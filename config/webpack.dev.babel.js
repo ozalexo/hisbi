@@ -3,7 +3,7 @@
  */
 
 import path from 'path'
-import webpack from 'webpack'
+// import webpack from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CircularDependencyPlugin from 'circular-dependency-plugin'
 // import CleanWebpackPlugin from 'clean-webpack-plugin'
@@ -15,7 +15,7 @@ module.exports = Object.assign({}, baseWebpackConfig, {
   entry: path.resolve(__dirname, '../src/index.js'),
   output: {
     filename: '[name].js',
-    chunkFilename: '[name].chunk.js',
+    chunkFilename: '[name].chunk.js'
     // path: path.resolve(__dirname, '../dist')
   },
   optimization: {
@@ -36,7 +36,6 @@ module.exports = Object.assign({}, baseWebpackConfig, {
   },
   plugins: [
     // new CleanWebpackPlugin(['../dist']),
-    new webpack.HotModuleReplacementPlugin(),
     new CircularDependencyPlugin({
       exclude: /node_modules/,
       failOnError: true
