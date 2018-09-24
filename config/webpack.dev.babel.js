@@ -3,11 +3,12 @@
  */
 
 import path from 'path'
-import webpack from 'webpack'
+// import webpack from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CircularDependencyPlugin from 'circular-dependency-plugin'
 // import CleanWebpackPlugin from 'clean-webpack-plugin'
 import baseWebpackConfig from './webpack.base.babel'
+import CleanTerminalPlugin from 'clean-terminal-webpack-plugin'
 
 module.exports = Object.assign({}, baseWebpackConfig, {
   mode: 'development',
@@ -36,6 +37,9 @@ module.exports = Object.assign({}, baseWebpackConfig, {
   },
   plugins: [
     // new CleanWebpackPlugin(['../dist']),
+    new CleanTerminalPlugin({
+      message: 'Clean up...'
+    }),
     new CircularDependencyPlugin({
       exclude: /node_modules/,
       failOnError: true
