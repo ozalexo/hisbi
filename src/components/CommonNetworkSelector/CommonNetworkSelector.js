@@ -8,7 +8,6 @@ import { Popover } from '@material-ui/core'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
 
-import { AccountCustomNetwork } from '@chronobank/core/models/wallet/persistAccount'
 import { selectCurrentNetwork, selectDisplayNetworksList } from '@chronobank/nodes/redux/selectors'
 import { DUCK_PERSIST_ACCOUNT } from '@chronobank/core/redux/persistAccount/constants'
 import { modalsOpen } from '@chronobank/core/redux/modals/actions'
@@ -129,13 +128,6 @@ export default class CommonNetworkSelector extends PureComponent {
 
   handleOpenModalAddNetwork = (network) => (e) => {
     e.stopPropagation()
-    this.handleModalNetworkSelectorClose()
-    if (network) {
-      const networkModel = new AccountCustomNetwork(network)
-      this.props.modalOpenAddNetwork(networkModel)
-    } else {
-      this.props.modalOpenAddNetwork()
-    }
   }
 
   renderPredefinedNetworkSections = () => {
