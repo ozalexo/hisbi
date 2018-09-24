@@ -3,7 +3,7 @@
  */
 
 import path from 'path'
-// import webpack from 'webpack'
+import webpack from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CircularDependencyPlugin from 'circular-dependency-plugin'
 // import CleanWebpackPlugin from 'clean-webpack-plugin'
@@ -32,7 +32,7 @@ module.exports = Object.assign({}, baseWebpackConfig, {
     // publicPath: '/dist',
     hot: true,
     inline: true,
-    historyApiFallback: false
+    historyApiFallback: true
   },
   plugins: [
     // new CleanWebpackPlugin(['../dist']),
@@ -61,40 +61,3 @@ module.exports = Object.assign({}, baseWebpackConfig, {
     hints: false
   }
 })
-
-// module.exports = require('./webpack.base.babel')({
-//   mode: 'development',
-//   entry: [
-//     path.resolve(__dirname, '../src/index.js')
-//   ],
-//   output: {
-//     filename: '[name].js',
-//     chunkFilename: '[name].chunk.js'
-//   },
-//   plugins: [
-//     new CleanWebpackPlugin(['dist']),
-//     new webpack.HotModuleReplacementPlugin(),
-//     new HtmlWebpackPlugin({
-//       inject: true,
-//       template: 'public/index.html'
-//     }),
-//     new CircularDependencyPlugin({
-//       exclude: /a\.js|node_modules/,
-//       failOnError: false
-//     })
-//   ],
-//   // Emit a source map for easier debugging
-//   // See https://webpack.js.org/configuration/devtool/#devtool
-//   devtool: 'eval-source-map',
-//   devServer: {
-//     contentBase: './dist',
-//     compress: false,
-//     port: 3000,
-//     watchContentBase: true,
-//     progress: true,
-//     hot: true
-//   },
-//   performance: {
-//     hints: false
-//   }
-// })

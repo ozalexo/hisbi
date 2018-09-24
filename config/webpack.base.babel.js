@@ -3,8 +3,6 @@
  */
 
 import path from 'path'
-import webpack from 'webpack'
-import HtmlWebpackPlugin from 'html-webpack-plugin'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 
 process.noDeprecation = true
@@ -31,7 +29,22 @@ module.exports = {
       {
         test: /\.scss$/,
         exclude: /node_modules/,
-        use: ['style-loader', 'css-loader', 'sass-loader']
+        use: [
+          process.env.NODE_ENV !== 'production' ? 'style-loader' : MiniCssExtractPlugin.loader,
+          { loader: 'css-loader', options: { sourceMap: false, modules: true, importLoaders: 1, localIdentName: '[name]__[local]___[hash:base64:5]' } },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: false,
+              ident: 'postcss',
+              plugins: () => [
+                require('postcss-cssnext')(),
+                require('postcss-modules-values')
+              ]
+            }
+          },
+          { loader: 'sass-loader', options: { sourceMap: false, outputStyle: 'expanded' } }
+        ]
       },
       {
         test: /\.css$/,
@@ -75,27 +88,11 @@ module.exports = {
     ]
   },
   plugins: [
-    // Always expose NODE_ENV to webpack, in order to use `process.env.NODE_ENV`
-    // inside your code for any environment checks UglifyJS will automatically
-    // drop any unreachable code.
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-      }
-    }),
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // both options are optional
       filename: '[name].css',
       chunkFilename: '[id].css'
-    }),
-    new HtmlWebpackPlugin({ // Create HTML file that includes references to bundled CSS and JS.
-      template: 'src/index.html',
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true
-      },
-      inject: true
     })
   ]
 }

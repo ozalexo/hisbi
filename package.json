@@ -11,6 +11,7 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@chronobank/nodes": "*",
     "@material-ui/core": "^3.1.0",
     "@material-ui/icons": "^3.0.1",
     "@material-ui/lab": "^3.0.0-alpha.16",
@@ -20,13 +21,17 @@
     "classnames": "^2.2.6",
     "connected-react-router": "^4.5.0",
     "history": "^4.7.2",
+    "image-webpack-loader": "^4.3.1",
     "immutable": "^3.8.2",
+    "material-colors-scss": "^1.0.0",
     "moment": "^2.22.2",
+    "postcss-cssnext": "^3.1.0",
     "prop-types": "^15.6.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-hot-loader": "^4.3.11",
     "react-redux": "^5.0.7",
+    "react-redux-i18n": "^1.9.3",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.5",
@@ -40,6 +45,7 @@
   "devDependencies": {
     "@babel/core": "^7.1.0",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-decorators": "^7.1.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/plugin-transform-runtime": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
@@ -65,5 +71,8 @@
     "webpack": "^4.19.1",
     "webpack-cli": "^3.1.1",
     "webpack-dev-server": "^3.1.8"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

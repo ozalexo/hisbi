@@ -1,0 +1,43 @@
+/**
+ * Copyright 2017–2018, LaborX PTY
+ * Licensed under the AGPL Version 3 license.
+ */
+@import "src/common/styles/partials/variables";
+@import "src/common/styles/partials/mixins";
+
+.root {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  .content {
+    .tabsFilterWrapper {
+      width: 587px;
+      display: flex;
+      margin: 0 auto;
+      .filterTab {
+        &:focus {
+          outline: 0;
+        }
+        cursor: pointer;
+        color: $color-white;
+        font-weight: 400;
+        font-size: 16px;
+        margin-right: 45px;
+        border: none;
+        background: none;
+        border-radius: 0;
+        &:hover {
+          color: $color-orange-1;
+        }
+        &.active {
+          color: $color-hover;
+          font-weight: bold;
+        }
+      }
+    }
+    .pollsContent {
+    }
+  }
+}

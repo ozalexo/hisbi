@@ -1,29 +1,39 @@
 import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
-import { PersistGate } from 'redux-persist/lib/integration/react'
-import { Provider } from 'react-redux'
-import configureStore from './store/configureStore'
-import logo from './logo.svg'
+import { Route, Switch } from 'react-router-dom'
 import './App.scss'
+// import LoginForm from './pages/LoginForm'
+// import AccountSelector from './pages/AccountSelector'
+import StartPage from './pages/StartPage'
+import Splash from './common/layouts/Splash/Splash'
 
-const { store, history, persistor } = configureStore()
+// class App extends Component {
+//   render () {
+//     console.log('Renders')
+//     return (
+//       <div>
+//         <Switch>
+//           <Route exact path='/' component={LoginForm} />
+//           <Route exact path='/start' component={StartPage} />
+//           <Route component={() => (<div>Miss</div>)} />
+//         </Switch>
+//       </div>
+//     )
+//   }
+// }
 
 class App extends Component {
   render () {
+    console.log('Renders')
     return (
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <div className='App'>
-            <header className='App-header'>
-              <img src={logo} className='App-logo' alt='logo' />
-              <h1 className='App-title'>Welcome to React 1</h1>
-            </header>
-            <p className='App-intro'>
-              To get started, edit <code>src/App.js</code> and save to reload 36.
-            </p>
-          </div>
-        </PersistGate>
-      </Provider>
+      <div>
+        <Switch>
+          <Splash>
+            <Route exact path='/start' component={StartPage} />
+          </Splash>
+          <Route component={() => (<div>Miss</div>)} />
+        </Switch>
+      </div>
     )
   }
 }
