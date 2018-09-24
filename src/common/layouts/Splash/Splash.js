@@ -9,17 +9,17 @@ import { connect } from 'react-redux'
 import { CommonNetworkSelector } from '../../../components/CommonNetworkSelector/CommonNetworkSelector'
 import {
   navigateToLoginPage,
-} from '@chronobank/login-ui/redux/navigation'
-import LocaleDropDown from 'layouts/partials/LocaleDropDown/LocaleDropDown'
-import ModalStack from 'components/common/ModalStack/ModalStack'
+} from '../../../thunks/navigation'
+import LocaleDropDown from '../../../components/LocaleDropDown/LocaleDropDown'
+import ModalStack from '../../../containers/ModalStack/ModalStack'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 
-import WalletTitleBG from 'assets/img/wallet-title-bg.png'
-import StripesToCrop from 'assets/img/stripes-2-crop.jpg'
-import ChronoWalletLogoBright from 'assets/img/chronowalletlogobright.svg'
-import ChronoWalletTextBright from 'assets/img/chronowallettextbright.svg'
-import ChronoLogo from 'assets/img/logo-chrono-bank-full.svg'
-import BackIcon from 'assets/img/icons/back.svg'
+import WalletTitleBG from '../../../common/assets/img/wallet-title-bg.png'
+import StripesToCrop from '../../../common/assets/img/stripes-2-crop.jpg'
+import ChronoWalletLogoBright from '../../../common/assets/img/chronowalletlogobright.svg'
+import ChronoWalletTextBright from '../../../common/assets/img/chronowallettextbright.svg'
+import ChronoLogo from '../../../common/assets/img/logo-chrono-bank-full.svg'
+import BackIcon from '../../../common/assets/img/icons/back.svg'
 
 import Footer from '../Footer/Footer'
 

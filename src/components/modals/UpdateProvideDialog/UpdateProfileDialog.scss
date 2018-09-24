@@ -1,0 +1,96 @@
+/**
+ * Copyright 2017–2018, LaborX PTY
+ * Licensed under the AGPL Version 3 license.
+ */
+
+@import 'src/common/styles/partials/mixins';
+@import 'src/common/styles/partials/variables';
+
+.root {
+
+  .content {
+    max-width: 544px;
+    background-color: $color-white;
+
+    .person {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 24px 16px;
+      align-items: flex-start;
+      margin-bottom: -24px; // for inner margins
+
+      .left {
+        margin-right: 24px;
+        margin-bottom: 24px;
+
+        .icon {
+          position: relative;
+          display: flex;
+          border-radius: 50%;
+          overflow: hidden;
+          align-items: center;
+          justify-content: center;
+
+          .iconImage {
+            width: 96px;
+            height: 96px;
+            background: transparent none no-repeat center center;
+            background-size: cover;
+          }
+        }
+      }
+
+      .right {
+        margin-bottom: 24px;
+        flex-grow: 1;
+        overflow: hidden; // for ellipsis
+
+        .name {
+          font-size: 16px;
+          font-weight: 600;
+          color: $color-primary-0;
+        }
+
+        .company {
+          font-size: 17px;
+          color: $color-primary-0;
+        }
+
+        .account {
+          font-size: 14px;
+          color: $color-primary-1;
+          line-height: 1.43;
+          @include ellipsis;
+
+          @include xs-only {
+            max-width: 300px;
+          }
+        }
+
+        .micros {
+          margin-left: -4px;
+        }
+      }
+    }
+
+    .body {
+      padding: 0 16px;
+    }
+
+    .footer {
+      padding: 24px 16px 16px;
+      text-align: right;
+
+      .action {
+        margin: 0 0 10px;
+      }
+    }
+  }
+
+}
+
+.default-icon {
+  font-size: 96px;
+  color: white;
+  background-color: $color-panel-bg-0;
+}

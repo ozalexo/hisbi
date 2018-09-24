@@ -9,7 +9,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { Field, reduxForm } from 'redux-form/immutable'
-import { Link } from 'react-route-dom'
+import { Link } from 'react-router-dom'
 import { withStyles } from '@material-ui/core/styles'
 import compose from 'recompose/compose'
 import {

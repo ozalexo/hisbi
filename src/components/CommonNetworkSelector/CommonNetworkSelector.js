@@ -9,10 +9,8 @@ import classnames from 'classnames'
 import PropTypes from 'prop-types'
 
 import { selectCurrentNetwork, selectDisplayNetworksList } from '@chronobank/nodes/redux/selectors'
-import { DUCK_PERSIST_ACCOUNT } from '@chronobank/core/redux/persistAccount/constants'
-import { modalsOpen } from '@chronobank/core/redux/modals/actions'
 import { networkSelect } from '@chronobank/nodes/redux/thunks'
-import Button from 'components/common/ui/Button/Button'
+import Button from '../Button/Button'
 import React, { PureComponent } from 'react'
 
 import styles from './CommonNetworkSelector.scss'
@@ -20,12 +18,10 @@ import styles from './CommonNetworkSelector.scss'
 const mapStateToProps = (state) => {
   const currentNetwork = selectCurrentNetwork(state)
   const displayNetworksList = selectDisplayNetworksList(state)
-  const customNetworksList = state.get(DUCK_PERSIST_ACCOUNT).customNetworksList
 
   return {
     currentNetwork,
     displayNetworksList,
-    customNetworksList,
   }
 }
 
@@ -91,7 +87,6 @@ export default class CommonNetworkSelector extends PureComponent {
       ])),
     }),
     customNetworksList: PropTypes.arrayOf(PropTypes.object),
-    modalOpenAddNetwork: PropTypes.func,
     networkSelect: PropTypes.func,
   }
 
@@ -159,50 +154,7 @@ export default class CommonNetworkSelector extends PureComponent {
     ))
   }
 
-  // TODO: to internationalize text inside
-  // TODO: to complete this method. At the moment it using Redux persistAccount.customNetworkList
-  renderCustomNetworkSection = () => (
-    <div>
-      <SectionHeader section={{ sectionTitle: 'Custom networks' }} />
-      <div>
-        {
-          this.props.customNetworksList.map((network) => (
-            <div
-              styleName={classnames({
-                providerItem: true,
-                providerItemActive: network.networkIndex === this.props.currentNetwork.networkIndex,
-              })}
-              onClick={this.handleOpenModalAddNetwork(network)}
-              key={network.name}
-            >
-              <span styleName='providerItemText'>
-                {
-                  network.networkTitle || ''
-                }
-              </span>
-              <span
-                onClick={this.handleOpenModalAddNetwork(network)}
-                styleName='providerItemIcon'
-                className='chronobank-icon'
-              >
-                edit
-              </span>
-            </div>
-          ))
-        }
-      </div>
-      <div
-        styleName='providerItem'
-        onClick={this.handleOpenModalAddNetwork()}
-      >
-        Add a Network ...
-      </div>
-    </div>
-  )
-
   render () {
-    const { customNetworksList } = this.props
-
     return (
       <div styleName='root'>
         <Button
@@ -229,9 +181,6 @@ export default class CommonNetworkSelector extends PureComponent {
                 this.renderPredefinedNetworkSections()
               }
             </div>
-            {
-              customNetworksList && this.renderCustomNetworkSection()
-            }
           </div>
         </Popover>
       </div>

@@ -1,0 +1,27 @@
+/**
+ * Copyright 2017–2018, LaborX PTY
+ * Licensed under the AGPL Version 3 license.
+ */
+
+@import 'src/common/styles/partials/variables';
+
+.root {
+  max-width: 928px;
+  background-color: $color-white;
+}
+
+.header {
+  background-color: $color-primary-1;
+  padding: 24px 16px;
+  /* TODO @dkchv: add space for close */
+}
+
+.title {
+  font-size: 34px;
+  font-weight: 300;
+  color: $color-white;
+}
+
+.content {
+  padding: 24px 16px;
+}

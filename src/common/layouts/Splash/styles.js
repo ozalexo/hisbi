@@ -4,7 +4,7 @@
  */
 
 import { createMuiTheme } from '@material-ui/core/styles'
-import variables from 'styles/themes/variables'
+import variables from '../../styles/themes/variables'
 
 export default createMuiTheme({
   overrides: {

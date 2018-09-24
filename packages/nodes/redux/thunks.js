@@ -3,12 +3,11 @@
  * Licensed under the AGPL Version 3 license.
  */
 
-import type { Dispatch } from 'redux'
 import * as NodesActions from './actions'
 import * as NodesSelectors from './selectors'
 
 // TODO: It must be a bit more complex. Need to connect to second available primary node in case of connection failure
-export const preselectNetwork = () => (dispatch: Dispatch<any>, getState) => {
+export const preselectNetwork = () => (dispatch, getState) => {
   const state = getState()
   const nodes = NodesSelectors.selectNodesState(state)
   if (nodes.selected === null) {
@@ -20,10 +19,10 @@ export const preselectNetwork = () => (dispatch: Dispatch<any>, getState) => {
   }
 }
 
-export const networkSelect = (networkIndex) => (dispatch: Dispatch<any>) => {
+export const networkSelect = (networkIndex) => (dispatch) => {
   dispatch(NodesActions.networkSelect(networkIndex))
   dispatch(NodesActions.networkSwitch(networkIndex))
 }
 
-export const nodesInit = () => (dispatch: Dispatch<any>) =>
+export const nodesInit = () => (dispatch) =>
   dispatch(NodesActions.nodesInit())

@@ -3,7 +3,7 @@
  * Licensed under the AGPL Version 3 license.
  */
 
-import { Link } from 'react-route-dom'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import React, { PureComponent } from 'react'
 import { Translate, I18n } from 'react-redux-i18n'

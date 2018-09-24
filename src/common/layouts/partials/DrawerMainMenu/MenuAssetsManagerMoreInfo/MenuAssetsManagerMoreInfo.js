@@ -3,7 +3,7 @@
  * Licensed under the AGPL Version 3 license.
  */
 
-import { Link } from 'react-route-dom'
+import { Link } from 'react-router-dom'
 import iconTokenDefaultSVG from 'assets/img/icons/coin-blue.svg'
 import React, { PureComponent } from 'react'
 import linkSvg from 'assets/img/icons/prev.svg'

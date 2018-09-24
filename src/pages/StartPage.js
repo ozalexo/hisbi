@@ -5,7 +5,7 @@
 
 import { Translate } from 'react-redux-i18n'
 import React, { PureComponent } from 'react'
-import Button from 'components/common/ui/Button/Button'
+import Button from '../components//Button/Button'
 import {
   navigateToSelectImportMethod,
   navigateToCreateAccount
