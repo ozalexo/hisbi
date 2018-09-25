@@ -7,7 +7,25 @@ import Toolbar from '@material-ui/core/Toolbar'
 import List from '@material-ui/core/List'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
-import { mailFolderListItems, otherMailFolderListItems } from './tileData'
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import StarIcon from '@material-ui/icons/Star';
+import SendIcon from '@material-ui/icons/Send';
+import MailIcon from '@material-ui/icons/Mail';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ReportIcon from '@material-ui/icons/Report';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import NetworkSelector from './components/NetworkSelector'
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 
 const drawerWidth = 240
 
@@ -55,15 +73,58 @@ function MainDrawer(props) {
         }}
       >
         <div className={classes.toolbar} />
-        <List>{mailFolderListItems}</List>
+        <NetworkSelector />
         <Divider />
-        <List>{otherMailFolderListItems}</List>
+        {/* <List>
+          <ListItem button>
+            <ListItemIcon>
+              <MailIcon />
+            </ListItemIcon>
+            <ListItemText primary="All mail" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon>
+              <DeleteIcon />
+            </ListItemIcon>
+            <ListItemText primary="Trash" />
+          </ListItem>
+          <ListItem button>
+            <ListItemIcon>
+              <ReportIcon />
+            </ListItemIcon>
+            <ListItemText primary="Spam" />
+          </ListItem>
+        </List> */}
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Typography noWrap>
-          {'You think water moves fast? You should see ice.'}
-        </Typography>
+        <div className={classes.root}>
+          <Grid container spacing={24}>
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>
+                <p>You think water moves fast? You should see ice.</p>
+              </Paper>
+            </Grid>
+            <Grid item xs={6}>
+              <Paper className={classes.paper}>xs=6</Paper>
+            </Grid>
+            <Grid item xs={6}>
+              <Paper className={classes.paper}>xs=6</Paper>
+            </Grid>
+            <Grid item xs={3}>
+              <Paper className={classes.paper}>xs=3</Paper>
+            </Grid>
+            <Grid item xs={3}>
+              <Paper className={classes.paper}>xs=3</Paper>
+            </Grid>
+            <Grid item xs={3}>
+              <Paper className={classes.paper}>xs=3</Paper>
+            </Grid>
+            <Grid item xs={3}>
+              <Paper className={classes.paper}>xs=3</Paper>
+            </Grid>
+          </Grid>
+        </div>
       </main>
     </div>
   )

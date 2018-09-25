@@ -6,7 +6,7 @@ import path from 'path'
 // import webpack from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CircularDependencyPlugin from 'circular-dependency-plugin'
-// import CleanWebpackPlugin from 'clean-webpack-plugin'
+import CleanWebpackPlugin from 'clean-webpack-plugin'
 import baseWebpackConfig from './webpack.base.babel'
 import CleanTerminalPlugin from 'clean-terminal-webpack-plugin'
 
@@ -36,7 +36,7 @@ module.exports = Object.assign({}, baseWebpackConfig, {
     historyApiFallback: true
   },
   plugins: [
-    // new CleanWebpackPlugin(['../dist']),
+    new CleanWebpackPlugin(['../dist']),
     new CleanTerminalPlugin({
       message: 'Clean up...'
     }),
@@ -44,22 +44,22 @@ module.exports = Object.assign({}, baseWebpackConfig, {
       exclude: /node_modules/,
       failOnError: true
     }),
-    new HtmlWebpackPlugin({
-      template: 'src/index.html',
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true
-      },
-      inject: true
-    })
+    // new HtmlWebpackPlugin({
+    //   template: 'src/index.html',
+    //   minify: {
+    //     removeComments: true,
+    //     collapseWhitespace: true,
+    //     removeRedundantAttributes: true,
+    //     useShortDoctype: true,
+    //     removeEmptyAttributes: true,
+    //     removeStyleLinkTypeAttributes: true,
+    //     keepClosingSlash: true,
+    //     minifyJS: true,
+    //     minifyCSS: true,
+    //     minifyURLs: true
+    //   },
+    //   inject: true
+    // })
   ],
   performance: {
     hints: false

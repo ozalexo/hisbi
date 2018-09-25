@@ -13,14 +13,11 @@ const initialState = {
 const mutations = {
 
   [REHYDRATE]: (state, payload) => {
-    console.log('A', state, payload)
     // action.payload is undefined if LocalStorage is empty
     // See https://github.com/rt2zz/redux-persist/issues/719
     if (!payload.payload) {
-      console.log('Returning state')
       return state
     }
-    console.log('B', state, payload)
     return {
       ...state,
       selected: null,
@@ -36,7 +33,6 @@ const mutations = {
 }
 
 export default (state = initialState, { type, ...payload }) => {
-  console.log('Type:', type, type in mutations)
   return (type in mutations)
     ? mutations[type](state, payload)
     : state

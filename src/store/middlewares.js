@@ -1,14 +1,17 @@
 import { createLogger } from 'redux-logger'
 import { routerMiddleware } from 'connected-react-router/immutable'
 import thunk from 'redux-thunk'
+import axiosMiddleware from '@chronobank/nodes/redux/middlewares/axios'
+import web3middleware from '@chronobank/nodes/redux/middlewares/web3'
+import rabbitmqMmiddleware from '@chronobank/nodes/redux/middlewares/rabbitmq'
 
 export default (history) => {
   const middleware = [
     thunk,
-    routerMiddleware(history)
-    // primaryNodesReduxMiddleware,
-    // chronobankMiddlewaresReduxMiddleware,
-    // axiosMiddleware,
+    routerMiddleware(history),
+    axiosMiddleware,
+    web3middleware,
+    rabbitmqMmiddleware
   ]
   const isDevelopmentEnv = process.env.NODE_ENV === 'development'
   if (isDevelopmentEnv) {

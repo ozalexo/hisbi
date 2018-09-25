@@ -9,7 +9,7 @@
       "tokens": {}
     },
     "bitcoinGold": {
-      "enabled": true,
+      "enabled": false,
       "tokens": {}
     },
     "dash": {
