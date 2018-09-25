@@ -4,8 +4,7 @@ import { Route, Switch } from 'react-router-dom'
 import './App.scss'
 // import LoginForm from './pages/LoginForm'
 // import AccountSelector from './pages/AccountSelector'
-import StartPage from './pages/StartPage'
-import Splash from './common/layouts/Splash/Splash'
+import DemoPage from './pages/DemoPage'
 
 // class App extends Component {
 //   render () {
@@ -28,9 +27,7 @@ class App extends Component {
     return (
       <div>
         <Switch>
-          <Splash>
-            <Route exact path='/start' component={StartPage} />
-          </Splash>
+          <Route exact path='/' component={DemoPage} />
           <Route component={() => (<div>Miss</div>)} />
         </Switch>
       </div>

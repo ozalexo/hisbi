@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
-import accounts from '../reducers/accounts'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer } from 'redux-persist'
+import accounts from '../redux/accounts/reducer'
 
 const accountPersistConfig = {
   key: 'accounts',

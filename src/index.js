@@ -4,9 +4,9 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import { PersistGate } from 'redux-persist/lib/integration/react'
 import { withRouter } from 'react-router'
 import { ConnectedRouter, push } from 'connected-react-router'
-import defaultTheme from './components/defaultTheme'
 import { Provider } from 'react-redux'
 import './index.scss'
+import defaultTheme from './themes/default'
 import configureStore from './store/configureStore'
 import App from './App'
 import registerServiceWorker from './registerServiceWorker'
@@ -18,11 +18,11 @@ const NonBlockApp = withRouter(App)
 
 const initAfterRehydration = () => {
   const state = store.getState()
-  let path = '/start'
+  let path = '/'
   if (state.accounts.list.length > 0) {
     path = '/select-account'
   }
-  store.dispath(push(path))
+  store.dispatch(push(path))
 }
 
 ReactDOM.render(
