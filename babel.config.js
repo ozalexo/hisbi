@@ -36,7 +36,6 @@ module.exports = (api) => {
     ],
     '@babel/plugin-proposal-export-default-from',
     '@babel/plugin-proposal-throw-expressions',
-    '@babel/plugin-syntax-class-properties',
     ['@babel/plugin-proposal-class-properties', { 'loose': false }],
     'react-hot-loader/babel'
   ]

@@ -84,6 +84,20 @@ module.exports = {
       {
         test: /\.html$/,
         use: 'html-loader'
+      },
+      // {
+      //   test: /(?!node_modules\/chronobank-smart-contracts\/build\/contracts\/).+\.json$/, // all JSON files except contracts
+      //   loader: 'json-loader',
+      //   exclude: [
+      //     path.resolve('node_modules/chronobank-smart-contracts/build/contracts')
+      //   ]
+      // },
+      {
+        test: /node_modules\/chronobank-smart-contracts\/build\/contracts\/.+\.json$/, // only ABI contracts
+        loader: path.resolve('./config/abi-loader'),
+        include: [
+          path.resolve('node_modules/chronobank-smart-contracts/build/contracts')
+        ]
       }
     ]
   },

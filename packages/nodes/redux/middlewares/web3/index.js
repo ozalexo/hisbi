@@ -4,35 +4,44 @@
  */
 
 import Web3 from 'web3'
-import web3WSProviderFactory from './Web3WSProviderFactory'
-import web3Factory from './Web3Factory'
+import { Map } from 'immutable'
+import ERC20DAODefaultABI from './abi/ERC20DAODefaultABI'
+import BigNumber from 'bignumber.js'
+import web3utils from 'web3/lib/utils/utils'
+import * as Utils from './abi/utils'
+import ContractList from './abi'
 import * as NodesActionTypes from '../../nodes/constants'
 import * as NodesActions from '../../nodes/actions'
 import * as NodesThunks from '../../nodes/thunks'
 import * as NodesSelectors from '../../nodes/selectors'
 
-let w3 = null
-let availableProviders = null
-let syncIntervalId = null // Using to check if node is syncing
+let w3c = null
 
 class Web3Controller {
   constructor (
     dispatch,
     host,
+    networkId,
   ) {
-    this.dispath = dispatch
+    this.dispatch = dispatch
     this.host = host
     this.provider = null
     this.web3 = null
     this.syncTimer = null
     this.syncInterval = 5000 // 5 seconds
+    this.contracts = new Map()
+    this.networkId = networkId
+    this.tokens = new Map()
   }
 
-  initController = () => {
+  initController () {
     this.provider = new Web3.providers.WebsocketProvider(this.host)
     this.provider.on('connect', () => {
       this.web3 = new Web3(this.provider)
+      console.log('This web3:', this.web3)
       this.startSyncingMonitor()
+      // console.log(this)
+      this.initContracts()
       this.dispatch(NodesActions.primaryNodeConnected(this.host))
     })
     this.provider.on('error', (e) => {
@@ -44,19 +53,134 @@ class Web3Controller {
     })
   }
 
-  startSyncingMonitor = () => {
-    this.syncTimer = setInterval(this.checkSyncStatus, this.syncInterval)
+  initTokenContract (tokenSymbol, tokenAddress) {
+    this.tokens = this.tokens.set(tokenSymbol, new this.web3.eth.Contract(ERC20DAODefaultABI.abi, tokenAddress))
   }
 
-  stopSyncingMonitor = () => {
+  unsubscribeFromTokenEvents () {
+    this.tokens.forEach((tokenContract) => {
+      tokenContract.clearSubscriptions()
+    })
+  }
+
+  subscribeOnTokenEvents () {
+    this.tokens.forEach((tokenContract, tokenSymbol) => {
+      if (!tokenContract.events) {
+        return
+      }
+      tokenContract.events
+        .allEvents({})
+        .on('data', (data) => {
+          if (!data || !data.event) {
+            return
+          }
+          const eventType = data.event.toLowerCase()
+          switch (eventType) {
+            case 'transfer': {
+              // eslint-disable-next-line no-console
+              console.log(tokenSymbol, eventType, data)
+              break
+            }
+            case 'approval': {
+              // eslint-disable-next-line no-console
+              console.log(tokenSymbol, eventType, data)
+              break
+            }
+          }
+        })
+        .on('error', (error) => {
+          // eslint-disable-next-line no-console
+          console.log(`Error of token ${tokenSymbol}\n`, error)
+        })
+    })
+  }
+
+  changeProvider (host, networkId) {
+    this.unsubscribeFromTokenEvents()
+    this.stopSyncingMonitor(this.dispatch)
+    this.tokens = null
+    this.contracts = null
+    this.disconnect()
+    this.host = host
+    this.networkId = networkId
+    this.provider = null
+    this.web3 = null
+    this.initController()
+  }
+
+  async loadTokens () {
+    const Erc20Manager = this.contracts.get('ERC20Manager')
+    if (Erc20Manager) {
+      const res = await Erc20Manager.methods.getTokens([]).call()
+      /* eslint-disable no-underscore-dangle */
+      const addresses = res._tokensAddresses
+      const names = res._names
+      const symbols = res._symbols
+      const urls = res._urls
+      const decimalsArr = res._decimalsArr
+      const ipfsHashes = res._ipfsHashes
+      /* eslint-enable no-underscore-dangle */
+      const gasPrice = await this.web3.eth.getGasPrice()
+      const bnGasPrice = new BigNumber(gasPrice)
+      addresses.forEach((address, i) => {
+        const model = {
+          address: address.toLowerCase(),
+          name: web3utils.toUtf8(names[i]),
+          symbol: web3utils.toUtf8(symbols[i]).toUpperCase(),
+          url: web3utils.toUtf8(urls[i]),
+          decimals: parseInt(decimalsArr[i]),
+          icon: Utils.bytes32ToIPFSHash(ipfsHashes[i]),
+          feeRate: {
+            wei: bnGasPrice,
+            gwei: web3utils.fromWei(bnGasPrice, 'gwei')
+          },
+          events: false
+        }
+        this.initTokenContract(model.symbol, model.address)
+      })
+      this.subscribeOnTokenEvents()
+    } else {
+      // eslint-disable-next-line no-console
+      console.log('Contract not initialized.')
+    }
+  }
+
+  initContracts () {
+    const contractNameList = Object.keys(ContractList)
+    contractNameList.forEach((contractObjectName) => {
+      const contract = ContractList[contractObjectName]
+      const abi = contract.abi
+      try {
+        const address = Utils.getContractAddressByNetworkId(contract.networks, this.networkId)
+        this.contracts = this.contracts.set(contract.contractName, new this.web3.eth.Contract(abi, address))
+      } catch (error) {
+        // console.log(error)
+      }
+    })
+    this.loadTokens()
+  }
+
+  getWeb3Instance () {
+    return this.web3
+  }
+
+  getWeb3CurrentProvider () {
+    return this.web3.currentProvider
+  }
+
+  startSyncingMonitor () {
+    this.syncTimer = setInterval(() => this.checkSyncStatus(), this.syncInterval)
+  }
+
+  stopSyncingMonitor () {
     clearInterval(this.syncTimer)
     this.dispatch(NodesActions.primaryNodeSyncingStatusStop())
   }
 
-  checkSyncStatus = () => {
+  checkSyncStatus () {
     // TODO: Need to clarify algorythm and what to do case of errors
     // See https://web3js.readthedocs.io/en/1.0/web3-eth.html#issyncing
-    w3.eth.isSyncing()
+    this.web3.eth.isSyncing()
       .then((syncStatus) => {
         if (syncStatus === true) {
           const syncingComplete = false
@@ -82,127 +206,53 @@ class Web3Controller {
         console.log('Set SIP, progress 0', error)
       })
   }
+
+  disconnect () {
+    this.web3.currentProvider.connection.close()
+  }
 }
-
-// // TODO: Need to clarify algorythm and what to do case of errors
-// const checkIfSyncing = (dispatch) => {
-//   // See https://web3js.readthedocs.io/en/1.0/web3-eth.html#issyncing
-//   w3.eth.isSyncing()
-//     .then((syncStatus) => {
-//       if (syncStatus === true) {
-//         const syncingComplete = false
-//         const progress = 0
-//         dispatch(NodesActions.primaryNodeSetSyncingStatus(syncingComplete, progress))
-//       } else {
-//         if (syncStatus) {
-//           const syncingComplete = false
-//           const progress = (syncStatus.currentBlock - syncStatus.startingBlock) / (syncStatus.highestBlock - syncStatus.startingBlock)
-//           dispatch(NodesActions.primaryNodeSetSyncingStatus(syncingComplete, progress))
-//         } else {
-//           const syncingComplete = true
-//           const progress = 1
-//           dispatch(NodesActions.primaryNodeSetSyncingStatus(syncingComplete, progress))
-//         }
-//       }
-//     })
-//     .catch((error) => {
-//       const syncingInProgress = true
-//       const progress = 0
-//       dispatch(NodesActions.primaryNodeSetSyncingStatus(syncingInProgress, progress))
-//       // eslint-disable-next-line no-console
-//       console.log('Set SIP, progress 0', error)
-
-//     })
-// }
-
-// const startSyncTimer = (dispatch) => {
-//   syncIntervalId = setInterval(() => checkIfSyncing(dispatch), 5000)
-// }
-
-// const stopSyncTimer = (dispatch) => {
-//   clearInterval(syncIntervalId)
-//   dispatch(NodesActions.primaryNodeSyncingStatusStop())
-// }
-
-// /**
-//  * Creating web3 provider and subscribing for web-socket's events
-//  * @param {string} url
-//  * @param {*} store Redux store
-//  */
-// const getProvider = (host, dispatch) => web3WSProviderFactory(
-//   host,
-//   // onconnect
-//   () => {
-//     startSyncTimer(dispatch)
-//     dispatch(NodesActions.primaryNodeConnected(host))
-//   },
-//   // onerror
-//   (e) => dispatch(NodesActions.primaryNodeError(host, e)),
-//   // onend
-//   (e) => {
-//     stopSyncTimer(dispatch)
-//     dispatch(NodesActions.primaryNodeDisconnected(host, e))
-//   }
-// )
 
 const mutations = {
 
   /**
    * Returns currently used web3 instance (Only for refactoring purposes, to be deleted in the future)
    */
-  [NodesActionTypes.NODES_PRIMARY_NODE_SET_EXTERNAL_PROVIDER]: (store, payload) => {
-    w3.currentProvider.connection.close()
-    w3 = payload.w3
-    w3.setProvider(payload.provider)
+  // [NodesActionTypes.NODES_PRIMARY_NODE_SET_EXTERNAL_PROVIDER]: (store, payload) => {
+  //   w3.currentProvider.connection.close()
+  //   w3 = payload.w3
+  //   w3.setProvider(payload.provider)
+  // },
+
+  /**
+   * Returns currently used web3 instance (Only for refactoring purposes, to be deleted in the future)
+   */
+  [NodesActionTypes.NODES_PRIMARY_NODE_SYNC_STATUS_STOP]: () => {
+    w3c.stopSyncTimer()
   },
 
   /**
    * Returns currently used web3 instance (Only for refactoring purposes, to be deleted in the future)
    */
-  [NodesActionTypes.NODES_PRIMARY_NODE_SYNC_STATUS_STOP]: (store) => {
-    stopSyncTimer(store.dispatch)
-  },
-
-  /**
-   * Returns currently used web3 instance (Only for refactoring purposes, to be deleted in the future)
-   */
-  [NodesActionTypes.NODES_PRIMARY_NODE_GET_WEB3]: () => w3,
+  [NodesActionTypes.NODES_PRIMARY_NODE_GET_WEB3]: () => w3c.getWeb3Instance(),
 
   /**
    * Returns currently used web3 provider instance (Only for refactoring purposes, to be deleted in the future)
    */
-  [NodesActionTypes.NODES_PRIMARY_NODE_GET_WEB3_PROVIDER]: () =>
-    availableProviders[w3.currentProvider.connection.url],
+  [NodesActionTypes.NODES_PRIMARY_NODE_GET_WEB3_PROVIDER]: () => w3c.getWeb3CurrentProvider(),
 
   /**
    * Must be called on App start. Connecting to selected primary Ethereum node
    */
   [NodesActionTypes.NODES_INIT]: async (store) => {
     let state = store.getState()
-    if (!availableProviders) {
-      availableProviders = NodesSelectors.selectAvailableProviders(state)
-        .reduce((accumulator, providerUrl) => {
-          accumulator[providerUrl] = null
-          return accumulator
-        }, {})
+    if (!state.nodes.selected) {
       await store.dispatch(NodesThunks.preselectNetwork())
+      state = store.getState()
     }
-    state = store.getState()
-    const currentPrimaryNode = NodesSelectors.selectCurrentPrimaryNode(state)
-    const currentProviderUrl = currentPrimaryNode.ws
-    if (!w3 || !availableProviders[currentProviderUrl]) {
-      const currentPrimaryNode = NodesSelectors.selectCurrentPrimaryNode(state)
-      const currentProviderUrl = currentPrimaryNode.ws
-
-      const w3Provider = getProvider(currentProviderUrl, store.dispatch)
-      console.log(w3Provider)
-      availableProviders[currentProviderUrl] = w3Provider
-      // w3 = new Web3(w3Provider)
-      w3 = new Web3Controller(dispatch, currentProviderUrl)
-      return Promise.resolve(w3)
-    } else {
-      return Promise.resolve(w3)
-    }
+    const networkId = NodesSelectors.selectCurrentNetworkId(state)
+    w3c = new Web3Controller(store.dispatch, NodesSelectors.selectCurrentPrimaryNode(state).ws, networkId.toString())
+    w3c.initController()
+    return Promise.resolve(w3c.getWeb3Instance())
   },
 
   /**
@@ -211,17 +261,14 @@ const mutations = {
    */
   [NodesActionTypes.NODES_NETWORK_SWITCH]: (store) => {
     const state = store.getState()
-    const currentPrimaryNode = NodesSelectors.selectCurrentPrimaryNode(state)
-    const currentProviderUrl = currentPrimaryNode && currentPrimaryNode.ws
-    if (!currentProviderUrl || !availableProviders || !availableProviders[currentProviderUrl] || !w3) {
+    const selectedWeb3Host = NodesSelectors.selectCurrentPrimaryNode(state)
+    const selectedProviderUrl = selectedWeb3Host && selectedWeb3Host.ws
+    if (!w3c || !selectedProviderUrl) {
       store.dispatch(NodesActions.nodesInit())
     } else {
-      const w3ProviderHost = w3.currentProvider.connection.url
-      if (w3ProviderHost !== currentProviderUrl) {
-        w3.currentProvider.connection.close()
-        const w3Provider = getProvider(currentProviderUrl, store.dispatch)
-        availableProviders[currentProviderUrl] = w3Provider
-        w3.setProvider(w3Provider)
+      const w3cProviderHost = w3c.getWeb3CurrentProvider().connection.url
+      if (w3cProviderHost !== selectedProviderUrl) {
+        w3c.changeProvider(selectedProviderUrl, NodesSelectors.selectCurrentNetworkId(state))
       }
     }
   },

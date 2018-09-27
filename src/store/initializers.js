@@ -5,6 +5,7 @@
 
 // import { I18n, loadTranslations, setLocale } from 'react-redux-i18n'
 import { nodesInit } from '@chronobank/nodes/redux/nodes/actions'
+import { preselectNetwork } from '@chronobank/nodes/redux/nodes/thunks'
 // import { middlewareConnect } from '@chronobank/nodes/middleware/thunks'
 // import { WebSocketService } from '@chronobank/core/services/WebSocketService'
 // import moment from 'moment'
@@ -12,7 +13,8 @@ import { nodesInit } from '@chronobank/nodes/redux/nodes/actions'
 // import translations from '../i18n'
 
 export const initPrimaryNodes = async (store) => {
-  // dispatch(preselectNetwork()) // Automatic selection of a primary node and network (mainnet/testnet)
+  store.dispatch(preselectNetwork()) // Automatic selection of a primary node and network (mainnet/testnet)
+  console.log('INIT nodes from initializer')
   await store.dispatch(nodesInit()) // Init Nodes middlware (working with Ehtereum primary nodes via web3)
   // TODO: WebSocketService we be removed. Let's it be here for now
   // WebSocketService.initWebSocketService(store)

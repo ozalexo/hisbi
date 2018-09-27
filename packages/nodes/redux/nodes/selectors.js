@@ -106,6 +106,12 @@ export const selectCurrentNetworkTitle = createSelector(
     currentNetwork && currentNetwork.networkTitle
 )
 
+export const selectCurrentNetworkId = createSelector(
+  selectCurrentNetwork,
+  (currentNetwork) =>
+    currentNetwork && currentNetwork.networkId
+)
+
 export const selectCoinType = (blockchain) => createSelector(
   [(state) => selectCurrentBlockchainInfo(blockchain)(state)],
   (currentBlockChainInfo) =>
