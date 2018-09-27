@@ -1,0 +1,14 @@
+dist/**
+config/**
+nodes/**
+**/node_modules/**
+.tmp/**
+*.json
+*.md
+*.less
+*.scss
+*.svg
+git
+.git
+**/*.spec.js
+registerServiceWorker.js

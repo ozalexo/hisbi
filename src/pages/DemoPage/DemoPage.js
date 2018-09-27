@@ -1,35 +1,40 @@
+/**
+ * Copyright 2017–2018, LaborX PTY
+ * Licensed under the AGPL Version 3 license.
+ */
+
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
-import List from '@material-ui/core/List'
+// import List from '@material-ui/core/List'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import StarIcon from '@material-ui/icons/Star';
-import SendIcon from '@material-ui/icons/Send';
-import MailIcon from '@material-ui/icons/Mail';
-import DeleteIcon from '@material-ui/icons/Delete';
-import ReportIcon from '@material-ui/icons/Report';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+// import ListItem from '@material-ui/core/ListItem'
+// import ListItemIcon from '@material-ui/core/ListItemIcon'
+// import ListItemText from '@material-ui/core/ListItemText'
+// import InboxIcon from '@material-ui/icons/MoveToInbox'
+// import DraftsIcon from '@material-ui/icons/Drafts'
+// import StarIcon from '@material-ui/icons/Star'
+// import SendIcon from '@material-ui/icons/Send'
+// import MailIcon from '@material-ui/icons/Mail'
+// import DeleteIcon from '@material-ui/icons/Delete'
+// import ReportIcon from '@material-ui/icons/Report'
+// import Radio from '@material-ui/core/Radio'
+// import RadioGroup from '@material-ui/core/RadioGroup'
+// import FormHelperText from '@material-ui/core/FormHelperText'
+// import FormControlLabel from '@material-ui/core/FormControlLabel'
+// import FormControl from '@material-ui/core/FormControl'
+// import FormLabel from '@material-ui/core/FormLabel'
 import NetworkSelector from './components/NetworkSelector'
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper'
+import Grid from '@material-ui/core/Grid'
 
 const drawerWidth = 240
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     flexGrow: 1,
     height: 440,
@@ -54,7 +59,7 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 })
 
-function MainDrawer(props) {
+function MainDrawer (props) {
   const { classes } = props
 
   return (

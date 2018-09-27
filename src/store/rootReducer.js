@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer } from 'redux-persist'
+import nodes from '@chronobank/nodes/redux/nodes/reducer'
 import accounts from '../redux/accounts/reducer'
 
 const accountPersistConfig = {
@@ -13,28 +14,7 @@ const accountPersistConfig = {
   timeout: null
 }
 
-const reducerA = (state = [], action) => {
-  switch (action.type) {
-    case 'ADD_TODO':
-      return state.concat([action.text])
-    default:
-      return state
-  }
-}
-
-const reducerB = (state = 0, action) => {
-  switch (action.type) {
-    case 'INCREMENT':
-      return state + 1
-    case 'DECREMENT':
-      return state - 1
-    default:
-      return state
-  }
-}
-
 export default combineReducers({
   accounts: persistReducer(accountPersistConfig, accounts),
-  reducerA,
-  reducerB
+  nodes,
 })

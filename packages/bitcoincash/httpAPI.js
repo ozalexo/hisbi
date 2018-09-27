@@ -4,44 +4,24 @@
  */
 
 /**
- * See middleware API documantaion here:
- * https://github.com/ChronoBank/middleware-eth-rest
- * https://github.com/ChronoBank/middleware-eth-2fa
+ * See middleware API documantaion here: https://github.com/ChronoBank/middleware-bitcoin-rest
  */
 
-import { BLOCKCHAIN_ETHEREUM } from '@chronobank/core/dao/constants'
-
-/**
- * await this._api.post('addr', {
-	address: ethAddress,
-	nem: nemAddress,
-	waves: wavesAddress,
-})
-await this._api.delete('addr', {
-	address: ethAddress,
-	//nem: nemAddress,
-	//waves: wavesAddress,
-})
-_api.get(`tx/${address}/history?skip=${skip}&limit=${offset}`)
-_api.get(`events/${eventName}/?${queryFilter}`)
-_api.get(`addr/${address}/balance`)
- */
+import { BLOCKCHAIN_BITCOIN_CASH } from './constants'
 
 /**
  * register new address on middleware
  * @param {string} address
  */
-export const requestErc20SubscribeWalletByAddress = (address) => (dispatch) => {
+export const requestSubscribeWalletByAddress = (address) => (dispatch) => {
   const action = {
-    type: 'REQ/MIDDLEWARE/ERC20/POST/SUBSCRIBE',
+    type: 'REQ/MIDDLEWARE/BITCOIN_CASH/POST/SUBSCRIBE',
     payload: {
-      blockchain: BLOCKCHAIN_ETHEREUM,
+      blockchain: BLOCKCHAIN_BITCOIN_CASH,
       request: {
         method: 'POST',
         url: '/addr',
-        data: {
-          address,
-        },
+        data: address,
       },
     },
   }
@@ -59,17 +39,15 @@ export const requestErc20SubscribeWalletByAddress = (address) => (dispatch) => {
  * remove an address from middleware
  * @param {string} address
  */
-export const requestErc20UnubscribeWalletByAddress = (address) => (dispatch) => {
+export const requestUnubscribeWalletByAddress = (address) => (dispatch) => {
   const action = {
-    type: 'REQ/MIDDLEWARE/ERC20/DELETE/UNSUBSCRIBE',
+    type: 'REQ/MIDDLEWARE/BITCOIN_CASH/DELETE/UNSUBSCRIBE',
     payload: {
-      blockchain: BLOCKCHAIN_ETHEREUM,
+      blockchain: BLOCKCHAIN_BITCOIN_CASH,
       request: {
         method: 'DELETE',
         url: '/addr',
-        data: {
-          address,
-        },
+        data: address,
       },
     },
   }
@@ -87,11 +65,11 @@ export const requestErc20UnubscribeWalletByAddress = (address) => (dispatch) => 
  * retrieve balance of the registered address
  * @param {string} address
  */
-export const requestErc20BalanceByAddress = (address) => (dispatch) => {
+export const requestBalanceByAddress = (address) => (dispatch) => {
   const action = {
-    type: 'REQ/MIDDLEWARE/ERC20/GET/BALANCE',
+    type: 'REQ/MIDDLEWARE/BITCOIN_CASH/GET/BALANCE',
     payload: {
-      blockchain: BLOCKCHAIN_ETHEREUM,
+      blockchain: BLOCKCHAIN_BITCOIN_CASH,
       request: {
         method: 'GET',
         url: `/addr/${address}/balance`,
@@ -109,20 +87,43 @@ export const requestErc20BalanceByAddress = (address) => (dispatch) => {
 }
 
 /**
+ * returns an array of unspent transactions (utxo)
+ * @param {string} address
+ */
+export const requestUtxoByAddress = (address) => (dispatch) => {
+  const action = {
+    type: 'REQ/MIDDLEWARE/BITCOIN_CASH/GET/UTXO',
+    payload: {
+      blockchain: BLOCKCHAIN_BITCOIN_CASH,
+      request: {
+        method: 'GET',
+        url: `/addr/${address}/utxo`,
+      },
+    },
+  }
+
+  return dispatch(action)
+    .then((result) => {
+      return result
+    })
+    .catch((error) => {
+      throw new Error(error)
+    })
+}
+
+/**
  * broadcast new transaction to network
  * @param {string} rawTx
  */
-export const requestErc20SendRawTransaction = (rawTx) => (dispatch) => {
+export const requestSendRawTransaction = (rawTx) => (dispatch) => {
   const action = {
-    type: 'REQ/MIDDLEWARE/ERC20/POST/SEND_RAW_TRANSACTION',
+    type: 'REQ/MIDDLEWARE/BITCOIN_CASH/POST/SEND_RAW_TRANSACTION',
     payload: {
-      blockchain: BLOCKCHAIN_ETHEREUM,
+      blockchain: BLOCKCHAIN_BITCOIN_CASH,
       request: {
         method: 'POST',
         url: '/tx/send',
-        data: {
-          tx: rawTx,
-        },
+        data: rawTx,
       },
     },
   }
@@ -141,11 +142,11 @@ const TXS_PER_PAGE = 20
  * retrieve transactions for the registered adresses [use skip and limit paramters]
  * @param {string} address
  */
-export const requestErc20TransactionsHistoryByAddress = (address, skip = 0, offset = TXS_PER_PAGE) => (dispatch) => {
+export const requestTransactionsHistoryByAddress = (address, skip = 0, offset = TXS_PER_PAGE) => (dispatch) => {
   const action = {
-    type: 'REQ/MIDDLEWARE/ERC20/GET/TRANSACTIONS_HISTORY',
+    type: 'REQ/MIDDLEWARE/BITCOIN_CASH/GET/TRANSACTIONS_HISTORY',
     payload: {
-      blockchain: BLOCKCHAIN_ETHEREUM,
+      blockchain: BLOCKCHAIN_BITCOIN_CASH,
       request: {
         method: 'GET',
         url: `tx/${address}/history?skip=${skip}&limit=${offset}`,
@@ -161,16 +162,15 @@ export const requestErc20TransactionsHistoryByAddress = (address, skip = 0, offs
       throw new Error(error)
     })
 }
-
 /**
  * retrieve transaction by its hash
  * @param {string} txHash
  */
-export const requestErc20TransactionByHash = (txHash) => (dispatch) => {
+export const requestTransactionByHash = (txHash) => (dispatch) => {
   const action = {
-    type: 'REQ/MIDDLEWARE/ERC20/GET/TRANSACTION_BY_HASH',
+    type: 'REQ/MIDDLEWARE/BITCOIN_CASH/GET/TRANSACTION_BY_HASH',
     payload: {
-      blockchain: BLOCKCHAIN_ETHEREUM,
+      blockchain: BLOCKCHAIN_BITCOIN_CASH,
       request: {
         method: 'GET',
         url: `/tx/${txHash}`,
@@ -188,17 +188,16 @@ export const requestErc20TransactionByHash = (txHash) => (dispatch) => {
 }
 
 /**
- * retrieve transaction by its hash
- * @param {string} txHash
+ * estimate fee rate (based on last 6 blocks)
  */
-export const requestErc20ListEvents = () => (dispatch) => {
+export const requestEstimateFeeRate = () => (dispatch) => {
   const action = {
-    type: 'REQ/MIDDLEWARE/ERC20/GET/EVENTS',
+    type: 'REQ/MIDDLEWARE/BITCOIN_CASH/GET/ESTIMATE_FEE_RATE',
     payload: {
-      blockchain: BLOCKCHAIN_ETHEREUM,
+      blockchain: BLOCKCHAIN_BITCOIN_CASH,
       request: {
         method: 'GET',
-        url: '/events',
+        url: '/estimate/feerate',
       },
     },
   }
@@ -213,17 +212,16 @@ export const requestErc20ListEvents = () => (dispatch) => {
 }
 
 /**
- * retrieve transaction by its hash
- * @param {string} txHash
+ * get current block height
  */
-export const requestErc20ListEventsByName = (eventName) => (dispatch) => {
+export const requestBlocksHeight = () => (dispatch) => {
   const action = {
-    type: 'REQ/MIDDLEWARE/ERC20/GET/EVENTS_BY_NAME',
+    type: 'REQ/MIDDLEWARE/BLOCKCHAIN_BITCOIN_CASH/GET/BLOCKS_HEIGHT',
     payload: {
-      blockchain: BLOCKCHAIN_ETHEREUM,
+      blockchain: BLOCKCHAIN_BITCOIN_CASH,
       request: {
         method: 'GET',
-        url: `/events/${eventName}`,
+        url: '/blocks/height',
       },
     },
   }

@@ -11,7 +11,7 @@ import { DUCK_NODES } from './constants'
  * @param {Map} state
  */
 export const selectNodesState = (state) =>
-  state.get(DUCK_NODES)
+  state[DUCK_NODES]
 
 /**
  * get nodes.selected

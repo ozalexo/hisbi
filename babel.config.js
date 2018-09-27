@@ -29,13 +29,14 @@ module.exports = (api) => {
     '@babel/plugin-proposal-export-namespace-from', // to use 'exports * as ...'
     '@babel/plugin-transform-runtime',
     '@babel/plugin-syntax-object-rest-spread',
-
+    '@babel/plugin-transform-object-assign',
+    '@babel/plugin-transform-destructuring',
     ['@babel/plugin-proposal-decorators',
       { 'decoratorsBeforeExport': true }
     ],
     '@babel/plugin-proposal-export-default-from',
     '@babel/plugin-proposal-throw-expressions',
-
+    '@babel/plugin-syntax-class-properties',
     ['@babel/plugin-proposal-class-properties', { 'loose': false }],
     'react-hot-loader/babel'
   ]

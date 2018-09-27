@@ -8,7 +8,7 @@ import { DUCK_NODES } from '../../../redux/constants'
 
 export const requestBitcoinCashUnconfirmedBalance = (address) => (dispatch, getState) => {
   const state = getState()
-  const client = state.get(DUCK_NODES).networkType === 'mainnet'
+  const client = state[DUCK_NODES].networkType === 'mainnet'
     ? 'bcc_blockdozer'
     : 'tbcc_blockdozer'
   const action = {
@@ -33,7 +33,7 @@ export const requestBitcoinCashUnconfirmedBalance = (address) => (dispatch, getS
 
 export const requestBitcoinCashConfirmedBalance = (address) => (dispatch, getState) => {
   const state = getState()
-  const client = state.get(DUCK_NODES).networkType === 'mainnet'
+  const client = state[DUCK_NODES].networkType === 'mainnet'
     ? 'bcc_blockdozer'
     : 'tbcc_blockdozer'
   const action = {

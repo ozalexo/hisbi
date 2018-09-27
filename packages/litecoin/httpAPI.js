@@ -7,7 +7,7 @@
  * See middleware API documantaion here: https://github.com/ChronoBank/middleware-bitcoin-rest
  */
 
-import { BLOCKCHAIN_LITECOIN } from '@chronobank/core/dao/constants'
+import { BLOCKCHAIN_LITECOIN } from './constants'
 
 /**
  * register new address on middleware

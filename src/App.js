@@ -23,7 +23,6 @@ import DemoPage from './pages/DemoPage'
 
 class App extends Component {
   render () {
-    console.log('Renders')
     return (
       <div>
         <Switch>

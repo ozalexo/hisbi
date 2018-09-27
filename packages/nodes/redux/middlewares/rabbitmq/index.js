@@ -4,19 +4,116 @@
  */
 
 import SockJS from 'sockjs-client'
-import Stomp from 'webstomp-client'
+import Stomp from '@stomp/stompjs'
+import { Map, fromJS } from 'immutable'
 import * as MiddlewareActions from './actions'
 import * as MiddlewareActionTypes from './constants'
 
 // WS states
-// const CONNECTING = 0
-// const OPEN = 1
-// const CLOSING = 2
-// const CLOSED = 3
+const CONNECTING = 0
+const OPEN = 1
+const CLOSING = 2
+const CLOSED = 3
 
 const BASE_URL = 'https://rabbitmq-webstomp.chronobank.io/stomp'
 const USER = 'rabbitmq_user'
 const PASSWORD = '38309100024'
+
+class SubscriptionManager {
+  constructor () {
+    this.subscriptions = new Map()
+  }
+
+  addSubscription = (blockchain, channel, subscription) => {
+    const blockchainSection = this.subscriptions.get(blockchain)
+    if (blockchainSection) {
+      const channelSubscription = blockchainSection.get(channel)
+      if (channelSubscription) {
+        blockchainSection.update({[channel]: subscription}) // overwrite with new subscription
+      } else {
+
+      }
+    } else {
+      const newBlockChainSection = fromJS({
+        [blockchain]: {
+          [channel]: subscription
+        }
+      })
+      this.subscriptions.set(blockchain, newBlockChainSection)
+    }
+  }
+
+  delSubscription = (blockchain, channel) => {
+    const blockchainSection = this.subscriptions.get(blockchain)
+    if (blockchainSection) {
+
+    }
+  }
+
+  listAllSubscriptions = () => {
+
+  }
+
+  delSubscriptionByBlockchain = (blockchain) => {
+    this.subscriptions.deleteIn(blockchain)
+  }
+
+}
+
+class Broker {
+  constructor (url, user, password) {
+    this.client = null
+    this.isreconnect = false
+    this.password = password || PASSWORD
+    this.subscriptions = []
+    this.timer = null
+    this.url = url || BASE_URL
+    this.user = user || USER
+    this.wsState = CLOSED
+  }
+
+  connect = () => {
+    if (this.wsState === OPEN) {
+      this.disconnect()
+    }
+
+    if (this.wsState !== CLOSED) {
+      return Promise.reject('Socket is bisy. Try again later, when')
+    }
+  }
+
+  disconnect = () => {
+    this.setreconnect(false)
+    if (this.ws !== null || this.wsState !== CLOSED) {
+      if (this.wsState === WsStateConnected) {
+        this.onclose()
+        this.wsState = WsStateDisconnecting
+        this.ws.close(1000, 'doclose')
+      } else {
+        Promise.resolve('WS is busy (connecting or disconnecting)')
+      }
+    } else {
+      return Promise.resolve('WS is not connected')
+    }
+  }
+
+  subscribe = () => {}
+
+  unsubscribe = () => {}
+
+  setreconnect (ok) {
+    if (ok) {
+      this.isreconnect = true;
+    } else {
+      this.isreconnect = false;
+      if (typeof this.timer !== 'undefined' || this.timer !== null) {
+        clearInterval(this.timer);
+        this.timer = null;
+      }
+    }
+  }
+
+}
 
 let ws = null // WebSocket
 let client = null // Stomp client

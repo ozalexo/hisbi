@@ -7,9 +7,10 @@
  * See middleware API documantaion here: https://github.com/ChronoBank/middleware-waves-rest
  */
 
-import { BLOCKCHAIN_WAVES } from '@chronobank/core/dao/constants'
+import { BLOCKCHAIN_WAVES } from './constants'
 
 const TXS_PER_PAGE = 20
+
 /**
  * get transactions for the registered address (by default skip = 0, limit=100)
  * @param {string} address

@@ -7,7 +7,7 @@
  * See middleware API documantaion here: https://github.com/ChronoBank/middleware-nem-rest
  */
 
-import { BLOCKCHAIN_NEM } from '@chronobank/core/dao/constants'
+import { BLOCKCHAIN_NEM } from './constants'
 
 /**
  * register new address on middleware

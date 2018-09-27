@@ -4,6 +4,8 @@
  */
 
 import Web3 from 'web3'
+import web3WSProviderFactory from './Web3WSProviderFactory'
+import web3Factory from './Web3Factory'
 import * as NodesActionTypes from '../../nodes/constants'
 import * as NodesActions from '../../nodes/actions'
 import * as NodesThunks from '../../nodes/thunks'
@@ -13,70 +15,135 @@ let w3 = null
 let availableProviders = null
 let syncIntervalId = null // Using to check if node is syncing
 
-// TODO: Need to clarify algorythm and what to do case of errors
-const checkIfSyncing = (dispatch) => {
-  // See https://web3js.readthedocs.io/en/1.0/web3-eth.html#issyncing
-  w3.eth.isSyncing()
-    .then((syncStatus) => {
-      if (syncStatus === true) {
-        const syncingComplete = false
-        const progress = 0
-        dispatch(NodesActions.primaryNodeSetSyncingStatus(syncingComplete, progress))
-      } else {
-        if (syncStatus) {
+class Web3Controller {
+  constructor (
+    dispatch,
+    host,
+  ) {
+    this.dispath = dispatch
+    this.host = host
+    this.provider = null
+    this.web3 = null
+    this.syncTimer = null
+    this.syncInterval = 5000 // 5 seconds
+  }
+
+  initController = () => {
+    this.provider = new Web3.providers.WebsocketProvider(this.host)
+    this.provider.on('connect', () => {
+      this.web3 = new Web3(this.provider)
+      this.startSyncingMonitor()
+      this.dispatch(NodesActions.primaryNodeConnected(this.host))
+    })
+    this.provider.on('error', (e) => {
+      this.dispatch(NodesActions.primaryNodeError(this.host, e))
+    })
+    this.provider.on('end', (e) => {
+      this.stopSyncingMonitor(this.dispatch)
+      this.dispatch(NodesActions.primaryNodeDisconnected(this.host, e))
+    })
+  }
+
+  startSyncingMonitor = () => {
+    this.syncTimer = setInterval(this.checkSyncStatus, this.syncInterval)
+  }
+
+  stopSyncingMonitor = () => {
+    clearInterval(this.syncTimer)
+    this.dispatch(NodesActions.primaryNodeSyncingStatusStop())
+  }
+
+  checkSyncStatus = () => {
+    // TODO: Need to clarify algorythm and what to do case of errors
+    // See https://web3js.readthedocs.io/en/1.0/web3-eth.html#issyncing
+    w3.eth.isSyncing()
+      .then((syncStatus) => {
+        if (syncStatus === true) {
           const syncingComplete = false
-          const progress = (syncStatus.currentBlock - syncStatus.startingBlock) / (syncStatus.highestBlock - syncStatus.startingBlock)
-          dispatch(NodesActions.primaryNodeSetSyncingStatus(syncingComplete, progress))
+          const progress = 0
+          this.dispatch(NodesActions.primaryNodeSetSyncingStatus(syncingComplete, progress))
         } else {
-          const syncingComplete = true
-          const progress = 1
-          dispatch(NodesActions.primaryNodeSetSyncingStatus(syncingComplete, progress))
+          if (syncStatus) {
+            const syncingComplete = false
+            const progress = (syncStatus.currentBlock - syncStatus.startingBlock) / (syncStatus.highestBlock - syncStatus.startingBlock)
+            this.dispatch(NodesActions.primaryNodeSetSyncingStatus(syncingComplete, progress))
+          } else {
+            const syncingComplete = true
+            const progress = 1
+            this.dispatch(NodesActions.primaryNodeSetSyncingStatus(syncingComplete, progress))
+          }
         }
-      }
-    })
-    .catch((error) => {
-      const syncingInProgress = true
-      const progress = 0
-      dispatch(NodesActions.primaryNodeSetSyncingStatus(syncingInProgress, progress))
-      // eslint-disable-next-line no-console
-      console.log('Set SIP, progress 0', error)
-
-    })
+      })
+      .catch((error) => {
+        const syncingInProgress = true
+        const progress = 0
+        this.dispatch(NodesActions.primaryNodeSetSyncingStatus(syncingInProgress, progress))
+        // eslint-disable-next-line no-console
+        console.log('Set SIP, progress 0', error)
+      })
+  }
 }
 
-const startSyncTimer = (dispatch) => {
-  syncIntervalId = setInterval(() => checkIfSyncing(dispatch), 3000)
-}
+// // TODO: Need to clarify algorythm and what to do case of errors
+// const checkIfSyncing = (dispatch) => {
+//   // See https://web3js.readthedocs.io/en/1.0/web3-eth.html#issyncing
+//   w3.eth.isSyncing()
+//     .then((syncStatus) => {
+//       if (syncStatus === true) {
+//         const syncingComplete = false
+//         const progress = 0
+//         dispatch(NodesActions.primaryNodeSetSyncingStatus(syncingComplete, progress))
+//       } else {
+//         if (syncStatus) {
+//           const syncingComplete = false
+//           const progress = (syncStatus.currentBlock - syncStatus.startingBlock) / (syncStatus.highestBlock - syncStatus.startingBlock)
+//           dispatch(NodesActions.primaryNodeSetSyncingStatus(syncingComplete, progress))
+//         } else {
+//           const syncingComplete = true
+//           const progress = 1
+//           dispatch(NodesActions.primaryNodeSetSyncingStatus(syncingComplete, progress))
+//         }
+//       }
+//     })
+//     .catch((error) => {
+//       const syncingInProgress = true
+//       const progress = 0
+//       dispatch(NodesActions.primaryNodeSetSyncingStatus(syncingInProgress, progress))
+//       // eslint-disable-next-line no-console
+//       console.log('Set SIP, progress 0', error)
 
-const stopSyncTimer = (dispatch) => {
-  clearInterval(syncIntervalId)
-  dispatch(NodesActions.primaryNodeSyncingStatusStop())
-}
+//     })
+// }
 
-/**
- * Creating web3 provider and subscribing for web-socket's events
- * @param {string} url
- * @param {*} store Redux store
- */
-const getProvider = (url, dispatch) => {
-  const provider = new Web3.providers.WebsocketProvider(url)
+// const startSyncTimer = (dispatch) => {
+//   syncIntervalId = setInterval(() => checkIfSyncing(dispatch), 5000)
+// }
 
-  provider.on('connect', () => {
-    startSyncTimer(dispatch)
-    dispatch(NodesActions.primaryNodeConnected(url))
-  })
+// const stopSyncTimer = (dispatch) => {
+//   clearInterval(syncIntervalId)
+//   dispatch(NodesActions.primaryNodeSyncingStatusStop())
+// }
 
-  provider.on('error', (e) =>
-    dispatch(NodesActions.primaryNodeError(url, e))
-  )
-
-  provider.on('end', (e) => {
-    stopSyncTimer(dispatch)
-    dispatch(NodesActions.primaryNodeDisconnected(url, e))
-  })
-
-  return provider
-}
+// /**
+//  * Creating web3 provider and subscribing for web-socket's events
+//  * @param {string} url
+//  * @param {*} store Redux store
+//  */
+// const getProvider = (host, dispatch) => web3WSProviderFactory(
+//   host,
+//   // onconnect
+//   () => {
+//     startSyncTimer(dispatch)
+//     dispatch(NodesActions.primaryNodeConnected(host))
+//   },
+//   // onerror
+//   (e) => dispatch(NodesActions.primaryNodeError(host, e)),
+//   // onend
+//   (e) => {
+//     stopSyncTimer(dispatch)
+//     dispatch(NodesActions.primaryNodeDisconnected(host, e))
+//   }
+// )
 
 const mutations = {
 
@@ -126,9 +193,12 @@ const mutations = {
     if (!w3 || !availableProviders[currentProviderUrl]) {
       const currentPrimaryNode = NodesSelectors.selectCurrentPrimaryNode(state)
       const currentProviderUrl = currentPrimaryNode.ws
+
       const w3Provider = getProvider(currentProviderUrl, store.dispatch)
+      console.log(w3Provider)
       availableProviders[currentProviderUrl] = w3Provider
-      w3 = new Web3(w3Provider)
+      // w3 = new Web3(w3Provider)
+      w3 = new Web3Controller(dispatch, currentProviderUrl)
       return Promise.resolve(w3)
     } else {
       return Promise.resolve(w3)

@@ -6,19 +6,17 @@
 // TODO: to implement validation that provided blockchain exists and throw Error if it does not
 
 /**
- * This is wrapper on real API in the ./bitcoins folder.
+ * This is wrapper on real APIs of all Bitcoin-like blockchains (btc, bcc, litecoin).
  * In this module we desides which node will be used.
  * See middleware API documantaion here: https://github.com/ChronoBank/middleware-bitcoin-rest
  */
 
-import {
-  BLOCKCHAIN_BITCOIN_CASH,
-  BLOCKCHAIN_BITCOIN,
-  BLOCKCHAIN_LITECOIN,
-} from '@chronobank/core/dao/constants'
-import * as bitcoinApi from './bitcoins/bitcoin'
-import * as bitcoinCashApi from './bitcoins/bitcoincash'
-import * as litecoinApi from './bitcoins/litecoin'
+import { BLOCKCHAIN_BITCOIN } from '@chronobank/bitcoin/constants'
+import { BLOCKCHAIN_BITCOIN_CASH } from '@chronobank/bitcoincash/constants'
+import { BLOCKCHAIN_LITECOIN } from '@chronobank/litecoin/constants'
+import * as bitcoinApi from '@chronobank/bitcoin/httpAPI'
+import * as bitcoinCashApi from '@chronobank/bitcoincash/httpAPI'
+import * as litecoinApi from '@chronobank/litecoin/httpAPI'
 
 const chainsMapping = {
   [BLOCKCHAIN_BITCOIN_CASH]: bitcoinCashApi,
@@ -78,11 +76,11 @@ export const requestBitcoinTransactionByHash = (blockchain, txHash) =>
 /**
  * estimate fee rate (based on last 6 blocks)
  */
-export const requestBitcoinEstimateFeeRate =  (blockchain) =>
+export const requestBitcoinEstimateFeeRate = (blockchain) =>
   chainsMapping[blockchain].requestEstimateFeeRate()
 
 /**
  * estimate fee rate (based on last 6 blocks)
  */
-export const requestBlocksHeight =  (blockchain) =>
+export const requestBlocksHeight = (blockchain) =>
   chainsMapping[blockchain].requestBlocksHeight()

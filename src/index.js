@@ -1,3 +1,8 @@
+/**
+ * Copyright 2017–2018, LaborX PTY
+ * Licensed under the AGPL Version 3 license.
+ */
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
@@ -5,18 +10,22 @@ import { PersistGate } from 'redux-persist/lib/integration/react'
 import { withRouter } from 'react-router'
 import { ConnectedRouter, push } from 'connected-react-router'
 import { Provider } from 'react-redux'
+import * as Initializers from './store/initializers'
 import './index.scss'
 import defaultTheme from './themes/default'
 import configureStore from './store/configureStore'
 import App from './App'
 import registerServiceWorker from './registerServiceWorker'
 
+// eslint-disable-next-line no-unused-vars
 let i18nJson
 
 const { store, history, persistor } = configureStore()
 const NonBlockApp = withRouter(App)
 
 const initAfterRehydration = () => {
+  // Initializers.initI18N(store)
+  Initializers.initPrimaryNodes(store)
   const state = store.getState()
   let path = '/'
   if (state.accounts.list.length > 0) {

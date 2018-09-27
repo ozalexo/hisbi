@@ -7,18 +7,12 @@
  * TODO: To use i18n for sections/networks titles
  */
 
-import {
-  BLOCKCHAIN_BITCOIN_CASH,
-  BLOCKCHAIN_BITCOIN,
-  BLOCKCHAIN_ETHEREUM,
-  BLOCKCHAIN_LITECOIN,
-  BLOCKCHAIN_NEM,
-  BLOCKCHAIN_WAVES,
-  COIN_TYPE_BTC_MAINNET,
-  COIN_TYPE_BTC_TESTNET,
-  COIN_TYPE_LTC_MAINNET,
-  COIN_TYPE_LTC_TESTNET,
-} from '@chronobank/core/dao/constants'
+import { BLOCKCHAIN_BITCOIN, COIN_TYPE_BTC_MAINNET, COIN_TYPE_BTC_TESTNET } from '@chronobank/bitcoin/constants'
+import { BLOCKCHAIN_BITCOIN_CASH } from '@chronobank/bitcoincash/constants'
+import { BLOCKCHAIN_ETHEREUM } from '@chronobank/ethereum/constants'
+import { BLOCKCHAIN_LITECOIN, COIN_TYPE_LTC_MAINNET, COIN_TYPE_LTC_TESTNET } from '@chronobank/litecoin/constants'
+import { BLOCKCHAIN_NEM } from '@chronobank/nem/constants'
+import { BLOCKCHAIN_WAVES } from '@chronobank/waves/constants'
 
 const MAINNET = 'mainnet'
 const TESTNET = 'testnet'

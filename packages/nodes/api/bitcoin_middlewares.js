@@ -3,7 +3,7 @@
  * Licensed under the AGPL Version 3 license.
  */
 
-import { BLOCKCHAIN_BITCOIN_CASH } from '@chronobank/core/dao/constants'
+import { BLOCKCHAIN_BITCOIN_CASH } from '@chronobank/bitcoincash/constants'
 import { requestBitcoinCashAddressInfo } from './explorers/blockdozer'
 
 export const requestBitcoinCurrentBlockHeight = (blockchain) => (dispatch) => {
