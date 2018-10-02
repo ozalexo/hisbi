@@ -13,15 +13,9 @@ export const mutations = {
     console.log(state)
     return {
       ...state,
-      web3: {
-        ...state.web3,
-        web3Listener: {
-          ...state.web3.web3Listener,
-          contracts: {
-            ...state.web3.web3Listener.contracts,
-            list: [...state.web3.web3Listener.contracts.list, payload.contractName],
-          },
-        },
+      contracts: {
+        ...state.contracts,
+        list: [...state.contracts.list, payload.contractName],
       },
     }
   },
@@ -29,6 +23,7 @@ export const mutations = {
 }
 
 export default (state = initialState, { type, ...payload }) => {
+  console.log('\n\nSliced reducer')
   return (type in mutations)
     ? mutations[type](state, payload)
     : state

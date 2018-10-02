@@ -41,10 +41,10 @@ const configureStore = () => {
   // TODO: issue: accounts and weallets ducks contains unnecessary '_persist' value
   // TODO: need to wotk with HMR correctly
   if (module.hot) {
-    console.log('Hot', module.hot)
+    // console.log('Hot', module.hot)
     module.hot.accept( () => {
       // This fetch the new state of the above reducers.
-      console.log('Hot reducer releacements')
+      // console.log('Hot reducer releacements')
       store.replaceReducer(
         persistReducer(accountsPersistConfig, accounts)
       )

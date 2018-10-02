@@ -4,26 +4,27 @@
  */
 
 import * as NodesActionTypes from './constants'
+import * as Web3ActionTypes from '../middlewares/web3/constants'
 // import * as NodesActions from './actions'
 // import * as NodesSelectors from './selectors'
 import initialState from './initialState'
-import { mutations as web3Mutations } from '../middlewares/web3/reducers'
+import slicedWeb3Reducer from '../middlewares/web3/reducers'
 
 const mutations = {
 
-  [NodesActionTypes.NODES_NETWORK_SELECT]: (state, { networkIndex }) => {
+  [NodesActionTypes.NODES_NETWORK_SELECT]: (state, action) => {
     return {
       ...state,
-      selected: state.availableNetworks[networkIndex],
+      selected: state.availableNetworks[action.networkIndex],
     }
   },
 
-  [NodesActionTypes.ETHEREUM_TOKEN_TRANSFER]: (state, {symbol, data}) => {
+  [NodesActionTypes.ETHEREUM_TOKEN_TRANSFER]: (state, action) => {
     return {
       ...state,
       tokens: {
         ...state.tokens,
-        [symbol]: data,
+        [action.symbol]: action.data,
       },
     }
   },
@@ -32,15 +33,21 @@ const mutations = {
     return state
   },
 
+  [Web3ActionTypes.WEB3_LISTENER_APPEND_CONTRACT]: (state, action) => {
+    return {
+      ...state,
+      web3: {
+        ...state.web3,
+        web3Listener: slicedWeb3Reducer(state.web3.web3Listener, action),
+      },
+    }
+  },
+
 }
 
-const joinedMutations = {
-  ...mutations,
-  ...web3Mutations,
-}
-
-export default (state = initialState, { type, ...payload }) => {
-  return (type in joinedMutations)
-    ? joinedMutations[type](state, payload)
+export default (state = initialState, action) => {
+  const type = action.type
+  return (type in mutations)
+    ? mutations[type](state, action)
     : state
 }
