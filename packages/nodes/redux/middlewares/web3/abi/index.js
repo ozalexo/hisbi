@@ -16,7 +16,7 @@ import PlatformsManagerABI from 'chronobank-smart-contracts/build/contracts/Plat
 import PlatformTokenExtensionGatewayManagerEmitterABI from 'chronobank-smart-contracts/build/contracts/PlatformTokenExtensionGatewayManagerEmitter.json'
 import RewardsABI from 'chronobank-smart-contracts/build/contracts/Rewards.json'
 import AssetHolderABI from 'chronobank-smart-contracts/build/contracts/TimeHolder.json'
-import TokenManagementInterfaceABI from 'chronobank-smart-contracts/build/contracts/TokenManagementInterface.json'
+// import TokenManagementInterfaceABI from 'chronobank-smart-contracts/build/contracts/TokenManagementInterface.json'
 import UserManagerABI from 'chronobank-smart-contracts/build/contracts/UserManager.json'
 import VotingManagerABI from 'chronobank-smart-contracts/build/contracts/VotingManager.json'
 import PollEmitterABI from 'chronobank-smart-contracts/build/contracts/PollEmitter.json'
@@ -48,7 +48,7 @@ export default {
   PollEmitterABI,
   PollInterfaceABI,
   RewardsABI,
-  TokenManagementInterfaceABI,
+  // TokenManagementInterfaceABI,
   UserManagerABI,
   VotingManagerABI,
   WalletABI,

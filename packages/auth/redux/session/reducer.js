@@ -3,27 +3,38 @@
  * Licensed under the AGPL Version 3 license.
  */
 
-import { REHYDRATE } from 'redux-persist'
-
 const initialState = {
-  selected: null,
-  list: []
+  isLoggedIn: false,
+  currentAuthType: null,
+  authTypes: [
+    {
+      type: 'MetaMask',
+      enabled: true,
+    },
+    {
+      type: 'WalletFile',
+      enabled: true,
+    },
+    {
+      type: 'TrezorDevice',
+      enabled: true,
+    },
+    {
+      type: 'LedgerDevice',
+      enabled: true,
+    },
+    {
+      type: 'Mnemonic',
+      enabled: true,
+    },
+    {
+      type: 'PrivateKey',
+      enabled: true,
+    },
+  ],
 }
 
 const mutations = {
-
-  [REHYDRATE]: (state, payload) => {
-    // action.payload is undefined if LocalStorage is empty
-    // See https://github.com/rt2zz/redux-persist/issues/719
-    if (!payload.payload) {
-      return state
-    }
-    return {
-      ...state,
-      selected: null,
-      list: payload.payload.list
-    }
-  }
 
   // [persistAccountActionTypes.PERSIST_ACCOUNT_SIGNATURES_LOADING]: (state) => ({
   //   ...state,

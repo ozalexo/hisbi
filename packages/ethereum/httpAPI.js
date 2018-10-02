@@ -4,28 +4,12 @@
  */
 
 /**
- * See middleware API documantaion here:
+ * See middleware's API documantaion here:
  * https://github.com/ChronoBank/middleware-eth-rest
  * https://github.com/ChronoBank/middleware-eth-2fa
  */
 
 import { BLOCKCHAIN_ETHEREUM } from './constants'
-
-/**
- * await this._api.post('addr', {
-	address: ethAddress,
-	nem: nemAddress,
-	waves: wavesAddress,
-})
-await this._api.delete('addr', {
-	address: ethAddress,
-	//nem: nemAddress,
-	//waves: wavesAddress,
-})
-_api.get(`tx/${address}/history?skip=${skip}&limit=${offset}`)
-_api.get(`events/${eventName}/?${queryFilter}`)
-_api.get(`addr/${address}/balance`)
- */
 
 /**
  * register new address on middleware

@@ -8,13 +8,12 @@ import * as NodesSelectors from './selectors'
 
 // TODO: It must be a bit more complex. Need to connect to second available primary node in case of connection failure
 export const preselectNetwork = () => (dispatch, getState) => {
-  console.log('THUNK preselectNetwork')
   const state = getState()
   const nodes = NodesSelectors.selectNodesState(state)
   let networkIndex = null
   if (nodes.selected === null) {
     if (process.env['NODE_ENV'] === 'development') {
-      networkIndex = 3
+      networkIndex = 1
     } else {
       networkIndex = 1
     }

@@ -4,6 +4,7 @@
  */
 
 import React from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Radio from '@material-ui/core/Radio'
@@ -12,6 +13,9 @@ import RadioGroup from '@material-ui/core/RadioGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
+import { selectNodesState } from '@chronobank/nodes/redux/nodes/selectors'
+import compose from 'recompose/compose'
+import { networkSwitch } from '@chronobank/nodes/redux/nodes/actions'
 
 const styles = (theme) => ({
   root: {
@@ -25,18 +29,26 @@ const styles = (theme) => ({
   },
 })
 
+const mapStateToProps = (state) => ({
+  networks: selectNodesState(state),
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  networkSwitch: (networkIndex) => dispatch(networkSwitch(networkIndex)),
+})
+
 class NetworkSelector extends React.Component {
-  state = {
-    value: 'female',
+  static propTypes = {
+    classes: PropTypes.object.isRequired,
+    networkSwitch: PropTypes.func,
   }
 
   handleChange = (event) => {
-    this.setState({ value: event.target.value })
+    this.props.networkSwitch(parseInt(event.target.value))
   }
 
   render () {
     const { classes } = this.props
-
     return (
       <div className={classes.root}>
         <FormControl component="fieldset" className={classes.formControl}>
@@ -45,10 +57,24 @@ class NetworkSelector extends React.Component {
             aria-label="Gender"
             name="gender1"
             className={classes.group}
-            value={this.state.value}
+            value={this.props.networks.selected.networkIndex.toString()}
             onChange={this.handleChange}
           >
-            <FormControlLabel value="mainChrono" control={<Radio />} label="Chronobank mainnet" />
+            {
+              this.props.networks.availableNetworks.map((network) => {
+                const value = network.networkIndex.toString()
+                const label = network.networkTitle
+                return (
+                  <FormControlLabel
+                    key={label}
+                    value={value}
+                    control={<Radio />}
+                    label={label}
+                  />
+                )
+              })
+            }
+            {/* <FormControlLabel value="mainChrono" checked={true} control={<Radio />} label="Chronobank mainnet" />
             <FormControlLabel value="mainInfura" control={<Radio />} label="Infura mainnet" />
             <FormControlLabel value="testChrono" control={<Radio />} label="Chronobank testnet" />
             <FormControlLabel value="testInfura" control={<Radio />} label="Infura tesnet" />
@@ -57,7 +83,7 @@ class NetworkSelector extends React.Component {
               disabled
               control={<Radio />}
               label="(Custom ETH node)"
-            />
+            /> */}
           </RadioGroup>
         </FormControl>
       </div>
@@ -65,8 +91,7 @@ class NetworkSelector extends React.Component {
   }
 }
 
-NetworkSelector.propTypes = {
-  classes: PropTypes.object.isRequired,
-}
-
-export default withStyles(styles)(NetworkSelector)
+export default compose(
+  withStyles(styles),
+  connect(mapStateToProps, mapDispatchToProps)
+)(NetworkSelector)

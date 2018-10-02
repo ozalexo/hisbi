@@ -6,8 +6,8 @@
 import SockJS from 'sockjs-client'
 import Stomp from '@stomp/stompjs'
 import { Map, fromJS } from 'immutable'
-import * as MiddlewareActions from './actions'
-import * as MiddlewareActionTypes from './constants'
+// import * as MiddlewareActions from './actions'
+import * as ActionTypes from './constants'
 
 // WS states
 const CONNECTING = 0
@@ -181,16 +181,16 @@ const disconnect = () =>
 
 const mutations = {
 
-  [MiddlewareActionTypes.MIDDLEWARE_CONNECT]: (store) => {
+  [ActionTypes.MIDDLEWARE_CONNECT]: (store) => {
     connect(store.dispatch)
   },
 
-  [MiddlewareActionTypes.MIDDLEWARE_DISCONNECT]: () => {
+  [ActionTypes.MIDDLEWARE_DISCONNECT]: () => {
     unsubscribeAll()
     disconnect()
   },
 
-  [MiddlewareActionTypes.MIDDLEWARE_SUBSCRIBE]: (store, payload) => {
+  [ActionTypes.MIDDLEWARE_SUBSCRIBE]: (store, payload) => {
     try {
       subscribe(payload.channel, payload.onMessageThunk, store.dispatch)
       return store.dispatch(MiddlewareActions.middlewareSubscribeSuccess(payload.channel))
@@ -199,7 +199,7 @@ const mutations = {
     }
   },
 
-  [MiddlewareActionTypes.MIDDLEWARE_UNSUBSCRIBE]: (store, payload) => {
+  [ActionTypes.MIDDLEWARE_UNSUBSCRIBE]: (store, payload) => {
     if (payload && payload.channel) {
       unsubscribe(payload.channel)
     } else {

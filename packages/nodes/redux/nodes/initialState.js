@@ -13,6 +13,8 @@ import { BLOCKCHAIN_ETHEREUM } from '@chronobank/ethereum/constants'
 import { BLOCKCHAIN_LITECOIN, COIN_TYPE_LTC_MAINNET, COIN_TYPE_LTC_TESTNET } from '@chronobank/litecoin/constants'
 import { BLOCKCHAIN_NEM } from '@chronobank/nem/constants'
 import { BLOCKCHAIN_WAVES } from '@chronobank/waves/constants'
+import Web3InitialState from '../middlewares/web3/initialState'
+import WSInitialState from '../middlewares/rabbitmq/initialState'
 
 const MAINNET = 'mainnet'
 const TESTNET = 'testnet'
@@ -229,4 +231,7 @@ export default {
     },
   ],
   selected: null,
+  tokens: {},
+  web3: Web3InitialState,
+  ws: WSInitialState,
 }

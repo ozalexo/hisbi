@@ -43,3 +43,7 @@ export const middlewareUnsubscribe = (channel) => ({
   channel,
 })
 
+export const appendContract = (contractName) => ({
+  type: MiddlewareActionTypes.WEB3_LISTENER_APPEND_CONTRACT,
+  contractName,
+})

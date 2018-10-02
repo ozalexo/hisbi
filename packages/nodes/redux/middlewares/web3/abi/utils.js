@@ -5,7 +5,7 @@
 
 import bs58 from 'bs58'
 
-export const getContractAddressByNetworkId = (networks, networkId) => {
+export const getContractAddressByNetworkId = (networks, networkId, contractName) => {
   if (!networks) {
     throw new Error('No networks specified!')
   }
@@ -13,7 +13,7 @@ export const getContractAddressByNetworkId = (networks, networkId) => {
     throw new Error('No network ID specified!')
   }
   if (!networks[networkId]) {
-    throw new Error(`Contract is not supported in network with ID ${networkId}`)
+    throw new Error(`Contract ${contractName} is not supported in network with ID ${networkId}`)
   }
   return networks[networkId].address
 }

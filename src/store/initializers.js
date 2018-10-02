@@ -14,7 +14,6 @@ import { preselectNetwork } from '@chronobank/nodes/redux/nodes/thunks'
 
 export const initPrimaryNodes = async (store) => {
   store.dispatch(preselectNetwork()) // Automatic selection of a primary node and network (mainnet/testnet)
-  console.log('INIT nodes from initializer')
   await store.dispatch(nodesInit()) // Init Nodes middlware (working with Ehtereum primary nodes via web3)
   // TODO: WebSocketService we be removed. Let's it be here for now
   // WebSocketService.initWebSocketService(store)

@@ -2,6 +2,7 @@
  * Copyright 2017–2018, LaborX PTY
  * Licensed under the AGPL Version 3 license.
  */
+
 const path = require('path')
 
 module.exports = {
@@ -25,7 +26,9 @@ module.exports = {
     propWrapperFunctions: ['forbidExtraProps'],
   },
   plugins: [
-    'babel'
+    'babel',
+    'import',
+    'jsx-a11y'
   ],
   extends: [
     'eslint:recommended',
@@ -43,7 +46,7 @@ module.exports = {
   rules: {
     indent: ['warn', 2],
     'arrow-parens': 'warn',
-    'comma-dangle': 'warn',
+    'comma-dangle': ['error', 'always-multiline'],
     complexity: 'warn',
     'eol-last': 'warn',
     'global-require': 'warn',
