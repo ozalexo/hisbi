@@ -14,7 +14,6 @@ import { BLOCKCHAIN_BITCOIN } from './constants'
  * @param {string} address
  */
 export const requestSubscribeWalletByAddress = (address) => (dispatch) => {
-  console.log('\n\n\n\nREquest for ', address)
   const action = {
     type: 'REQ/MIDDLEWARE/BITCOIN/POST/SUBSCRIBE',
     payload: {

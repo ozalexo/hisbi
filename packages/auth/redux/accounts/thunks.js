@@ -25,6 +25,7 @@ export const createInMemoryAccount = (accountTitle, mnemonic, password) => (
   console.log('Private key is', privateKey)
   const btcAddress = dispatch(BitcoinThunks.createBitcoinWallet(privateKey))
   // Wallets are created. Let's use http API to obtain some data
-  const httpResponse = dispatch(requestBitcoinSubscribeWalletByAddress('Bitcoin', btcAddress))
-  console.log('HTTP reponse', httpResponse)
+  dispatch(requestBitcoinSubscribeWalletByAddress('Bitcoin', btcAddress))
+    .then((data) => { console.log('HTTP response OK:', data) })
+    .catch((error) => { console.log('HTTP response EROR:', error) })
 }
