@@ -23,6 +23,7 @@ const walletCreateSuccess = (state, payload) => ({
     [payload.wallet.address]: payload.wallet,
   },
 })
+
 const walletCreateFailure = (state) => state
 
 const mutations = {

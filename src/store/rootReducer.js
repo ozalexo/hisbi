@@ -14,7 +14,6 @@ import { DUCK_LITECOIN } from '@chronobank/litecoin/redux/constants'
 import { DUCK_NEM } from '@chronobank/nem/redux/constants'
 import { DUCK_NODES } from '@chronobank/nodes/redux/nodes/constants'
 import { DUCK_SESSION } from '@chronobank/auth/redux/session/constants'
-import { DUCK_WALLETS } from '@chronobank/auth/redux/wallets/constants'
 import { DUCK_WAVES } from '@chronobank/waves/redux/constants'
 import accounts from '@chronobank/auth/redux/accounts/reducer'
 import bitcoin from '@chronobank/bitcoin/redux/reducers'
@@ -24,20 +23,9 @@ import litecoin from '@chronobank/litecoin/redux/reducers'
 import nem from '@chronobank/nem/redux/reducers'
 import nodes from '@chronobank/nodes/redux/nodes/reducer'
 import session from '@chronobank/auth/redux/session/reducer'
-import wallets from '@chronobank/auth/redux/wallets/reducer'
 import waves from '@chronobank/waves/redux/reducers'
 
 export const accountsPersistConfig = {
-  key: 'accounts',
-  storage: storage,
-  whitelist: ['selected', 'list'],
-  // blacklist: ['decryptedWallet'],
-  // There is an issue in the source code of redux-persist (default setTimeout does not cleaning)
-  // See https://github.com/rt2zz/redux-persist/issues/786#issuecomment-421850652
-  timeout: null,
-}
-
-export const walletsPersistConfig = {
   key: 'accounts',
   storage: storage,
   whitelist: ['selected', 'list'],
@@ -69,5 +57,4 @@ export default combineReducers({
   [DUCK_ACCOUNTS]: persistReducer(accountsPersistConfig, accounts),
   [DUCK_NODES]: nodes,
   [DUCK_SESSION]: session,
-  [DUCK_WALLETS]: persistReducer(walletsPersistConfig, wallets),
 })
