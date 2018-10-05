@@ -1,3 +1,8 @@
+/**
+ * Copyright 2017–2018, LaborX PTY
+ * Licensed under the AGPL Version 3 license.
+ */
+
 import { combineReducers } from 'redux'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer } from 'redux-persist'
@@ -36,6 +41,16 @@ export const walletsPersistConfig = {
   key: 'accounts',
   storage: storage,
   whitelist: ['selected', 'list'],
+  // blacklist: ['decryptedWallet'],
+  // There is an issue in the source code of redux-persist (default setTimeout does not cleaning)
+  // See https://github.com/rt2zz/redux-persist/issues/786#issuecomment-421850652
+  timeout: null,
+}
+
+export const bitcoinPersistConfig = {
+  key: [DUCK_BITCOIN],
+  storage: storage,
+  whitelist: ['wallets'],
   // blacklist: ['decryptedWallet'],
   // There is an issue in the source code of redux-persist (default setTimeout does not cleaning)
   // See https://github.com/rt2zz/redux-persist/issues/786#issuecomment-421850652

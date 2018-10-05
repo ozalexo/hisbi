@@ -6,8 +6,7 @@
     "axios": "^0.16.2",
     "bignumber.js": "^4.1.0",
     "chronobank-smart-contracts": "^1.1.47",
-    "redux-axios-middleware": "4.0.0",
-    "web3": "npm:web3@1.0.0-beta.33",
+    "web3": "npm:web3@1.0.0-beta.36",
     "webstomp-client": "^1.2.4"
   }
 }

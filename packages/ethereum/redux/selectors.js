@@ -3,9 +3,32 @@
  * Licensed under the AGPL Version 3 license.
  */
 
-// import { createSelector } from 'reselect'
+import { createSelector } from 'reselect'
+import { selectCurrentNetworkType } from '@chronobank/nodes/redux/nodes/selectors'
+import { selectAccountSelected } from '@chronobank/auth/redux/accounts/selectors'
 
 import { DUCK_ETHEREUM } from './constants'
 
 export const selectDuckEthereum = (state) =>
   state[DUCK_ETHEREUM]
+
+export const selectCurrentDerivedPath = createSelector(
+  [selectCurrentNetworkType, selectDuckEthereum],
+  (networkType, duckEthereum) => {
+    return duckEthereum.derivedPath[networkType]
+  }
+)
+
+export const selectEthereumWallets = createSelector(
+  [selectDuckEthereum],
+  (duckEthereum) => {
+    return duckEthereum.wallets
+  }
+)
+
+export const selectEncryptedWallet = createSelector(
+  [selectAccountSelected, selectEthereumWallets],
+  (accountAddress, ethereumWallets) => {
+    return ethereumWallets[accountAddress] && ethereumWallets[accountAddress].encrypted
+  }
+)

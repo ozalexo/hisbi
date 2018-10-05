@@ -47,3 +47,7 @@ export const appendContract = (contractName) => ({
   type: MiddlewareActionTypes.WEB3_LISTENER_APPEND_CONTRACT,
   contractName,
 })
+
+export const web3Reset = () => ({
+  type: MiddlewareActionTypes.WEB3_LISTENER_RESET,
+})

@@ -1,13 +1,14 @@
 import { createSelector } from 'reselect'
 
-export const selectAuthDuck = (state) => state.auth
+export const selectSessionDuck = (state) => state.session
 
-export const selectAuthType = createSelector(
-  selectAuthDuck,
-  (auth) => auth.currentAuthType
+export const selectSessionType = createSelector(
+  selectSessionDuck,
+  (session) => session.currentAuthType
 )
 
 export const selectIsLoggedIn = () => createSelector(
-  selectAuthDuck,
-  (auth) => auth.isLoggedIn
+  selectSessionDuck,
+  (session) => session.isLoggedIn
 )
+

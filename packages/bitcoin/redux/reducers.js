@@ -4,8 +4,21 @@
  */
 
 import initialState from './initialState'
+import * as ActionTypes from './constants'
 
-const mutations = {}
+const createBitcoinWallet = (state, payload) => ({
+  ...state,
+  wallets: {
+    ...state.wallets,
+    [payload.ethereumAddress]: {
+      [payload.wallet.address]: payload.wallet,
+    },
+  },
+})
+
+const mutations = {
+  [ActionTypes.BITCOIN_WALLET_CREATE]: createBitcoinWallet,
+}
 
 export default (state = initialState, { type, ...payload }) => {
   return (type in mutations)

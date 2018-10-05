@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom'
 import './App.scss'
 // import LoginForm from './pages/LoginForm'
 // import AccountSelector from './pages/AccountSelector'
-import DemoPage from './pages/DemoPage'
+import DemoPageContainer from './pages/DemoPageContainer'
 
 // class App extends Component {
 //   render () {
@@ -26,7 +26,7 @@ class App extends Component {
     return (
       <div>
         <Switch>
-          <Route exact path='/' component={DemoPage} />
+          <Route exact path='/' component={DemoPageContainer} />
           <Route component={() => (<div>Miss</div>)} />
         </Switch>
       </div>

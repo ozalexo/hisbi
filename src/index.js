@@ -25,13 +25,20 @@ const NonBlockApp = withRouter(App)
 
 const initAfterRehydration = () => {
   // Initializers.initI18N(store)
-  Initializers.initPrimaryNodes(store)
-  const state = store.getState()
-  let path = '/'
-  if (state.accounts.list.length > 0) {
-    path = '/select-account'
+  try {
+    Initializers.initPrimaryNodes(store)
+    const state = store.getState()
+    let path = '/'
+    if (state.accounts.list.length > 0) {
+      // path = '/select-account'
+      path = '/'
+    }
+    store.dispatch(push(path))
+  } catch (error) {
+    // TODO: Q: automatic switch to another available node? But what if user tried to connect to custom node?
+    // eslint-dicanle-next-line no-console
+    console.log('Error during connection to Ethereum node:', error)
   }
-  store.dispatch(push(path))
 }
 
 ReactDOM.render(

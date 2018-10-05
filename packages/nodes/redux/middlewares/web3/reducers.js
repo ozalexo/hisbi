@@ -7,23 +7,28 @@ import * as ActionTypes from './constants'
 import initialState from './initialState'
 // import * as Actions from './actions'
 
+const web3ListenerAppendContract = (state, payload) => {
+  return {
+    ...state,
+    contracts: {
+      ...state.contracts,
+      list: [...state.contracts.list, payload.contractName],
+    },
+  }
+}
+
+const web3ListenerReset = () => {
+  return initialState
+}
+
 export const mutations = {
 
-  [ActionTypes.WEB3_LISTENER_APPEND_CONTRACT]: (state, payload) => {
-    console.log(state)
-    return {
-      ...state,
-      contracts: {
-        ...state.contracts,
-        list: [...state.contracts.list, payload.contractName],
-      },
-    }
-  },
+  [ActionTypes.WEB3_LISTENER_APPEND_CONTRACT]: web3ListenerAppendContract,
+  [ActionTypes.WEB3_LISTENER_RESET]: web3ListenerReset,
 
 }
 
 export default (state = initialState, { type, ...payload }) => {
-  console.log('\n\nSliced reducer')
   return (type in mutations)
     ? mutations[type](state, payload)
     : state

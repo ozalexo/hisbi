@@ -1,3 +1,8 @@
+/**
+ * Copyright 2017–2018, LaborX PTY
+ * Licensed under the AGPL Version 3 license.
+ */
+
 import { createSelector } from 'reselect'
 
 export const selectAccountList = createSelector(
@@ -5,7 +10,7 @@ export const selectAccountList = createSelector(
   (accounts) => accounts.list
 )
 
-export const selectAccountSelected = () => createSelector(
+export const selectAccountSelected = createSelector(
   (state) => state.accounts,
   (accounts) => accounts.selected
 )

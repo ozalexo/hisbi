@@ -47,10 +47,10 @@ const availableChronoBankMiddlewares = {
 }
 
 /**
- * This is a list of all available primary Ethereum nodes
+ * This is a list of all available Ethereum nodes
  */
 const INFURA_TOKEN = 'PVe9zSjxTKIP3eAuAHFA'
-const availablePrimaryNodes = {
+const availableEthereumNodes = {
   [MAINNET]: {
     chronobank: {
       disabled: false,
@@ -85,6 +85,14 @@ const availablePrimaryNodes = {
       isOnline: null,
       isSyncing: true,
       ws: 'wss://rinkeby.infura.io/ws',
+    },
+    local: {
+      disabled: false,
+      host: `https://localhost:8545`,
+      providerTitle: 'LocalNode',
+      isOnline: null,
+      isSyncing: true,
+      ws: 'ws://localhost:8540/ws',
     },
   },
   custom: {},
@@ -189,6 +197,11 @@ export default {
           networkIndex: 3,
           networkTitle: 'Infura - Rinkeby (testnet)',
         },
+        {
+          networkId: 4,
+          networkIndex: 4,
+          networkTitle: 'Local Node (testnet)',
+        },
       ],
     },
   ],
@@ -200,7 +213,7 @@ export default {
       networkIndex: 0,
       networkTitle: 'ChronoBank - Mainnet (production)',
       networkType: MAINNET,
-      primaryNode: availablePrimaryNodes[MAINNET].chronobank,
+      primaryNode: availableEthereumNodes[MAINNET].chronobank,
     },
     {
       blockchain: blockchainMainnet,
@@ -209,7 +222,7 @@ export default {
       networkIndex: 1,
       networkTitle: 'Infura - Mainnet (production)',
       networkType: MAINNET,
-      primaryNode: availablePrimaryNodes[MAINNET].infura,
+      primaryNode: availableEthereumNodes[MAINNET].infura,
     },
     {
       blockchain: blockchainTestnet,
@@ -218,7 +231,7 @@ export default {
       networkIndex: 2,
       networkTitle: 'ChronoBank - Rinkeby (testnet)',
       networkType: TESTNET,
-      primaryNode: availablePrimaryNodes[TESTNET].chronobank,
+      primaryNode: availableEthereumNodes[TESTNET].chronobank,
     },
     {
       blockchain: blockchainTestnet,
@@ -227,7 +240,16 @@ export default {
       networkIndex: 3,
       networkTitle: 'Infura - Rinkeby (testnet)',
       networkType: TESTNET,
-      primaryNode: availablePrimaryNodes[TESTNET].infura,
+      primaryNode: availableEthereumNodes[TESTNET].infura,
+    },
+    {
+      blockchain: blockchainTestnet,
+      chronobankMiddlewares: availableChronoBankMiddlewares[TESTNET],
+      networkId: 4,
+      networkIndex: 4,
+      networkTitle: 'Local Node (testnet)',
+      networkType: TESTNET,
+      primaryNode: availableEthereumNodes[TESTNET].local,
     },
   ],
   selected: null,

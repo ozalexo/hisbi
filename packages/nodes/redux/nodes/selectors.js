@@ -39,8 +39,10 @@ export const selectCurrentNetworkBlockchains = createSelector(
  */
 export const selectCurrentBlockchainInfo = (blockchainId) => createSelector(
   selectCurrentNetwork,
-  (currentNetwork) =>
-    currentNetwork && currentNetwork.blockchain[blockchainId]
+  (currentNetwork) => {
+    console.log('currentNetwork', currentNetwork, blockchainId)
+    return currentNetwork && currentNetwork.blockchain[blockchainId]
+  }
 )
 
 /**
@@ -113,13 +115,15 @@ export const selectCurrentNetworkId = createSelector(
 )
 
 export const selectCoinType = (blockchain) => createSelector(
-  [(state) => selectCurrentBlockchainInfo(blockchain)(state)],
+  selectCurrentBlockchainInfo(blockchain),
   (currentBlockChainInfo) =>
     currentBlockChainInfo && currentBlockChainInfo.coinType
 )
 
 export const selectBlockchainNetworkId = (blockchain) => createSelector(
-  [(state) => selectCurrentBlockchainInfo(blockchain)(state)],
-  (currentBlockChainInfo) =>
-    currentBlockChainInfo && currentBlockChainInfo.bcNetworkId
+  selectCurrentBlockchainInfo(blockchain),
+  (currentBlockChainInfo) => {
+    console.log('currentBlockChainInfo', currentBlockChainInfo, blockchain)
+    return currentBlockChainInfo && currentBlockChainInfo.bcNetworkId
+  }
 )

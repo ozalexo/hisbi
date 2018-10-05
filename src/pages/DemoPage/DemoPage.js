@@ -3,7 +3,7 @@
  * Licensed under the AGPL Version 3 license.
  */
 
-import React from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
@@ -26,11 +26,14 @@ import Divider from '@material-ui/core/Divider'
 // import RadioGroup from '@material-ui/core/RadioGroup'
 // import FormHelperText from '@material-ui/core/FormHelperText'
 // import FormControlLabel from '@material-ui/core/FormControlLabel'
-// import FormControl from '@material-ui/core/FormControl'
+import FormControl from '@material-ui/core/FormControl'
 // import FormLabel from '@material-ui/core/FormLabel'
 import NetworkSelector from './components/NetworkSelector'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
+import Input from '@material-ui/core/Input'
+// import InputLabel from '@material-ui/core/InputLabel'
+import EnterMnemonicFormContainer from '../../containers/EnterMnemonicFormContainer'
 
 const drawerWidth = 240
 
@@ -59,84 +62,65 @@ const styles = (theme) => ({
   toolbar: theme.mixins.toolbar,
 })
 
-function MainDrawer (props) {
-  const { classes } = props
+class DemoPage extends PureComponent {
+  static propTypes = {
+    // eslint-disable-next-line react/forbid-prop-types
+    classes: PropTypes.object.isRequired,
+  }
 
-  return (
-    <div className={classes.root}>
-      <AppBar position="absolute" className={classes.appBar}>
-        <Toolbar>
-          <Typography variant="title" color="inherit" noWrap>
-            ChronoWallet Network Demo: HTTP nodes, web-sockets and web3
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <div className={classes.toolbar} />
-        <NetworkSelector />
-        <Divider />
-        {/* <List>
-          <ListItem button>
-            <ListItemIcon>
-              <MailIcon />
-            </ListItemIcon>
-            <ListItemText primary="All mail" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <DeleteIcon />
-            </ListItemIcon>
-            <ListItemText primary="Trash" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <ReportIcon />
-            </ListItemIcon>
-            <ListItemText primary="Spam" />
-          </ListItem>
-        </List> */}
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        <div className={classes.root}>
-          <Grid container spacing={24}>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <p>You think water moves fast? You should see ice.</p>
-              </Paper>
+  render () {
+    const { classes } = this.props
+
+    return (
+      <div className={classes.root}>
+        <AppBar position="absolute" className={classes.appBar}>
+          <Toolbar>
+            <Typography variant="title" color="inherit" noWrap>
+              ChronoWallet Network Demo: HTTP nodes, web-sockets and web3
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <div className={classes.toolbar} />
+          <NetworkSelector />
+          <Divider />
+        </Drawer>
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          <div className={classes.root}>
+            <Grid container spacing={24}>
+              <Grid item xs={12}>
+                <EnterMnemonicFormContainer />
+              </Grid>
+              <Grid item xs={6}>
+                <Paper className={classes.paper}>xs=6</Paper>
+              </Grid>
+              <Grid item xs={6}>
+                <Paper className={classes.paper}>xs=6</Paper>
+              </Grid>
+              <Grid item xs={3}>
+                <Paper className={classes.paper}>xs=3</Paper>
+              </Grid>
+              <Grid item xs={3}>
+                <Paper className={classes.paper}>xs=3</Paper>
+              </Grid>
+              <Grid item xs={3}>
+                <Paper className={classes.paper}>xs=3</Paper>
+              </Grid>
+              <Grid item xs={3}>
+                <Paper className={classes.paper}>xs=3</Paper>
+              </Grid>
             </Grid>
-            <Grid item xs={6}>
-              <Paper className={classes.paper}>xs=6</Paper>
-            </Grid>
-            <Grid item xs={6}>
-              <Paper className={classes.paper}>xs=6</Paper>
-            </Grid>
-            <Grid item xs={3}>
-              <Paper className={classes.paper}>xs=3</Paper>
-            </Grid>
-            <Grid item xs={3}>
-              <Paper className={classes.paper}>xs=3</Paper>
-            </Grid>
-            <Grid item xs={3}>
-              <Paper className={classes.paper}>xs=3</Paper>
-            </Grid>
-            <Grid item xs={3}>
-              <Paper className={classes.paper}>xs=3</Paper>
-            </Grid>
-          </Grid>
-        </div>
-      </main>
-    </div>
-  )
+          </div>
+        </main>
+      </div>
+    )
+  }
 }
 
-MainDrawer.propTypes = {
-  classes: PropTypes.object.isRequired,
-}
-
-export default withStyles(styles)(MainDrawer)
+export default withStyles(styles)(DemoPage)

@@ -53,11 +53,6 @@ export const primaryNodeSetSyncingStatus = (isSyncing) => ({
   isSyncing,
 })
 
-export const primaryNodeSyncingStatusStop = () => ({
-  type: NodesActionTypes.WEB3_LISTENER_SYNC_STATUS_STOP,
-  syncStatus: null,
-})
-
 export const networkSwitch = (networkIndex) => ({
   type: NodesActionTypes.NODES_NETWORK_SWITCH,
   networkIndex,
@@ -85,4 +80,8 @@ export const tokenTransfer = (symbol, data) => ({
 export const primaryNodeIncompatibleNetwork = (url) => ({
   type: NodesActionTypes.WEB3_LISTENER_INCOMPATIBLE_NETWORK,
   url,
+})
+
+export const web3Reset = () => ({
+  type: NodesActionTypes.WEB3_LISTENER_RESET,
 })

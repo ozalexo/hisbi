@@ -25,14 +25,6 @@ const mutations = {
   /**
    * Returns currently used web3 instance (Only for refactoring purposes, to be deleted in the future)
    */
-  [NodesActionTypes.WEB3_LISTENER_SYNC_STATUS_STOP]: (store, action, next) => {
-    w3c.stopSyncingMonitor()
-    next(action)
-  },
-
-  /**
-   * Returns currently used web3 instance (Only for refactoring purposes, to be deleted in the future)
-   */
   [NodesActionTypes.WEB3_LISTENER_GET_WEB3]: (store, action, next) => {
     next(action)
     return w3c.getWeb3Instance()
@@ -57,9 +49,13 @@ const mutations = {
     }
     const networkId = NodesSelectors.selectCurrentNetworkId(state)
     w3c = new Web3Controller(store.dispatch, NodesSelectors.selectCurrentPrimaryNode(state).ws, networkId.toString())
-    w3c.initController()
-    next(action)
-    return Promise.resolve(w3c.getWeb3Instance())
+    try {
+      await w3c.initController()
+      next(action)
+      return Promise.resolve(w3c.getWeb3Instance())
+    } catch (error) {
+      return Promise.reject(error)
+    }
   },
 
   /**
@@ -76,6 +72,7 @@ const mutations = {
     } else {
       const w3cProviderHost = w3c.getWeb3CurrentProvider().connection.url
       if (w3cProviderHost !== selectedProviderUrl) {
+        store.dispatch(NodesActions.web3Reset())
         w3c.changeProvider(selectedProviderUrl, NodesSelectors.selectCurrentNetworkId(state))
       }
     }
