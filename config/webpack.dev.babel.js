@@ -4,7 +4,7 @@
 
 import path from 'path'
 // import webpack from 'webpack'
-import HtmlWebpackPlugin from 'html-webpack-plugin'
+// import HtmlWebpackPlugin from 'html-webpack-plugin'
 import CircularDependencyPlugin from 'circular-dependency-plugin'
 import CleanWebpackPlugin from 'clean-webpack-plugin'
 import baseWebpackConfig from './webpack.base.babel'

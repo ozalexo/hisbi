@@ -11,6 +11,8 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 7,
     sourceType: 'module',
+    // parserOptions is a hack for ESLint error 'Please use `export @dec class` instead'
+    ecmaFeatures: { legacyDecorators: true },
   },
   settings: {
     'import/resolver': {

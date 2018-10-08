@@ -4,12 +4,19 @@
 
 import path from 'path'
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import babel from '../babel.config'
 
 process.noDeprecation = true
 
 module.exports = {
   entry: path.resolve(__dirname, '../src/index.js'),
   target: 'web', // Make web variables accessible to webpack, e.g. window
+  resolve: {
+    alias: {
+      // Resolving '@import "~styles/..." inside scss files
+      'styles': path.resolve(__dirname, '../src/styles/')
+    }
+  },
   module: {
     rules: [
       {
@@ -22,7 +29,7 @@ module.exports = {
             // It enables caching results in ./node_modules/.cache/babel-loader/
             // directory for faster rebuilds.
             cacheDirectory: true,
-            plugins: ['react-hot-loader/babel']
+            ...babel,
           }
         }
       },
@@ -31,7 +38,16 @@ module.exports = {
         exclude: /node_modules/,
         use: [
           process.env.NODE_ENV !== 'production' ? 'style-loader' : MiniCssExtractPlugin.loader,
-          { loader: 'css-loader', options: { sourceMap: false, modules: true, importLoaders: 1, localIdentName: '[name]__[local]___[hash:base64:5]' } },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: false,
+              modules: true,
+              import: true,
+              importLoaders: 1,
+              localIdentName: '[name]__[local]___[hash:base64:5]'
+            }
+          },
           {
             loader: 'postcss-loader',
             options: {
@@ -43,7 +59,13 @@ module.exports = {
               ]
             }
           },
-          { loader: 'sass-loader', options: { sourceMap: false, outputStyle: 'expanded' } }
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: false,
+              outputStyle: 'expanded'
+            }
+          }
         ]
       },
       {

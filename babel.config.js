@@ -15,14 +15,14 @@ module.exports = (api) => {
   api.cache(true)
 
   const presets = [
+    '@babel/preset-react',
     [
       '@babel/preset-env',
       {
-        'debug': false,
-        'modules': false,
+        debug: false,
+        modules: false,
       },
     ],
-    '@babel/preset-react',
   ]
 
   const plugins = [
@@ -31,12 +31,13 @@ module.exports = (api) => {
     '@babel/plugin-syntax-object-rest-spread',
     '@babel/plugin-transform-object-assign',
     '@babel/plugin-transform-destructuring',
-    ['@babel/plugin-proposal-decorators',
-      { 'decoratorsBeforeExport': true },
-    ],
+    ['@babel/plugin-proposal-decorators', { decoratorsBeforeExport: true }],
+    // plugin-proposal-class-properties must be placed before 'plugin-proposal-decorators'
+    // See https://babeljs.io/docs/en/next/babel-plugin-proposal-decorators.html
+    ['@babel/plugin-proposal-class-properties', { loose: false }],
     '@babel/plugin-proposal-export-default-from',
     '@babel/plugin-proposal-throw-expressions',
-    ['@babel/plugin-proposal-class-properties', { 'loose': false }],
+    // 'babel-plugin-root-import',
     'react-hot-loader/babel',
   ]
 
