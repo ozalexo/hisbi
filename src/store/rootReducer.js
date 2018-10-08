@@ -5,6 +5,7 @@
 
 import { combineReducers } from 'redux'
 import { persistReducer } from 'redux-persist'
+import { i18nReducer } from 'react-redux-i18n'
 
 import { DUCK_ACCOUNTS } from '@chronobank/auth/redux/accounts/constants'
 import { DUCK_BITCOIN } from '@chronobank/bitcoin/redux/constants'
@@ -62,12 +63,12 @@ const createRootReducer = () => {
     [DUCK_ACCOUNTS]: persistReducer(ACCOUNTS_PERSIST_CONFIG, accounts),
     [DUCK_NODES]: nodes,
     [DUCK_SESSION]: session,
+    i18n: i18nReducer,
   })
 
   if (ROOT_PERSIST_CONFIG.active) {
     // wrap reducers with persist
-    const persistConfig = ROOT_PERSIST_CONFIG.storeConfig
-    const rootReducer = persistReducer(persistConfig, getPersistReducers())
+    const rootReducer = getPersistReducers()
     return rootReducer
   } else {
     const rootReducer = getReducers()

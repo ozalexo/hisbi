@@ -3,20 +3,34 @@
  * Licensed under the AGPL Version 3 license.
  */
 
-// import { I18n, loadTranslations, setLocale } from 'react-redux-i18n'
+import { I18n, loadTranslations, setLocale } from 'react-redux-i18n'
+import moment from 'moment'
+
 import { nodesInit } from '@chronobank/nodes/redux/nodes/actions'
 import { preselectNetwork } from '@chronobank/nodes/redux/nodes/thunks'
+import translations from '../i18n'
+
 // import { middlewareConnect } from '@chronobank/nodes/middleware/thunks'
 // import { WebSocketService } from '@chronobank/core/services/WebSocketService'
-// import moment from 'moment'
 // import { loadI18n } from '../redux/i18n/thunks'
-// import translations from '../i18n'
 
+const initI18n = (store) => {
+  const dispatch = store.dispatch
+  const state = store.getState()
+  const locale = 'en'
+  moment.locale(locale)
+  I18n.setTranslationsGetter(() => state.i18n.translations)
+  I18n.setLocaleGetter(() => state.i18n.locale)
+  store.dispatch(loadTranslations(translations))
+  dispatch(setLocale(locale))
+}
+
+// eslint-disable-next-line import/prefer-default-export
 export const initPrimaryNodes = async (store) => {
-  store.dispatch(preselectNetwork()) // Automatic selection of a primary node and network (mainnet/testnet)
-  await store.dispatch(nodesInit()) // Init Nodes middlware (working with Ehtereum primary nodes via web3)
-  // TODO: WebSocketService we be removed. Let's it be here for now
-  // WebSocketService.initWebSocketService(store)
+  const dispatch = store.dispatch
+  dispatch(preselectNetwork()) // Automatic selection of a primary node and network (mainnet/testnet)
+  initI18n(store)
+  await dispatch(nodesInit()) // Init Nodes middlware (working with Ehtereum primary nodes via web3)
 }
 
 // export const initI18N = async (store) => {
