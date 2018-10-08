@@ -4,39 +4,7 @@
  */
 
 import * as ActionTypes from './constants'
-
-const initialState = {
-  authProcessing: false,
-  isLoggedIn: false,
-  error: null,
-  currentAuthType: null,
-  authTypes: [
-    {
-      type: 'MetaMask',
-      enabled: true,
-    },
-    {
-      type: 'WalletFile',
-      enabled: true,
-    },
-    {
-      type: 'TrezorDevice',
-      enabled: true,
-    },
-    {
-      type: 'LedgerDevice',
-      enabled: true,
-    },
-    {
-      type: 'Mnemonic',
-      enabled: true,
-    },
-    {
-      type: 'PrivateKey',
-      enabled: true,
-    },
-  ],
-}
+import initialState from './initialState'
 
 const userAuthProcessing = (state) => ({
   ...state,
@@ -70,11 +38,6 @@ const mutations = {
   [ActionTypes.USER_LOGOUT]: userAuthProcessing,
   [ActionTypes.USER_LOGOUT_SUCCESS]: userAuthProcessing,
   [ActionTypes.USER_LOGOUT_FAILURE]: userAuthProcessing,
-  // [persistAccountActionTypes.PERSIST_ACCOUNT_SIGNATURES_LOADING]: (state) => ({
-  //   ...state,
-  //   isLoadingSignatures: true
-  // }),
-
 }
 
 export default (state = initialState, { type, ...payload }) => {

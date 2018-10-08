@@ -7,11 +7,9 @@ import { applyMiddleware, compose, createStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension/logOnly'
 import { connectRouter } from 'connected-react-router'
 import { createBrowserHistory } from 'history'
-import { persistReducer } from 'redux-persist'
 import { persistStore } from 'redux-persist'
 import getMiddlewares from './middlewares'
-import createRootReducer from './rootReducer'
-import ROOT_PERSIST_CONFIG from './persist'
+import rootReducer from './rootReducer'
 
 const initialState = {}
 
@@ -29,27 +27,12 @@ const configureStore = () => {
     applyMiddleware(...middleware)
   )(createStore)
 
-  const rootReducer = createRootReducer()
-
   const store = createStoreWithMiddleware(
     connectRouter(history)(rootReducer),
     initialState,
   )
 
   const persistor = persistStore(store)
-
-  if (module.hot) {
-    module.hot.accept( () => {
-
-      let nextRootReducer = createRootReducer()
-      if (ROOT_PERSIST_CONFIG.active) {
-        const persistConfig = ROOT_PERSIST_CONFIG.storeConfig
-        nextRootReducer = persistReducer(persistConfig, rootReducer)
-      }
-
-      store.replaceReducer(nextRootReducer)
-    })
-  }
 
   store.persistor = persistor
   return { store, history, persistor }
