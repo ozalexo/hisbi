@@ -17,6 +17,7 @@
     "@chronobank/auth": "*",
     "@chronobank/bitcoin": "*",
     "@chronobank/bitcoincash": "*",
+    "@chronobank/core": "*",
     "@chronobank/ethereum": "*",
     "@chronobank/litecoin": "*",
     "@chronobank/nem": "*",
