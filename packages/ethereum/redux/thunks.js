@@ -36,10 +36,10 @@ export const createWalletByMnemonic = (mnemonic, password) => (
   getState,
 ) => {
   const state = getState()
-  const hdPath = EthereumSelectors.selectCurrentDerivedPath(state)
+  const derivedPath = EthereumSelectors.selectCurrentDerivedPath(state)
   try {
     dispatch(EthereumActions.createWalletByMnemonic())
-    const wallet = Utils.createWalletByMnemonic(mnemonic, password, hdPath)
+    const wallet = Utils.createWalletByMnemonic(mnemonic, password, derivedPath)
     dispatch(EthereumActions.createWalletByMnemonicSuccess(wallet))
     return wallet
   } catch (error) {

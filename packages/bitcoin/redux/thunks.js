@@ -19,7 +19,6 @@ export const createBitcoinWallet = (privateKey) => (dispatch, getState) => {
     dispatch(BitcoinActions.createWalletByPrivateKey(
       {
         address,
-        hdPath: state.bitcoin.derivedPath[network],
         type: 'InMemory',
       },
       ethereumAddress,

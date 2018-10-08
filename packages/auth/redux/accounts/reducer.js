@@ -5,16 +5,12 @@
 
 import { REHYDRATE } from 'redux-persist'
 import * as ActionTypes from './constants'
-
-const initialState = {
-  selected: null,
-  list: [],
-}
+import initialState from './initialState'
 
 const accountsRehydrate = (state, payload) => {
   // action.payload is undefined if LocalStorage is empty
   // See https://github.com/rt2zz/redux-persist/issues/719
-  if (!payload.payload) {
+  if (!payload.payload || payload.key !== ActionTypes.DUCK_ACCOUNTS) {
     return state
   }
   return {

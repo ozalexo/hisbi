@@ -19,10 +19,10 @@ module.exports = (api) => {
       '@babel/preset-env',
       {
         'debug': false,
-        'modules': false
-      }
+        'modules': false,
+      },
     ],
-    '@babel/preset-react'
+    '@babel/preset-react',
   ]
 
   const plugins = [
@@ -32,26 +32,26 @@ module.exports = (api) => {
     '@babel/plugin-transform-object-assign',
     '@babel/plugin-transform-destructuring',
     ['@babel/plugin-proposal-decorators',
-      { 'decoratorsBeforeExport': true }
+      { 'decoratorsBeforeExport': true },
     ],
     '@babel/plugin-proposal-export-default-from',
     '@babel/plugin-proposal-throw-expressions',
     ['@babel/plugin-proposal-class-properties', { 'loose': false }],
-    'react-hot-loader/babel'
+    'react-hot-loader/babel',
   ]
 
   const overrides = [
     {
       'test': ['./config'],
       'presets': [
-        ['@babel/preset-env']
-      ]
-    }
+        ['@babel/preset-env'],
+      ],
+    },
   ]
 
   return {
     presets,
     plugins,
-    overrides
+    overrides,
   }
 }

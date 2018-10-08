@@ -43,7 +43,7 @@ const userAuthProcessing = (state) => ({
   authProcessing: true,
 })
 
-const userLogin = (state, payload) => ({
+const userLogin = (state) => ({
   ...state,
 })
 

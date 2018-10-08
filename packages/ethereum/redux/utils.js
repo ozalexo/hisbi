@@ -8,13 +8,13 @@ import Accounts from 'web3-eth-accounts'
 import bip39 from 'bip39'
 
 // eslint-disable-next-line import/prefer-default-export
-export const createWalletByMnemonic = (mnemonic, password, hdPath) => {
+export const createWalletByMnemonic = (mnemonic, password, derivedPath) => {
 
   const accounts = new Accounts()
   const wallets = accounts.wallet.create()
   const hdWallet = hdKey.fromMasterSeed(bip39.mnemonicToSeed(mnemonic))
   /* eslint-disable no-underscore-dangle */
-  const hdkey = hdWallet.derivePath(hdPath)._hdkey
+  const hdkey = hdWallet.derivePath(derivedPath)._hdkey
   const hexPrivateKey = `0x${hdkey._privateKey.toString('hex')}`
   /* eslint-enable no-underscore-dangle */
   const account = accounts.privateKeyToAccount(hexPrivateKey)
@@ -24,7 +24,6 @@ export const createWalletByMnemonic = (mnemonic, password, hdPath) => {
   return {
     encrypted: wallet.encrypt(password),
     address: wallet.address.toLowerCase(),
-    hdPath: hdPath,
     type: 'InMemory',
   }
 }

@@ -8,12 +8,10 @@ import { composeWithDevTools } from 'redux-devtools-extension/logOnly'
 import { connectRouter } from 'connected-react-router'
 import { createBrowserHistory } from 'history'
 import { persistReducer } from 'redux-persist'
-// import { Map } from 'immutable'
 import { persistStore } from 'redux-persist'
-import accounts from '@chronobank/auth/redux/accounts/reducer'
-import wallets from '@chronobank/auth/redux/wallets/reducer'
 import getMiddlewares from './middlewares'
-import rootReducer, { accountsPersistConfig, walletsPersistConfig } from './rootReducer'
+import createRootReducer from './rootReducer'
+import ROOT_PERSIST_CONFIG from './persist'
 
 const initialState = {}
 
@@ -31,6 +29,8 @@ const configureStore = () => {
     applyMiddleware(...middleware)
   )(createStore)
 
+  const rootReducer = createRootReducer()
+
   const store = createStoreWithMiddleware(
     connectRouter(history)(rootReducer),
     initialState,
@@ -38,20 +38,16 @@ const configureStore = () => {
 
   const persistor = persistStore(store)
 
-  // TODO: issue: accounts and weallets ducks contains unnecessary '_persist' value
-  // TODO: need to wotk with HMR correctly
   if (module.hot) {
-    // console.log('Hot', module.hot)
     module.hot.accept( () => {
-      // This fetch the new state of the above reducers.
-      // console.log('Hot reducer releacements')
-      store.replaceReducer(
-        persistReducer(accountsPersistConfig, accounts)
-      )
-      store.replaceReducer(
-        persistReducer(walletsPersistConfig, wallets)
-      )
-      store.persistor.persist()
+
+      let nextRootReducer = createRootReducer()
+      if (ROOT_PERSIST_CONFIG.active) {
+        const persistConfig = ROOT_PERSIST_CONFIG.storeConfig
+        nextRootReducer = persistReducer(persistConfig, rootReducer)
+      }
+
+      store.replaceReducer(nextRootReducer)
     })
   }
 
