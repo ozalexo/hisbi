@@ -1,0 +1,19 @@
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #302b5c;
+      }
+
+      .cls-2 {
+        fill: #d9a162;
+      }
+    </style>
+  </defs>
+  <title>33700fd0-ce36-4da1-80a4-bcb649b3f433</title>
+  <rect class="cls-1" width="24" height="24" rx="12" ry="12"/>
+  <g>
+    <path id="Fill-50" class="cls-2" d="M12,3.122a8.879,8.879,0,1,0,0,17.757A8.879,8.879,0,1,0,12,3.122ZM12,4.7A7.3,7.3,0,1,1,4.6,12,7.359,7.359,0,0,1,12,4.7Z"/>
+    <path id="Fill-51" class="cls-2" d="M15.46,11.8H12.38V8.37a.8.8,0,0,0-1.6,0v4.222a.8.8,0,0,0,.8.789h3.88a.789.789,0,1,0,0-1.578"/>
+  </g>
+</svg>
