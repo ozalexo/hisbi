@@ -1,0 +1,126 @@
+/**
+ * Copyright 2017–2018, LaborX PTY
+ * Licensed under the AGPL Version 3 license.
+ */
+@import "~styles/partials/variables";
+@import "~styles/partials/mixins";
+@import "~styles/themes/fonts";
+
+:global {
+  * {
+    font-family: 'Proxima Nova', sans-serif;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+  }
+
+  p {
+    line-height: 1.2em;
+  }
+
+  html {
+    font-family: 'Proxima Nova', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100%;
+  }
+
+  body {
+    background-color: $background-color;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  #react-root {
+  }
+
+  .transition-swipe-enter {
+    top: 100vh;
+  }
+
+  .transition-swipe-enter.transition-swipe-enter-active {
+    top: 0;
+    transition: top 250ms $cubic-animation;
+  }
+
+  .transition-swipe-leave {
+    top: 0;
+  }
+
+  .transition-swipe-leave.transition-swipe-leave-active {
+    top: 100vh;
+    transition: top 250ms $cubic-animation;
+  }
+
+  .transition-swipe-appear {
+    top: 100vh;
+  }
+
+  .transition-swipe-appear.transition-swipe-appear-active {
+    top: 0;
+    transition: top 250ms $cubic-animation;
+  }
+
+  .transition-opacity-enter {
+    transition-opacity: 0;
+  }
+
+  .transition-opacity-enter.transition-opacity-enter-active {
+    opacity: 1;
+    transition: opacity 250ms ease-in-out;
+  }
+
+  .transition-opacity-leave {
+    opacity: 1;
+  }
+
+  .transition-opacity-leave.transition-opacity-leave-active {
+    opacity: 0;
+    transition: opacity 250ms ease-in-out;
+  }
+
+  .transition-opacity-appear {
+    opacity: 0;
+  }
+
+  .transition-opacity-appear.transition-opacity-appear-active {
+    opacity: 1;
+    transition: opacity 250ms ease-in-out;
+  }
+
+  .popover.popover-overflow-x-hidden {
+    > * {
+      // TODO @ipavenko: Remove when upgrade Material UI
+      overflow-x: hidden;
+    }
+  }
+
+  tbody {
+    tr {
+      @include xs-only {
+        display: flex;
+        flex-direction: column;
+        td {
+          width: 100% !important;
+        }
+      }
+    }
+  }
+  .chronobank-icon {
+    font-family: ChronoBankIcons;
+    font-style: normal;
+    white-space: nowrap;
+    text-transform: none;
+    font-weight: 400;
+  }
+  button {
+    background: none;
+    border: none;
+    box-shadow: none;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+}
