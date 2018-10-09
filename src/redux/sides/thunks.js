@@ -15,7 +15,7 @@ export const sidesClear = () => (dispatch) =>
   dispatch(SidesActions.sidesClear())
 
 export const sidesCloseAll = () => (dispatch) =>
-  dispatch(SidesActions.sidesCloaseAll())
+  dispatch(SidesActions.sidesCloseAll())
 
 export const toggleSidePanel = (panelKey, isOpened) => (dispatch) =>
   dispatch(SidesActions.sidesToggle(panelKey, isOpened))

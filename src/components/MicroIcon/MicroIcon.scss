@@ -1,0 +1,53 @@
+/**
+ * Copyright 2017–2018, LaborX PTY
+ * Licensed under the AGPL Version 3 license.
+ */
+
+@import "~styles/partials/variables";
+
+.root {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  .micro {
+    position: relative;
+    display: inline-block;
+    line-height: 16px;
+    vertical-align: middle;
+    margin: 0 2px;
+    padding: 2px 2px;
+    cursor: pointer;
+    color: $color-primary-0;
+    :global(.material-icons) {
+      width: 12px;
+      height: 12px;
+      font-size: 12px;
+      vertical-align: top;
+    }
+
+    &:hover {
+      color: $color-primary-1;
+    }
+  }
+  .average {
+    position: relative;
+    display: inline-block;
+    line-height: 16px;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    opacity: 0.5;
+    color: black;
+    :global(.material-icons) {
+      width: 24px;
+      height: 24px;
+      font-size: 24px;
+      vertical-align: top;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

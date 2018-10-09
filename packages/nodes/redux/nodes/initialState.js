@@ -103,31 +103,37 @@ const blockchainMainnet ={
     bcNetworkId: 'mainnet',
     blockexplorer: 'https://etherscan.io/tx',
     coinType: null,
+    symbol: 'ETH',
   },
   [BLOCKCHAIN_BITCOIN_CASH]: {
     bcNetworkId: 'bitcoin',
     blockexplorer: 'https://bcc.blockdozer.com/insight/tx',
     coinType: null,
+    symbol: 'BTC',
   },
   [BLOCKCHAIN_BITCOIN]: {
     bcNetworkId: 'bitcoin',
     blockexplorer: 'https://blockexplorer.com/tx',
     coinType: COIN_TYPE_BTC_MAINNET,
+    symbol: 'BTC',
   },
   [BLOCKCHAIN_LITECOIN]: {
     bcNetworkId: 'litecoin',
     blockexplorer: 'https://live.blockcypher.com/ltc/tx',
     coinType: COIN_TYPE_LTC_MAINNET,
+    symbol: 'LTC',
   },
   [BLOCKCHAIN_NEM]: {
     bcNetworkId: 'mainnet',
     blockexplorer: null,
     coinType: null,
+    symbol: 'NEM',
   },
   [BLOCKCHAIN_WAVES]: {
     bcNetworkId: 'MAINNET_CONFIG',
     blockexplorer: null,
     coinType: null,
+    symbol: 'WAVES',
   },
 }
 
@@ -136,31 +142,37 @@ const blockchainTestnet ={
     bcNetworkId: 'rinkeby',
     blockexplorer: 'https://rinkeby.etherscan.io/tx',
     coinType: null,
+    symbol: 'ETH',
   },
   [BLOCKCHAIN_BITCOIN_CASH]: {
     bcNetworkId: 'testnet',
     blockexplorer: 'https://tbcc.blockdozer.com/insight/tx',
     coinType: null,
+    symbol: 'BCC',
   },
   [BLOCKCHAIN_BITCOIN]: {
     bcNetworkId: 'testnet',
     blockexplorer: 'https://live.blockcypher.com/btc-testnet/tx',
     coinType: COIN_TYPE_BTC_TESTNET,
+    symbol: 'BTC',
   },
   [BLOCKCHAIN_LITECOIN]: {
     bcNetworkId: 'litecoin_testnet',
     blockexplorer: 'https://chain.so/tx/LTCTEST',
     coinType: COIN_TYPE_LTC_TESTNET,
+    symbol: 'LTC',
   },
   [BLOCKCHAIN_NEM]: {
     bcNetworkId: 'testnet',
     blockexplorer: '',
     coinType: null,
+    symbol: 'NEM',
   },
   [BLOCKCHAIN_WAVES]: {
     bcNetworkId: 'TESTNET_CONFIG',
     blockexplorer: '',
     coinType: null,
+    symbol: 'WAVES',
   },
 }
 

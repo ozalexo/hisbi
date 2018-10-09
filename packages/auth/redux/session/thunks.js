@@ -34,7 +34,7 @@ export const userLogout = () => (dispatch, getState) => {
   dispatch(Actions.userAuthProcessing())
   dispatch(Actions.userLogout())
     .then(() => {
-      dispatch(Actions.userLogouSuccess())
+      dispatch(Actions.userLogoutSuccess())
     })
     .catch((error) => {
       dispatch(Actions.userLogoutFailure(error))

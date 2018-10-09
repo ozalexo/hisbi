@@ -7,7 +7,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider'
 import { PersistGate } from 'redux-persist/lib/integration/react'
-import { withRouter } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import { ConnectedRouter, push } from 'connected-react-router'
 import { Provider } from 'react-redux'
 import * as Initializers from './store/initializers'
@@ -16,12 +16,6 @@ import defaultTheme from './themes/default'
 import configureStore from './store/configureStore'
 import App from './App'
 import registerServiceWorker from './registerServiceWorker'
-
-// eslint-disable-next-line no-unused-vars
-let i18nJson
-
-const { store, history, persistor } = configureStore()
-const NonBlockApp = withRouter(App)
 
 const initAfterRehydration = () => {
   // Initializers.initI18N(store)
@@ -41,6 +35,8 @@ const initAfterRehydration = () => {
   }
 }
 
+const { store, history, persistor } = configureStore()
+const NonBlockApp = withRouter(App)
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate

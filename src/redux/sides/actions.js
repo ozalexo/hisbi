@@ -30,13 +30,13 @@ export const sidesCloseAll = () => ({
   type: SIDES_CLOSE_ALL,
 })
 
-export const toggleSidePanel = (panelKey, isOpened) =>({
+export const sidesToggle = (panelKey, isOpened) =>({
   type: SIDES_TOGGLE,
   panelKey,
   isOpened,
 })
 
-export const toggleMainMenu = (mainMenuIsOpen) => ({
+export const sidesToggleMainMenu = (mainMenuIsOpen) => ({
   type: SIDES_TOGGLE_MAIN_MENU,
   mainMenuIsOpen,
 })

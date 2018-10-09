@@ -7,7 +7,7 @@ export const selectSessionType = createSelector(
   (session) => session.currentAuthType
 )
 
-export const selectIsLoggedIn = () => createSelector(
+export const selectIsLoggedIn = createSelector(
   selectSessionDuck,
   (session) => session.isLoggedIn
 )

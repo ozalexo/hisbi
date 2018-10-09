@@ -23,8 +23,12 @@ const createBitcoinWallet = (state, payload) => ({
   ...state,
   wallets: {
     ...state.wallets,
-    [payload.ethereumAddress]: {
-      [payload.wallet.address]: payload.wallet,
+    [payload.wallet.address]: {
+      ...payload.wallet,
+      transactions: {
+        list: {},
+        pending: {},
+      },
     },
   },
 })

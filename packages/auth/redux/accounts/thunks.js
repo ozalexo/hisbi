@@ -22,7 +22,6 @@ export const createInMemoryAccount = (accountTitle, mnemonic, password) => (
   }
   // TODO: continuing to login. Just for demo
   const privateKey = dispatch(EthereumThunks.getEthereumPrivateKeyByPassword('111'))
-  console.log('Private key is', privateKey)
   const btcAddress = dispatch(BitcoinThunks.createBitcoinWallet(privateKey))
   // Wallets are created. Let's use http API to obtain some data
   dispatch(requestBitcoinSubscribeWalletByAddress('Bitcoin', btcAddress))

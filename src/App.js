@@ -5,6 +5,8 @@ import './App.scss'
 // import LoginForm from './pages/LoginForm'
 // import AccountSelector from './pages/AccountSelector'
 import DemoPageContainer from './pages/DemoPageContainer'
+import SplashRoute from './layouts/SplashRoute'
+// import MarkupRoute from './layouts/MarkupRoute'
 
 // class App extends Component {
 //   render () {
@@ -21,15 +23,24 @@ import DemoPageContainer from './pages/DemoPageContainer'
 //   }
 // }
 
+// const publicRoutes = {
+//     Login: {
+//         component: DemoPageContainer,
+//         path: '/'
+//     },
+// }
+// const privateRoutes = {}
+
+
 class App extends Component {
   render () {
     return (
-      <div>
-        <Switch>
-          <Route exact path='/' component={DemoPageContainer} />
-          <Route component={() => (<div>Miss</div>)} />
-        </Switch>
-      </div>
+      <Switch>
+        <SplashRoute exact path='/' component={DemoPageContainer} />
+        {/* <MarkupRoute exact path='/test' component={DemoPageContainer} /> */}
+        {/* <Route exact path='/' component={DemoPageContainer} />*/}
+        <Route component={() => (<div>Miss</div>)} />
+      </Switch>
     )
   }
 }

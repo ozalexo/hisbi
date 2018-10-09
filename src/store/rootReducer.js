@@ -5,6 +5,7 @@
 
 import { combineReducers } from 'redux'
 import { i18nReducer } from 'react-redux-i18n'
+import { reducer as formReducer } from 'redux-form'
 
 import { DUCK_MODALS } from '../redux/modals/constants'
 import { DUCK_NOTIFIER } from '../redux/notifier/constants'
@@ -19,5 +20,6 @@ export default combineReducers({
   [DUCK_MODALS]: modals,
   [DUCK_NOTIFIER]: notifier,
   [DUCK_SIDES]: sides,
+  form: formReducer,
   i18n: i18nReducer,
 })

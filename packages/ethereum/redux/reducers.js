@@ -20,7 +20,13 @@ const walletCreateSuccess = (state, payload) => ({
   ...state,
   wallets: {
     ...state.wallets,
-    [payload.wallet.address]: payload.wallet,
+    [payload.wallet.address]: {
+      ...payload.wallet,
+      transactions: {
+        list: {},
+        pending: {},
+      },
+    },
   },
 })
 

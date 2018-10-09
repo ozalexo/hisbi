@@ -8,6 +8,11 @@ export const selectSidesMainMenuIsOpen = createSelector(
   (sides) => sides.mainMenuIsOpen
 )
 
+export const selectSidesStack = createSelector(
+  selectDuckSides,
+  (sides) => sides.stack
+)
+
 export const selectSidesStackLength = createSelector(
   selectDuckSides,
   (sides) => sides.stack.length

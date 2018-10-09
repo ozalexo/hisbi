@@ -37,7 +37,18 @@ module.exports = (api) => {
     ['@babel/plugin-proposal-class-properties', { loose: false }],
     '@babel/plugin-proposal-export-default-from',
     '@babel/plugin-proposal-throw-expressions',
-    // 'babel-plugin-root-import',
+    [
+      'react-css-modules',
+      {
+        handleMissingStyleName: 'throw',
+        generateScopedName: '[name]__[local]___[hash:base64:5]',
+        filetypes: {
+          '.scss': {
+            syntax: 'postcss-scss',
+          },
+        },
+      },
+    ],
     'react-hot-loader/babel',
   ]
 

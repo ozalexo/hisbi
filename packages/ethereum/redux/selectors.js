@@ -32,3 +32,19 @@ export const selectEncryptedWallet = createSelector(
     return ethereumWallets[accountAddress] && ethereumWallets[accountAddress].encrypted
   }
 )
+
+export const selectEthereumPendingTransactions = createSelector(
+  [selectEthereumWallets, selectAccountSelected],
+  (wallets, selectedAccount) => {
+    return Object.values(wallets[selectedAccount])
+      .flatMap((wallet) => Object.values(wallet.transactions.pending))
+  }
+)
+
+export const selectEthereumTransactions = createSelector(
+  [selectEthereumWallets],
+  (wallets, selectedAccount) => {
+    return Object.values(wallets[selectedAccount])
+      .flatMap((wallet) => Object.values(wallet.transactions.list))
+  }
+)
