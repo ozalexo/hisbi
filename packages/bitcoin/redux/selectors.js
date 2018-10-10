@@ -26,6 +26,12 @@ export const selectBitcoinWallets = createSelector(
   }
 )
 
+export const selectPreparedUnsignedTransaction = createSelector(
+  selectDuckBitcoin,
+  (bitcoin) =>
+    bitcoin.prepareSendTransaction && bitcoin.prepareSendTransaction.rawTx
+)
+
 export const selectBitcoinPendingTransactions = createSelector(
   [selectBitcoinWallets, selectAccountSelected],
   (wallets, selectedAccount) => {
@@ -40,4 +46,10 @@ export const selectBitcoinTransactions = createSelector(
     return Object.values(wallets[selectedAccount])
       .flatMap((wallet) => Object.values(wallet.transactions.list))
   }
+)
+
+export const selectSignedTransaction = createSelector(
+  selectDuckBitcoin,
+  (bitcoin) =>
+    bitcoin.prepareSendTransaction && bitcoin.prepareSendTransaction.signedRawTx
 )

@@ -3,9 +3,21 @@
  * Licensed under the AGPL Version 3 license.
  */
 
-import bitcoin from 'bitcoinjs-lib'
+// TODO: need to replace login types to appropriate constants
 
-// eslint-disable-next-line import/prefer-default-export
+import bitcoin from 'bitcoinjs-lib'
+import BitcoinMemoryDevice from '../signers/BitcoinMemoryDevice'
+import BitcoinLedgerDevice from '../signers/BitcoinLedgerDevice'
+import BitcoinTrezorDevice from '../signers/BitcoinTrezorDevice'
+
+const SUPPORTED_SIGN_TYPES = [
+  'LedgerDevice',
+  'Mnemonic',
+  'PrivateKey',
+  'TrezorDevice',
+  'WalletFile',
+]
+
 export const generateBitcoinAddressByEthereumPrivateKey = (privateKey, networkType) => {
   const network = bitcoin.networks[networkType]
   const keyPair = new bitcoin.ECPair.fromPrivateKey(
@@ -17,4 +29,26 @@ export const generateBitcoinAddressByEthereumPrivateKey = (privateKey, networkTy
     network,
   })
   return res.address
+}
+
+const selectSigner = (signType) => {
+
+  const signers = {
+    // Software signers
+    'Mnemonic': (privateKey, network) => new BitcoinMemoryDevice({ privateKey, network }),
+    'PrivateKey': (privateKey, network) => new BitcoinMemoryDevice({ privateKey, network }),
+    'WalletFile': (privateKey, network) => new BitcoinMemoryDevice({ privateKey, network }),
+    // Hardware signers
+    'LedgerDevice': (privateKey, network) => new BitcoinLedgerDevice({ network }),
+    'TrezorDevice': (privateKey, network) => new BitcoinTrezorDevice({ network }),
+  }
+
+  return (signType in SUPPORTED_SIGN_TYPES)
+    ? signers[signType]
+    : null
+}
+
+export const signTransaction = (loginType, privateKey, unsignedTxHex, network) => {
+  const signer = selectSigner(loginType)
+  return signer(privateKey, network).signTransaction(unsignedTxHex)
 }

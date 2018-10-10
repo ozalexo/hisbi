@@ -8,4 +8,6 @@ export default {
   enabled: true,
   tokens: {},
   wallets: {},
+  prepareSendTransaction: null,
+  selectedWallet: null,
 }
