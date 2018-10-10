@@ -3,34 +3,36 @@
  * Licensed under the AGPL Version 3 license.
  */
 
-import * as BitcoinActions from './actions'
-import { BLOCKCHAIN_BITCOIN } from '../constants'
-import * as Utils from './utils'
-import { selectBlockchainNetworkId } from '@chronobank/nodes/redux/nodes/selectors'
-import { selectAccountSelected } from '@chronobank/auth/redux/accounts/selectors'
 import { getEthereumPrivateKeyByPassword } from '@chronobank/ethereum/redux/thunks'
-import { selectSessionType } from '@chronobank/auth/redux/session/selectors'
-import { selectPreparedUnsignedTransaction, selectSignedTransaction} from './selectors'
 import { requestBitcoinSendRawTransaction } from '@chronobank/nodes/api/bitcoinLikeAPI'
+import { selectAccountSelected } from '@chronobank/auth/redux/accounts/selectors'
+import { selectBlockchainNetworkId } from '@chronobank/nodes/redux/nodes/selectors'
+import { selectSessionType } from '@chronobank/auth/redux/session/selectors'
+import { BLOCKCHAIN_BITCOIN } from '../constants'
+import { selectPreparedUnsignedTransaction, selectSignedTransaction, selectCurrentDerivedPath} from './selectors'
+import * as BitcoinActions from './actions'
+import * as Utils from './utils'
 
 // eslint-disable-next-line import/prefer-default-export
 export const createBitcoinWallet = (privateKey) => (dispatch, getState) => {
   const state = getState()
-  const network = selectBlockchainNetworkId(BLOCKCHAIN_BITCOIN)(state)
+  const loginType = selectSessionType(state)
+  const derivedPath = selectCurrentDerivedPath()
+  const networkType = selectBlockchainNetworkId(BLOCKCHAIN_BITCOIN)(state)
   const ethereumAddress = selectAccountSelected(state)
+
   try {
-    const address = Utils.generateBitcoinAddressByEthereumPrivateKey(privateKey, network)
+    const address = Utils.getAddress(loginType, privateKey, derivedPath, networkType)
     dispatch(BitcoinActions.createWalletByPrivateKey(
       {
         address,
-        type: 'InMemory',
+        type: loginType,
       },
       ethereumAddress,
     ))
     return address
   } catch (error) {
-    console.log('Catch error')
-    console.log(error)
+    throw new Error(error)
   }
 }
 
@@ -43,14 +45,10 @@ export const prepareSendTransaction = () => (dispatch) => {
   // Next steps: modification of data in store via UI
 }
 
-// Password (if requred) must be requested via App's UI if required. Here password may be empty.
+// Password (if required) must be requested via App's UI if required. Here password may be empty.
 export const signPreparedTransaction = (password) => (dispatch, getState) => {
   const state = getState()
   const loginType = selectSessionType(state)
-  if (loginType === 'MetaMask') {
-    // Actually, this case must be prevented earlier in UI. SendForm must be unavailable in this case.
-    return dispatch(BitcoinActions.signTransactionFailure('MetaMask not supported for this wallet'))
-  }
 
   let privateKey = null
   // For all non-hardware wallets we need to obtain privateKey from encrypted Ethereum wallet
