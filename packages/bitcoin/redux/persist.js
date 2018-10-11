@@ -11,24 +11,39 @@ const keepOnlyDerivedWallets = createTransform(
 
   // transform state on its way to being serialized and persisted.
   (inboundState/*, key*/) => {
-    Object.keys(inboundState)
-      .forEach((accountAddress) => {
-        Object.keys(inboundState[accountAddress])
-          .forEach((walletAddress) => {
-            if (!inboundState[accountAddress][walletAddress].hasOwnProperty('derivedPath')) {
-              delete inboundState[accountAddress][walletAddress]
-            }
-          })
-        if (Object.keys(inboundState[accountAddress]).length === 0) {
-          delete inboundState[accountAddress]
-        }
-      })
-
+    // console.log('inboundState before', inboundState)
+    // Object.keys(inboundState)
+    //   .forEach((accountAddress) => {
+    //     Object.keys(inboundState[accountAddress])
+    //       .forEach((walletAddress) => {
+    //         if (!inboundState[accountAddress][walletAddress].hasOwnProperty('derivedPath')) {
+    //           delete inboundState[accountAddress][walletAddress]
+    //         }
+    //       })
+    //     if (Object.keys(inboundState[accountAddress]).length === 0) {
+    //       delete inboundState[accountAddress]
+    //     }
+    //   })
+    // console.log('inboundState after', inboundState)
     return inboundState
   },
 
   // transform state being rehydrated
   (outboundState/*, key*/) => {
+    console.log('outboundState before', outboundState)
+    Object.keys(outboundState)
+      .forEach((accountAddress) => {
+        Object.keys(outboundState[accountAddress])
+          .forEach((walletAddress) => {
+            if (!outboundState[accountAddress][walletAddress].hasOwnProperty('derivedPath')) {
+              delete outboundState[accountAddress][walletAddress]
+            }
+          })
+        if (Object.keys(outboundState[accountAddress]).length === 0) {
+          delete outboundState[accountAddress]
+        }
+      })
+    console.log('outboundState after', outboundState)
     return outboundState
   },
 
