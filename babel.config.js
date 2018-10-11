@@ -26,6 +26,7 @@ module.exports = (api) => {
   ]
 
   const plugins = [
+    '@babel/plugin-transform-computed-properties',
     '@babel/plugin-proposal-export-namespace-from', // to use 'exports * as ...'
     '@babel/plugin-transform-runtime',
     '@babel/plugin-syntax-object-rest-spread',
