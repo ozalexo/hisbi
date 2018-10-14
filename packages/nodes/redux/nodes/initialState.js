@@ -268,4 +268,11 @@ export default {
   tokens: {},
   web3: Web3InitialState,
   ws: WSInitialState,
+  cryptocompare: {
+    status: {
+      connected: false,
+      reconnecting: false,
+    },
+    subscriptions: [],
+  },
 }

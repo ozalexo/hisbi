@@ -5,25 +5,25 @@
 
 import { persistReducer } from 'redux-persist'
 
-import { DUCK_ACCOUNTS } from '@chronobank/auth/redux/accounts/constants'
 import { DUCK_BITCOIN } from '@chronobank/bitcoin/redux/constants'
 import { DUCK_BITCOIN_CASH } from '@chronobank/bitcoincash/redux/constants'
 import { DUCK_ETHEREUM } from '@chronobank/ethereum/redux/constants'
 import { DUCK_LITECOIN } from '@chronobank/litecoin/redux/constants'
 import { DUCK_NEM } from '@chronobank/nem/redux/constants'
-import { DUCK_NODES } from '@chronobank/nodes/redux/nodes/constants'
-import { DUCK_SESSION } from '@chronobank/auth/redux/session/constants'
 import { DUCK_WAVES } from '@chronobank/waves/redux/constants'
-
-import accounts from '@chronobank/auth/redux/accounts/reducer'
 import bitcoin from '@chronobank/bitcoin/redux/reducers'
 import bitcoincash from '@chronobank/bitcoincash/redux/reducers'
 import ethereum from '@chronobank/ethereum/redux/reducers'
 import litecoin from '@chronobank/litecoin/redux/reducers'
 import nem from '@chronobank/nem/redux/reducers'
+import waves from '@chronobank/waves/redux/reducers'
+
+import { DUCK_ACCOUNTS } from '@chronobank/auth/redux/accounts/constants'
+import { DUCK_NODES } from '@chronobank/nodes/redux/nodes/constants'
+import { DUCK_SESSION } from '@chronobank/auth/redux/session/constants'
+import accounts from '@chronobank/auth/redux/accounts/reducer'
 import nodes from '@chronobank/nodes/redux/nodes/reducer'
 import session from '@chronobank/auth/redux/session/reducer'
-import waves from '@chronobank/waves/redux/reducers'
 
 import BITCOIN_PERSIST_CONFIG from '@chronobank/bitcoin/redux/persist'
 import BITCOIN_CASH_PERSIST_CONFIG from '@chronobank/bitcoincash/redux/persist'
@@ -37,6 +37,7 @@ export default {
   // Blockchains' ducks
   [DUCK_BITCOIN_CASH]: persistReducer(BITCOIN_CASH_PERSIST_CONFIG, bitcoincash),
   [DUCK_BITCOIN]: persistReducer(BITCOIN_PERSIST_CONFIG, bitcoin),
+  // [DUCK_BITCOIN]: bitcoin,
   [DUCK_ETHEREUM]: persistReducer(ETHEREUM_PERSIST_CONFIG, ethereum),
   [DUCK_LITECOIN]: persistReducer(LITECOIN_PERSIST_CONFIG, litecoin),
   [DUCK_NEM]: persistReducer(NEM_PERSIST_CONFIG, nem),

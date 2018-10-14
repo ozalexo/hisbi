@@ -11,31 +11,16 @@ const keepOnlyDerivedWallets = createTransform(
 
   // transform state on its way to being serialized and persisted.
   (inboundState/*, key*/) => {
-    // console.log('inboundState before', inboundState)
-    // Object.keys(inboundState)
-    //   .forEach((accountAddress) => {
-    //     Object.keys(inboundState[accountAddress])
-    //       .forEach((walletAddress) => {
-    //         if (!inboundState[accountAddress][walletAddress].hasOwnProperty('derivedPath')) {
-    //           delete inboundState[accountAddress][walletAddress]
-    //         }
-    //       })
-    //     if (Object.keys(inboundState[accountAddress]).length === 0) {
-    //       delete inboundState[accountAddress]
-    //     }
-    //   })
-    // console.log('inboundState after', inboundState)
     return inboundState
   },
 
-  // transform state being rehydrated
+  // transform state being rehydrated (remove all non-derived wallets)
   (outboundState/*, key*/) => {
-    console.log('outboundState before', outboundState)
     Object.keys(outboundState)
       .forEach((accountAddress) => {
         Object.keys(outboundState[accountAddress])
           .forEach((walletAddress) => {
-            if (!outboundState[accountAddress][walletAddress].hasOwnProperty('derivedPath')) {
+            if (outboundState[accountAddress][walletAddress].isMain) {
               delete outboundState[accountAddress][walletAddress]
             }
           })
@@ -43,7 +28,6 @@ const keepOnlyDerivedWallets = createTransform(
           delete outboundState[accountAddress]
         }
       })
-    console.log('outboundState after', outboundState)
     return outboundState
   },
 

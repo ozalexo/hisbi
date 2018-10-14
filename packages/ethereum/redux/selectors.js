@@ -5,7 +5,7 @@
 
 import { createSelector } from 'reselect'
 import { selectCurrentNetworkType } from '@chronobank/nodes/redux/nodes/selectors'
-import { selectAccountSelected } from '@chronobank/auth/redux/accounts/selectors'
+import { selectCurrentAccount } from '@chronobank/auth/redux/accounts/selectors'
 
 import { DUCK_ETHEREUM } from './constants'
 
@@ -27,14 +27,14 @@ export const selectEthereumWallets = createSelector(
 )
 
 export const selectEncryptedWallet = createSelector(
-  [selectAccountSelected, selectEthereumWallets],
+  [selectCurrentAccount, selectEthereumWallets],
   (accountAddress, ethereumWallets) => {
     return ethereumWallets[accountAddress] && ethereumWallets[accountAddress].encrypted
   }
 )
 
 export const selectEthereumPendingTransactions = createSelector(
-  [selectEthereumWallets, selectAccountSelected],
+  [selectEthereumWallets, selectCurrentAccount],
   (wallets, selectedAccount) => {
     return Object.values(wallets[selectedAccount])
       .flatMap((wallet) => Object.values(wallet.transactions.pending))

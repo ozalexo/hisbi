@@ -5,14 +5,30 @@
 
 import { I18n, loadTranslations, setLocale } from 'react-redux-i18n'
 import moment from 'moment'
-
 import { nodesInit } from '@chronobank/nodes/redux/nodes/actions'
 import { preselectNetwork } from '@chronobank/nodes/redux/nodes/thunks'
 import translations from '../i18n'
-
+import * as MarketMiddlewareActions from '@chronobank/market/middleware/actions'
+import { updateMarket } from '@chronobank/market/middleware/thunks'
 // import { middlewareConnect } from '@chronobank/nodes/middleware/thunks'
 // import { WebSocketService } from '@chronobank/core/services/WebSocketService'
 // import { loadI18n } from '../redux/i18n/thunks'
+
+export const initMarket = (store) => {
+  const MARKET_REQUEST_DELAY = 30000
+  const dispatch = store.dispatch
+  dispatch(MarketMiddlewareActions.connect())
+    .then(() => {
+      dispatch(MarketMiddlewareActions.setEventHandler('m', (data) => {
+        dispatch(updateMarket(data))
+      }))
+      dispatch(MarketMiddlewareActions.subscribe())
+    })
+    .catch((error) => {
+      console.log('MME:', error)
+    })
+  dispatch(MarketMiddlewareActions.startPricesPolling(MARKET_REQUEST_DELAY))
+}
 
 const initI18n = (store) => {
   const dispatch = store.dispatch

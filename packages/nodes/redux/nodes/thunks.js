@@ -13,7 +13,7 @@ export const preselectNetwork = () => (dispatch, getState) => {
   let networkIndex = null
   if (nodes.selected === null) {
     if (process.env['NODE_ENV'] === 'development') {
-      networkIndex = 1
+      networkIndex = 3
     } else {
       networkIndex = 1
     }

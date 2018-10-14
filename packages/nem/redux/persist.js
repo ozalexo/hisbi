@@ -20,7 +20,7 @@ const keepOnlyDerivedWallets = createTransform(
       .forEach((accountAddress) => {
         Object.keys(outboundState[accountAddress])
           .forEach((walletAddress) => {
-            if (!outboundState[accountAddress][walletAddress].hasOwnProperty('derivedPath')) {
+            if (outboundState[accountAddress][walletAddress].isMain) {
               delete outboundState[accountAddress][walletAddress]
             }
           })

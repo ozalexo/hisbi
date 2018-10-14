@@ -35,8 +35,9 @@ export default {
   middleware_waves_mainnet_rest: chronobankNodes.waves.middleware_waves_mainnet_rest,
   middleware_waves_testnet_rest: chronobankNodes.waves.middleware_waves_testnet_rest,
 
-  // ChronoBank publick backend
+  // ChronoBank public backend
   backend_chronobank: otherHosts.backend_chronobank,
+  cryptocompare: otherHosts.cryptocompare,
 
   // Primary nodes
   mainnet_chronobank: primaryNodes.mainnet_chronobank,

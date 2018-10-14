@@ -5,3 +5,4 @@
 
 // eslint-disable-next-line import/prefer-default-export
 export { backend_chronobank } from './backend_chronobank'
+export { cryptocompare } from './cryptocompare'

@@ -24,7 +24,7 @@ export const createWalletByMnemonic = (mnemonic, password, derivedPath) => {
   return {
     encrypted: wallet.encrypt(password),
     address: wallet.address.toLowerCase(),
-    type: 'InMemory',
+    type: 'Memory',
   }
 }
 

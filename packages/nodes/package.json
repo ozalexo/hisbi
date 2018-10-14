@@ -7,6 +7,7 @@
     "bignumber.js": "^4.1.0",
     "chronobank-smart-contracts": "^1.1.47",
     "web3": "npm:web3@1.0.0-beta.36",
-    "webstomp-client": "^1.2.4"
+    "webstomp-client": "^1.2.4",
+    "socket.io-client": "^2.1.1"
   }
 }

@@ -14,23 +14,15 @@ export default {
       enabled: true,
     },
     {
-      type: 'WalletFile',
+      type: 'Memory',
       enabled: true,
     },
     {
-      type: 'TrezorDevice',
+      type: 'Trezor',
       enabled: true,
     },
     {
-      type: 'LedgerDevice',
-      enabled: true,
-    },
-    {
-      type: 'Mnemonic',
-      enabled: true,
-    },
-    {
-      type: 'PrivateKey',
+      type: 'Ledger',
       enabled: true,
     },
   ],

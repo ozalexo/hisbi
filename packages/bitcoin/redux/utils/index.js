@@ -18,7 +18,7 @@ export const getAddress = (loginType, privateKey, path, networkType) => {
     return TrezorUtils.getAddress(path, networkType)
   }
   default: {
-    return InMemoryUtils.getMemoryAddress(privateKey, networkType)
+    return InMemoryUtils.getAddress(privateKey, networkType)
   }
   }
 }

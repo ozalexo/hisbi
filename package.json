@@ -15,6 +15,7 @@
   "dependencies": {
     "@babel/plugin-transform-object-assign": "^7.0.0",
     "@chronobank/auth": "*",
+    "@chronobank/market": "*",
     "@chronobank/bitcoin": "*",
     "@chronobank/bitcoincash": "*",
     "@chronobank/core": "*",

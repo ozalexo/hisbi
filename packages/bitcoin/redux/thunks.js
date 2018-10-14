@@ -5,7 +5,7 @@
 
 import { getEthereumPrivateKeyByPassword } from '@chronobank/ethereum/redux/thunks'
 import { requestBitcoinSendRawTransaction } from '@chronobank/nodes/api/bitcoinLikeAPI'
-import { selectAccountSelected } from '@chronobank/auth/redux/accounts/selectors'
+import { selectCurrentAccount } from '@chronobank/auth/redux/accounts/selectors'
 import { selectBlockchainNetworkId } from '@chronobank/nodes/redux/nodes/selectors'
 import { selectSessionType } from '@chronobank/auth/redux/session/selectors'
 import { BLOCKCHAIN_BITCOIN } from '../constants'
@@ -14,20 +14,22 @@ import * as BitcoinActions from './actions'
 import * as Utils from './utils'
 
 // eslint-disable-next-line import/prefer-default-export
-export const createBitcoinWallet = (privateKey) => (dispatch, getState) => {
+export const createBitcoinWallet = ({ isMain = false, privateKey }) => (dispatch, getState) => {
   const state = getState()
   const loginType = selectSessionType(state)
-  const derivedPath = selectCurrentDerivedPath()
+  const derivedPath = selectCurrentDerivedPath(state)
   const networkType = selectBlockchainNetworkId(BLOCKCHAIN_BITCOIN)(state)
-  const ethereumAddress = selectAccountSelected(state)
+  const ethereumAddress = selectCurrentAccount(state)
 
   try {
     const address = Utils.getAddress(loginType, privateKey, derivedPath, networkType)
+    const wallet = {
+      address,
+      type: loginType,
+      isMain,
+    }
     dispatch(BitcoinActions.createWalletByPrivateKey(
-      {
-        address,
-        type: loginType,
-      },
+      wallet,
       ethereumAddress,
     ))
     return address

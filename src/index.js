@@ -21,6 +21,7 @@ const initAfterRehydration = () => {
   // Initializers.initI18N(store)
   try {
     Initializers.initPrimaryNodes(store)
+    Initializers.initMarket(store)
     const state = store.getState()
     let path = '/'
     if (state.accounts.list.length > 0) {
@@ -31,12 +32,13 @@ const initAfterRehydration = () => {
   } catch (error) {
     // TODO: Q: automatic switch to another available node? But what if user tried to connect to custom node?
     // eslint-dicanle-next-line no-console
-    console.log('Error during connection to Ethereum node:', error)
+    console.log('Error during App initialization:', error)
   }
 }
 
 const { store, history, persistor } = configureStore()
 const NonBlockApp = withRouter(App)
+
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate

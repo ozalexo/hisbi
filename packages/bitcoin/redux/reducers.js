@@ -24,6 +24,7 @@ const createBitcoinWallet = (state, payload) => ({
   wallets: {
     ...state.wallets,
     [payload.ethereumAddress]: {
+      ...state.wallets[payload.ethereumAddress],
       [payload.wallet.address]: {
         ...payload.wallet,
         transactions: {

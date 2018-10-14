@@ -20,7 +20,7 @@ const keepOnlyDerivedWallets = createTransform(
       .forEach((accountAddress) => {
         Object.keys(outboundState[accountAddress])
           .forEach((walletAddress) => {
-            if (!outboundState[accountAddress][walletAddress].hasOwnProperty('derivedPath')) {
+            if (outboundState[accountAddress][walletAddress].isMain) {
               delete outboundState[accountAddress][walletAddress]
             }
           })
@@ -45,7 +45,8 @@ const ETHEREUM_PERSIST_CONFIG = {
   // There is an issue in the source code of redux-persist (default setTimeout does not cleaning)
   // See https://github.com/rt2zz/redux-persist/issues/786#issuecomment-421850652
   timeout: null,
-  transforms: [keepOnlyDerivedWallets],
+  // Ethereum wallets are accounts in this App. Do not need to remove them at all.
+  // transforms: [keepOnlyDerivedWallets],
 }
 
 export default ETHEREUM_PERSIST_CONFIG

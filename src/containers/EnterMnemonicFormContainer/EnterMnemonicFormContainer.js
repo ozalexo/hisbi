@@ -24,7 +24,7 @@ class EnterMnemonicFormContainer extends PureComponent {
   }
 
   handleSubmitMnemonic = (mnemonic) =>
-    this.props.createInMemoryAccount('Test Wallet', mnemonic, '111')
+    this.props.createInMemoryAccount('Test Wallet', 'decade light person nest wagon spy swarm merge surge answer kingdom wolf', '111')
 
   render () {
     const { handleSubmit } = this.props

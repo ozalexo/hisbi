@@ -22,7 +22,7 @@ export const selectAllMainWallets = createSelector(
 
 )
 
-export const selectAccountSelected = createSelector(
+export const selectCurrentAccount = createSelector(
   (state) => state.accounts,
   (accounts) => accounts.selected
 )

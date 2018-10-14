@@ -8,15 +8,17 @@ import { routerMiddleware } from 'connected-react-router/immutable'
 import thunk from 'redux-thunk'
 import axiosMiddleware from '@chronobank/nodes/redux/middlewares/axios'
 import web3middleware from '@chronobank/nodes/redux/middlewares/web3'
-import rabbitmqMmiddleware from '@chronobank/nodes/redux/middlewares/rabbitmq'
+import rabbitmqMiddleware from '@chronobank/nodes/redux/middlewares/rabbitmq'
+import createCryptoCompareMiddleware from '@chronobank/market/middleware'
 
 export default (history) => {
   const middleware = [
+    createCryptoCompareMiddleware(), // this middleware will dispatch thunk, so it MUST be placed before 'thunks'
     thunk,
     routerMiddleware(history),
     axiosMiddleware,
     web3middleware,
-    rabbitmqMmiddleware,
+    rabbitmqMiddleware,
   ]
   const isDevelopmentEnv = process.env.NODE_ENV === 'development'
   if (isDevelopmentEnv) {

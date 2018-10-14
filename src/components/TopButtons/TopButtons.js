@@ -6,12 +6,11 @@
 import PropTypes from 'prop-types'
 import { Translate } from 'react-redux-i18n'
 import React, { PureComponent } from 'react'
-import { history } from 'redux/configureStore'
 import classnames from 'classnames'
 import { connect } from 'react-redux'
-
 import { DUCK_SIDES } from 'redux/sides/constants'
-import Button from 'components/common/ui/Button/Button'
+import * as NavigationActions from '../../redux/navigation'
+import Button from '../Button'
 import BUTTONS from './buttons'
 import './TopButtons.scss'
 
@@ -24,6 +23,7 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     handleAction: (action) => dispatch(action()),
+    navigateBack: () => dispatch(NavigationActions.navigateBack()),
   }
 }
 
@@ -31,6 +31,7 @@ function mapDispatchToProps (dispatch) {
 export default class TopButtons extends PureComponent {
   static propTypes = {
     handleAction: PropTypes.func,
+    navigateBack: PropTypes.func,
     location: PropTypes.shape({
       action: PropTypes.string,
       hash: PropTypes.string,
@@ -49,7 +50,7 @@ export default class TopButtons extends PureComponent {
   }
 
   render () {
-    const { location } = this.props
+    const { location, navigateBack } = this.props
     const page = BUTTONS[location.pathname]
     let buttons = []
     if (page && page.buttons) {
@@ -59,7 +60,14 @@ export default class TopButtons extends PureComponent {
       <div styleName='root'>
         <div styleName='backButtonWrapper'>
           {page && page.backButton ? (
-            <Button styleName='backButton' onClick={page.backButtonAction ? this.handleAction(page.backButtonAction) : history.goBack}>
+            <Button
+              styleName='backButton'
+              onClick={
+                page.backButtonAction
+                  ? this.handleAction(page.backButtonAction)
+                  : navigateBack()
+              }
+            >
               <i styleName='backIcon' className='chronobank-icon'>back</i>
             </Button>
           ) : null}

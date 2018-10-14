@@ -27,7 +27,7 @@ import theme from './styles'
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    goBack: () => dispatch(NavigationActions.goBack()),
+    navigateBack: () => dispatch(NavigationActions.navigateBack()),
     navigateToLoginPage: () => dispatch(NavigationActions.navigateToLoginPage()),
   }
 }
@@ -35,18 +35,18 @@ const mapDispatchToProps = (dispatch) => {
 class Splash extends Component {
   static propTypes = {
     children: PropTypes.node,
-    goBack: PropTypes.func,
+    navigateBack: PropTypes.func,
     navigateToLoginPage: PropTypes.func,
     navigatorText: PropTypes.string,
   }
 
   static defaultProps = {
-    goBack: null,
+    navigateBack: null,
     navigatorText: '',
   }
 
   render () {
-    const { children, goBack, navigatorText, navigateToLoginPage } = this.props
+    const { children, navigateBack, navigatorText, navigateToLoginPage } = this.props
 
     return (
       <MuiThemeProvider theme={theme}>
@@ -73,9 +73,9 @@ class Splash extends Component {
           </div>
 
           {
-            goBack ? (
+            navigateBack ? (
               <div styleName='header-navigator'>
-                <button styleName='back-button' onClick={goBack}>
+                <button styleName='back-button' onClick={navigateBack}>
                   <img src={BackIcon} alt='' />
                 </button>
                 <span styleName='navigator-text'>
