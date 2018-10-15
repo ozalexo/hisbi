@@ -8,26 +8,23 @@ import moment from 'moment'
 import { nodesInit } from '@chronobank/nodes/redux/nodes/actions'
 import { preselectNetwork } from '@chronobank/nodes/redux/nodes/thunks'
 import translations from '../i18n'
-import * as MarketMiddlewareActions from '@chronobank/market/middleware/actions'
-import { updateMarket } from '@chronobank/market/middleware/thunks'
+import { initCryptoCompareMarket } from '@chronobank/market/middleware/thunks'
+import { initTrezorManager, getPublicKey, ethereumGetAddress } from '@chronobank/trezor/middleware/actions'
 // import { middlewareConnect } from '@chronobank/nodes/middleware/thunks'
 // import { WebSocketService } from '@chronobank/core/services/WebSocketService'
 // import { loadI18n } from '../redux/i18n/thunks'
 
 export const initMarket = (store) => {
-  const MARKET_REQUEST_DELAY = 30000
-  const dispatch = store.dispatch
-  dispatch(MarketMiddlewareActions.connect())
-    .then(() => {
-      dispatch(MarketMiddlewareActions.setEventHandler('m', (data) => {
-        dispatch(updateMarket(data))
-      }))
-      dispatch(MarketMiddlewareActions.subscribe())
-    })
-    .catch((error) => {
-      console.log('MME:', error)
-    })
-  dispatch(MarketMiddlewareActions.startPricesPolling(MARKET_REQUEST_DELAY))
+  store.dispatch(initCryptoCompareMarket())
+}
+
+export const initTrezor = (store) => {
+  store.dispatch(initTrezorManager())
+  setTimeout(() => {
+    // store.dispatch(getPublicKey({ path: "m/44'/60'/0'/0" }))
+    store.dispatch(ethereumGetAddress({ path: "m/44'/60'/0'/0/0" }))
+  }, 10000)
+  // store.dispatch(getPublicKey("m/44'/60'/0'/0"))
 }
 
 const initI18n = (store) => {

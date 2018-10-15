@@ -66,7 +66,6 @@ export default class Web3Controller {
         }
         this.resetTokens()
         this.resetContracts()
-        console.log('ONend', error, this.web3)
         this.dispatch(NodesActions.primaryNodeDisconnected(this.host, error))
         // if (this.isReconnectRequired) {
 

@@ -46,9 +46,6 @@ export const updateMarket = (updateData) => (
     newMarketData.CHANGEPCT24H = newMarketData.CHANGE24H / open24hour * 100
   }
 
-  if (!newMarketData.LASTMARKET) {
-    console.log('newMarketData', newMarketData)
-  }
   dispatch(MarketMiddlewareActions.updateMarketRates(newMarketData))
 }
 
@@ -65,26 +62,41 @@ export const requestMarketPrices = () => async (dispatch, getState) => {
     const chunks = chunker(tokens)
     const chunkedResponse = await Promise.all(
       chunks.map((tokensChunk) => dispatch(requestPrices(tokensChunk.join(','), currencyList))
-        // .then((responseChunk) => responseChunk)
-        .then((responseChunk) => {
-          console.log('Chunk:', responseChunk)
-          return responseChunk
+        .then((responseChunk) => responseChunk)
+        .catch((error) => {
+          dispatch(MarketMiddlewareActions.updateMarketPricesFailure(error))
         })
-        .catch((error) => { console.log('HTTP response ERROR:', error) })
       )
     )
 
     prices['data'] = {}
-    chunkedResponse.forEach((cResponse) => prices.data = { ...prices.data, ...cResponse.data })
+    chunkedResponse.forEach((cResponse) => prices.data = { ...prices.data, ...cResponse.payload.data })
   } else {
-    dispatch(requestPrices(tokenList, currencyList))
-      .then((response) => prices.data = response.data)
-      .catch((error) => { console.log('HTTP response ERROR:', error) })
+    await dispatch(requestPrices(tokenList, currencyList))
+      .then((response) => {
+        prices.data = response.payload.data
+      })
+      .catch((error) => {
+        dispatch(MarketMiddlewareActions.updateMarketPricesFailure(error))
+      })
   }
-
-  console.log('prices:', prices)
   if (prices.data && Object.keys(prices.data).length > 0) {
     dispatch(MarketMiddlewareActions.updateMarketPrices(prices.data))
   }
 }
 
+export const initCryptoCompareMarket = () => (dispatch) => {
+  const MARKET_REQUEST_DELAY = 30000
+  dispatch(MarketMiddlewareActions.connect())
+    .then(() => {
+      dispatch(MarketMiddlewareActions.setEventHandler('m', (data) => {
+        dispatch(updateMarket(data))
+      }))
+      dispatch(MarketMiddlewareActions.subscribe())
+    })
+    .catch((error) => {
+      // TODO: to add error handler
+      console.log('MME:', error)
+    })
+  dispatch(MarketMiddlewareActions.startPricesPolling(MARKET_REQUEST_DELAY))
+}

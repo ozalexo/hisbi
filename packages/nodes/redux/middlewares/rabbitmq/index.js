@@ -6,7 +6,7 @@
 import SockJS from 'sockjs-client'
 import Stomp from '@stomp/stompjs'
 import { Map, fromJS } from 'immutable'
-// import * as MiddlewareActions from './actions'
+import * as MiddlewareActions from './actions'
 import * as ActionTypes from './constants'
 
 // WS states
@@ -117,7 +117,7 @@ class Broker {
 
 let ws = null // WebSocket
 let client = null // Stomp client
-let subscriptions = {}
+let subscriptions = []
 
 const subscribe = (channel, onMessageThunk, dispatch) => {
   if (!client) {
@@ -146,7 +146,7 @@ const unsubscribe = (channel) => {
 }
 
 const unsubscribeAll = () => {
-  subscriptions.forEach((subscription) => {
+  subscriptions && subscriptions.forEach((subscription) => {
     subscription.unsubscribe()
   })
   subscriptions = {}
@@ -181,16 +181,16 @@ const disconnect = () =>
 
 const mutations = {
 
-  [ActionTypes.MIDDLEWARE_CONNECT]: (store) => {
+  [ActionTypes.RABBITMQ_CONNECT]: (store) => {
     connect(store.dispatch)
   },
 
-  [ActionTypes.MIDDLEWARE_DISCONNECT]: () => {
+  [ActionTypes.RABBITMQ_DISCONNECT]: () => {
     unsubscribeAll()
     disconnect()
   },
 
-  [ActionTypes.MIDDLEWARE_SUBSCRIBE]: (store, payload) => {
+  [ActionTypes.RABBITMQ_SUBSCRIBE]: (store, payload) => {
     try {
       subscribe(payload.channel, payload.onMessageThunk, store.dispatch)
       return store.dispatch(MiddlewareActions.middlewareSubscribeSuccess(payload.channel))
@@ -199,7 +199,7 @@ const mutations = {
     }
   },
 
-  [ActionTypes.MIDDLEWARE_UNSUBSCRIBE]: (store, payload) => {
+  [ActionTypes.RABBITMQ_UNSUBSCRIBE]: (store, payload) => {
     if (payload && payload.channel) {
       unsubscribe(payload.channel)
     } else {

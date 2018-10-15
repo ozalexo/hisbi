@@ -21,8 +21,7 @@ const createCryptoCompareMiddleware = () => {
 
   let pricePollingTimer = null
 
-  const connect = (dispatch, action) => {
-    dispatch(action)
+  const connect = (dispatch) => {
     return CryptocompareSocket
       .connect()
       .then(() => {
@@ -35,8 +34,7 @@ const createCryptoCompareMiddleware = () => {
       })
   }
 
-  const disconnect = (dispatch, action) => {
-    dispatch(action)
+  const disconnect = (dispatch) => {
     return CryptocompareSocket
       .disconnect()
       .then(() => {
@@ -49,8 +47,7 @@ const createCryptoCompareMiddleware = () => {
       })
   }
 
-  const subscribe = (dispatch, action) => {
-    dispatch(action)
+  const subscribe = (dispatch) => {
     return CryptocompareSocket
       .subscribe()
       .then(() => {
@@ -63,8 +60,7 @@ const createCryptoCompareMiddleware = () => {
       })
   }
 
-  const unsubscribe = (dispatch, action) => {
-    dispatch(action)
+  const unsubscribe = (dispatch) => {
     return CryptocompareSocket
       .unsubscribe()
       .then(() => {
@@ -126,12 +122,12 @@ const createCryptoCompareMiddleware = () => {
     [CRYPTOCOMPARE_STOP_PRICES_POLLING]: stopPricesPolling,
   }
 
-  return (/*store*/) => (dispatch) => (action) => {
+  return (store) => (next) => (action) => {
     const { type } = action
     if (type in mutations) {
-      return mutations[type](dispatch, action)
+      return mutations[type](store.dispatch, action)
     }
-    return dispatch(action)
+    return next(action)
   }
 }
 

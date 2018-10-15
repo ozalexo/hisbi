@@ -14,3 +14,8 @@ export const marketSelectCoin = (coin) => ({
   type: ActionTypes.MARKET_SELECT_COIN,
   coin,
 })
+
+export const marketSelectCoinFailure = (coin) => ({
+  type: ActionTypes.MARKET_SELECT_COIN_FAILURE,
+  coin,
+})

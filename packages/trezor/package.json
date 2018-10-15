@@ -1,0 +1,7 @@
+{
+  "name": "@chronobank/trezor",
+  "version": "1.0.0",
+  "dependencies": {
+    "trezor-connect": "^5.0.31"
+  }
+}

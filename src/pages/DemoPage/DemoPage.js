@@ -38,6 +38,9 @@ import EnterMnemonicFormContainer from '../../containers/EnterMnemonicFormContai
 const drawerWidth = 240
 
 const styles = (theme) => ({
+  typography: {
+    useNextVariants: true,
+  },
   root: {
     flexGrow: 1,
     height: 440,
@@ -75,7 +78,7 @@ class DemoPage extends PureComponent {
       <div className={classes.root}>
         <AppBar position="absolute" className={classes.appBar}>
           <Toolbar>
-            <Typography variant="title" color="inherit" noWrap>
+            <Typography variant="h6" color="inherit">
               ChronoWallet Network Demo: HTTP nodes, web-sockets and web3
             </Typography>
           </Toolbar>

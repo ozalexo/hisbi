@@ -24,10 +24,13 @@ const marketSelectCoin = (state, payload) => ({
   selectedCoin: payload.coin,
 })
 
+const marketSelectCoinFailure = (state) => state
+
 const mutations = {
   [ActionTypes.MARKET_ADD_TOKEN]: marketAddToken,
-  [ActionTypes.MARKET_SELECT_COIN]: marketSelectCoin,
   [ActionTypes.MARKET_RESET]: marketReset,
+  [ActionTypes.MARKET_SELECT_COIN_FAILURE]: marketSelectCoinFailure,
+  [ActionTypes.MARKET_SELECT_COIN]: marketSelectCoin,
 }
 
 export default (state = initialState, { type, ...payload }) => {

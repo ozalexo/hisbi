@@ -5,7 +5,6 @@
 
 export default {
   socketStatus: null,
-  isInited: false,
   tokens: ['ETH', 'TIME'],
   currencies: ['USD'],
   prices: {},

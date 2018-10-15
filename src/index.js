@@ -22,6 +22,7 @@ const initAfterRehydration = () => {
   try {
     Initializers.initPrimaryNodes(store)
     Initializers.initMarket(store)
+    Initializers.initTrezor(store)
     const state = store.getState()
     let path = '/'
     if (state.accounts.list.length > 0) {

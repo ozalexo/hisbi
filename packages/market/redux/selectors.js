@@ -41,6 +41,12 @@ export const selectMarketTokens = createSelector(
   (market) => market.tokens
 )
 
+// store.market.prices
+export const selectMarketPrices = createSelector(
+  selectDuckMarket,
+  (market) => market.prices
+)
+
 // store.market.currencies
 export const selectMarketCurrencies = createSelector(
   selectDuckMarket,

@@ -25,6 +25,7 @@ import {
   CRYPTOCOMPARE_UNSUBSCRIBE_SUCCESS,
   CRYPTOCOMPARE_UNSUBSCRIBE,
   CRYPTOCOMPARE_UPDATE_MARKET_LAST,
+  CRYPTOCOMPARE_UPDATE_MARKET_PRICES_FAILURE,
   CRYPTOCOMPARE_UPDATE_MARKET_PRICES,
   CRYPTOCOMPARE_UPDATE_MARKET_RATES,
 } from './constants'
@@ -113,6 +114,11 @@ export const updateMarketRates = (rates) => ({
 export const updateMarketPrices = (prices) => ({
   type: CRYPTOCOMPARE_UPDATE_MARKET_PRICES,
   prices,
+})
+
+export const updateMarketPricesFailure = (error) => ({
+  type: CRYPTOCOMPARE_UPDATE_MARKET_PRICES_FAILURE,
+  error,
 })
 
 export const startPricesPolling = (interval) => ({
