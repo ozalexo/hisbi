@@ -17,12 +17,13 @@ class CryptocompareSocket {
   constructor () {
     this.socket = null
     this.manager = null
-    this.subscriptions = []
+    this.subscriptions = null
     this.actions = {}
+    this.WStimeout = null
   }
 
   subscribe () {
-    this.subscriptions = prepareSubscriptions()
+    this.subscriptions = this.subscriptions || prepareSubscriptions()
 
     return new Promise((resolve, reject) => {
       try {
@@ -71,13 +72,41 @@ class CryptocompareSocket {
   }
 
   connect () {
+    if (this.socket) {
+      this.socket.destroy()
+      delete this.socket
+      this.socket = null
+    }
     return new Promise((resolve, reject) => {
-      this.socket = io(URL)
+      this.socket = io(URL, {
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax : 5000,
+        reconnectionAttempts: Infinity,
+        forceNew: true,
+        transports: ['websocket'],
+      })
       this.socket.on('connect', () => {
         return resolve()
       })
       this.socket.on('disconnect', () => {
         return reject()
+      })
+      this.socket.on('ping', () => {
+        console.log('ping, started timeout')
+        this.WStimeout = setTimeout(() => {  // if it doesn't respond within two seconds
+          console.log('timed out', this.socket)
+          if (this.socket && this.socket.io.readyState === 'open') {  // and if the connection is still open
+            this.connect() // force reconnect
+          }
+        }, 2000)
+      })
+      this.socket.on('pong', () => {
+        console.log('ping, clear timeout')
+        clearTimeout(this.WStimeout)
+      })
+      this.socket.on('connect_timeout', (timeout) => {
+        console.log('MARKET connect_timeout', timeout)
       })
       this.socket.connect()
     })
