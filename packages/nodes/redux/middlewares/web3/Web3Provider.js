@@ -4,7 +4,12 @@
  */
 
 import { errors } from 'web3-core-helpers'
-import uuid from 'uuid/v4'
+
+// WS states
+const CONNECTING = 0
+const OPEN = 1
+// const CLOSING = 2
+// const CLOSED = 3
 
 export default class Web3Provider {
   constructor (url) {
@@ -29,8 +34,6 @@ export default class Web3Provider {
             hasReturned = true
             // eslint-disable-next-line no-param-reassign
             --numberOfRetries
-            // eslint-disable-next-line no-console
-            console.info('W3P connect internal: Retrying establiching connection to websocket! url: %s, remaining retries: %s', this.url, numberOfRetries)
             this.connect(timeoutMs, numberOfRetries)
               .then(resolve, reject)
           }
@@ -42,17 +45,16 @@ export default class Web3Provider {
           rejectInternal()
         }
       }, numberOfRetries ? timeoutMs * numberOfRetries : timeoutMs)
-
-      if (!this.connection || this.connection.readyState != this.connection.OPEN) {
+      if (!this.connection || (this.connection.readyState !== OPEN && this.connection.readyState !== CONNECTING)) {
         if (this.connection) {
           this.connection.close()
-          delete this.connection
         }
         this.connection = new WebSocket(this.url)
         this.connection.onopen = () => {
           if (hasReturned) {
             this.connection.close()
           } else {
+            this.connectionFail = false
             return resolve(this)
           }
         }
@@ -71,7 +73,7 @@ export default class Web3Provider {
         }
       } else {
         this.connectionFail = false
-        return resolve(this.connection)
+        return resolve(this)
       }
 
     })
@@ -121,7 +123,7 @@ export default class Web3Provider {
   }
 
   get connected () {
-    return this.connection && this.connection.readyState === this.connection.OPEN
+    return this.connection && this.connection.readyState === OPEN
   }
 
   parseResponse = (data) => {
@@ -185,17 +187,13 @@ export default class Web3Provider {
   }
 
   keepAlive = () => {
-    const uid = uuid()
     if (this.connectionFail) {
-      console.log('KL ignored', new Date())
       return
     }
-    console.log('KL started', new Date())
     const timer = setTimeout(() => {
       if (!this.connectionFail) {
         this.connectionFail = true
-        console.log(`${uid} KeepAlive by timeout`)
-        this.connection && this.connection.onclose(new Error(`${uid} KeepAlive by timeout`))
+        this.connection && this.connection.onclose(new Error('KeepAlive by timeout'))
       }
     }, 5000)
     this.send({
@@ -219,14 +217,14 @@ export default class Web3Provider {
       callback(new Error('300: connection not open'))
       return
     }
-    if (this.connection.readyState === this.connection.CONNECTING) {
+    if (this.connection.readyState === CONNECTING) {
       setTimeout(() => {
         this.send(payload, callback)
       }, 10)
       return
     }
 
-    if (this.connection.readyState !== this.connection.OPEN) {
+    if (this.connection.readyState !== OPEN) {
       if (typeof this.connection.onerror === 'function') {
         this.connection.onerror(new Error('200: connection not open'))
       } else {
@@ -283,13 +281,19 @@ export default class Web3Provider {
       this.notificationCallbacks = []
       break
     case 'connect':
-      this.connection.onopen = null
+      if (this.connection) {
+        this.connection.onopen = null
+      }
       break
     case 'end':
-      this.connection.onclose = null
+      if (this.connection) {
+        this.connection.onclose = null
+      }
       break
     case 'error':
-      this.connection.onerror = null
+      if (this.connection) {
+        this.connection.onerror = null
+      }
       break
     default:
       break

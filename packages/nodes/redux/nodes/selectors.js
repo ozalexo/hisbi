@@ -16,10 +16,7 @@ export const selectNodesState = (state) =>
 // store.nodes.web3.web3Listener.isReconnecting
 export const selectWeb3ListenerReconnectingStatus = createSelector(
   [selectNodesState],
-  (nodes) => {
-    console.log('>>>>>>>>>>>>> SELECTOR', nodes)
-    return nodes.web3.web3Listener.isConnecting
-  }
+  (nodes) => nodes.web3.web3Listener.isConnecting
 )
 
 

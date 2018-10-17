@@ -59,6 +59,7 @@ export default class Web3Controller {
 
   onEndHandler = (error) => {
     this.dispatch(Web3ListenerActions.middlewareConnectFailure(error))
+    this.provider && this.provider.disconnect()
     this.keepAliveTimer && clearInterval(this.keepAliveTimer)
     this.keepAliveTimer = null
     if (!this.web3) {
@@ -67,8 +68,7 @@ export default class Web3Controller {
     this.resetTokens()
     this.resetContracts()
     setTimeout(() => {
-      console.log('middlewareReconnect 3')
-      this.dispatch(Web3ListenerThunks.middlewareReconnect(3))
+      this.dispatch(Web3ListenerThunks.middlewareReconnect())
     }, 5000)
   }
 
@@ -94,7 +94,6 @@ export default class Web3Controller {
               this.web3.eth.net
                 .getId()
                 .then((netId) => {
-                  console.log('Network ID:', netId)
                   if (netId === 1 || netId === 4) {
                     this.dispatch(Web3ListenerActions.middlewareConnectSuccess(this.host))
                     this.checkSyncStatus()
@@ -108,8 +107,7 @@ export default class Web3Controller {
                   }
                 })
                 .catch(() => {
-                  console.log('middlewareReconnect 4')
-                  this.dispatch(Web3ListenerThunks.middlewareReconnect(4))
+                  this.dispatch(Web3ListenerThunks.middlewareReconnect())
                 })
               return resolve()
             } else {
@@ -117,17 +115,12 @@ export default class Web3Controller {
             }
           })
           .catch(() => {
-            console.log('middlewareReconnect 5')
-            this.dispatch(Web3ListenerThunks.middlewareReconnect(5))
+            this.dispatch(Web3ListenerThunks.middlewareReconnect())
             return reject()
           })
       } catch (error) {
         setTimeout(() => {
-          // //#console.log('Reestablishing WS connection to %s in 10 seconds...', this.host)
-          //#console.log('recon 4')
-          console.log('middlewareReconnect 6')
-          this.dispatch(Web3ListenerThunks.middlewareReconnect(6))
-          // this.initController()
+          this.dispatch(Web3ListenerThunks.middlewareReconnect())
         }, 10000)
         return reject()
       }

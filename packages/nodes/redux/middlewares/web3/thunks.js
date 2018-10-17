@@ -18,14 +18,10 @@ export const middlewareSubscribe = (channel, onMessageThunk) => (dispatch) =>
 export const middlewareUnsubscribe = (channel) => (dispatch) =>
   dispatch(MiddlewareActions.middlewareUnsubscribe(channel))
 
-export const middlewareReconnect = (id, isConnecting) => (dispatch, getState) => {
+export const middlewareReconnect = (isConnecting) => (dispatch, getState) => {
   const state = getState()
   const isConnectingState = selectWeb3ListenerReconnectingStatus(state)
-  console.log('Call middlewareReconnect thunk from %s. isConnecting = %s', id, isConnectingState)
   if (!isConnectingState) {
-    console.log('middlewareReconnect 2')
     dispatch(MiddlewareActions.middlewareReconnect(isConnecting))
-  } else {
-    console.log('Already connecting: Call middlewareReconnect thunk from %s', id)
   }
 }

@@ -60,18 +60,14 @@ const nodesNetworkSwitch = (store, action, next) => {
 
 const web3Reconnect = (store, action, next) => {
   next(action)
-  console.log('web3Reconnect')
   return w3c.reconnect()
     .then(() => {
-      console.log('web3Reconnect then')
       store.dispatch(Web3MiddlewareActions.middlewareReconnectSuccess())
     })
     .catch((error) => {
-      console.log('web3Reconnect catch: next reconnect in 5 seconds')
       store.dispatch(Web3MiddlewareActions.middlewareReconnectFailure(error))
       setTimeout(() => {
-        console.log('middlewareReconnect 1')
-        store.dispatch(Web3MiddlewareActions.middlewareReconnect(1))
+        store.dispatch(Web3MiddlewareActions.middlewareReconnect())
       }, 5000)
     })
 }
