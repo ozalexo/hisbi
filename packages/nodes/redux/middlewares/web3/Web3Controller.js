@@ -13,16 +13,19 @@ import * as Utils from './abi/utils'
 import ContractList from './abi'
 import * as NodesActions from '../../nodes/actions'
 import * as Web3ListenerActions from './actions'
+import * as Web3ListenerThunks from './thunks'
+import Web3Provider from './Web3Provider'
 
 export default class Web3Controller {
   constructor (
     dispatch,
     host,
     networkId,
+    provider
   ) {
     this.dispatch = dispatch
-    this.host = host
-    this.provider = null
+    this.host = host // 'ws://localhost:40510'
+    this.provider = provider
     this.web3 = null
     this.syncing = null
     this.requiredTokens = []
@@ -33,47 +36,102 @@ export default class Web3Controller {
     this.tokenSubscriptions = []
     this.contractSubscriptions = []
     this.syncStatusSubscription = null
+    this.keepAliveTimer = null
   }
 
-  initController (provider) {
-    try {
-      this.provider = provider || new Web3.providers.WebsocketProvider(this.host)
-      this.provider.on('connect', () => {
-        this.web3 = new Web3(this.provider)
-        this.web3.eth.net
-          .getId()
-          .then((netId) => {
-            console.log('NetId:', netId)
-            if (netId === 1 || netId === 4) {
-              this.dispatch(NodesActions.primaryNodeConnected(this.host))
-              this.checkSyncStatus()
-              this.initContracts()
-              this.subscribeOnContractsEvents()
+  reconnect () {
+    this.provider && this.provider.disconnect()
+    this.web3 = null
+    this.syncing = null
+    this.requiredTokens = []
+    this.contracts = new Map()
+    this.tokens = new Map()
+    this.isReconnectRequired = true
+    this.tokenSubscriptions = []
+    this.contractSubscriptions = []
+    this.syncStatusSubscription = null
+    return this.initController()
+  }
+
+  onErrorHandler = (error) => {
+    this.dispatch(NodesActions.primaryNodeError(this.host, error))
+  }
+
+  onEndHandler = (error) => {
+    this.dispatch(Web3ListenerActions.middlewareConnectFailure(error))
+    this.keepAliveTimer && clearInterval(this.keepAliveTimer)
+    this.keepAliveTimer = null
+    if (!this.web3) {
+      return
+    }
+    this.resetTokens()
+    this.resetContracts()
+    setTimeout(() => {
+      console.log('middlewareReconnect 3')
+      this.dispatch(Web3ListenerThunks.middlewareReconnect(3))
+    }, 5000)
+  }
+
+  initController () {
+    return new Promise((resolve, reject) => {
+      try {
+        this.provider = this.provider || new Web3Provider(this.host)
+
+        this.provider
+          .connect()
+          .then(() => {
+            this.provider
+              .on('error', this.onErrorHandler)
+              .on('end', this.onEndHandler)
+
+            if (this.provider && this.provider.connected) {
+              this.keepAliveTimer = setInterval(() => {
+                this.provider.keepAlive()
+              }, 6000)
+
+              this.web3 = new Web3(this.provider)
+              this.dispatch(Web3ListenerActions.middlewareConnectSuccess(this.host))
+              this.web3.eth.net
+                .getId()
+                .then((netId) => {
+                  console.log('Network ID:', netId)
+                  if (netId === 1 || netId === 4) {
+                    this.dispatch(Web3ListenerActions.middlewareConnectSuccess(this.host))
+                    this.checkSyncStatus()
+                    this.initContracts()
+                    this.subscribeOnContractsEvents()
+                  } else {
+                    this.provider.disconnect()
+                    this.web3 = null
+                    this.provider = null
+                    this.dispatch(Web3ListenerActions.middlewareIncompatibleNetwork(netId))
+                  }
+                })
+                .catch(() => {
+                  console.log('middlewareReconnect 4')
+                  this.dispatch(Web3ListenerThunks.middlewareReconnect(4))
+                })
+              return resolve()
             } else {
-              this.disconnect()
-              this.web3 = null
-              this.provider = null
-              this.dispatch(NodesActions.primaryNodeIncompatibleNetwork(netId))
+              return reject()
             }
           })
-      })
-      this.provider.on('error', (error) => {
-        this.dispatch(NodesActions.primaryNodeError(this.host, error))
-      })
-      this.provider.on('end', (error) => {
-        if (!this.web3 || this.web3.currentProvider.connection.url !== error.currentTarget.url) {
-          return
-        }
-        this.resetTokens()
-        this.resetContracts()
-        this.dispatch(NodesActions.primaryNodeDisconnected(this.host, error))
-        // if (this.isReconnectRequired) {
-
-        // }
-      })
-    } catch (error) {
-      this.dispatch(NodesActions.primaryNodeError(this.host, error))
-    }
+          .catch(() => {
+            console.log('middlewareReconnect 5')
+            this.dispatch(Web3ListenerThunks.middlewareReconnect(5))
+            return reject()
+          })
+      } catch (error) {
+        setTimeout(() => {
+          // //#console.log('Reestablishing WS connection to %s in 10 seconds...', this.host)
+          //#console.log('recon 4')
+          console.log('middlewareReconnect 6')
+          this.dispatch(Web3ListenerThunks.middlewareReconnect(6))
+          // this.initController()
+        }, 10000)
+        return reject()
+      }
+    })
   }
 
   initTokenContract (tokenSymbol, tokenAddress) {
@@ -85,6 +143,7 @@ export default class Web3Controller {
       try {
         subscription.removeAllListeners && subscription.removeAllListeners()
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.log('Error clearing token subscriptions:', error)
       }
     })
@@ -92,6 +151,7 @@ export default class Web3Controller {
       try {
         subscription.removeAllListeners && subscription.removeAllListeners()
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.log('Error clearing contract subscriptions:', error)
       }
     })
@@ -107,65 +167,69 @@ export default class Web3Controller {
       if (!tokenContract.events) {
         return
       }
-      this.tokenSubscriptions.push(tokenContract.events
-        .allEvents({})
-        .on('data', (data) => {
-          if (!data || !data.event) {
-            return
-          }
-          const eventType = data.event.toLowerCase()
-          switch (eventType) {
-          case 'transfer': {
-            // eslint-disable-next-line no-console
-            console.log('Token %s event \'%s\':', tokenSymbol, eventType, data)
-            if (this.requiredTokens.length === 0 || this.requiredTokens.includes(tokenSymbol)) {
-              this.dispatch(NodesActions.tokenTransfer(tokenSymbol, data))
+      this.tokenSubscriptions.push(
+        tokenContract.events
+          .allEvents({})
+          .on('changed', (event) => {
+            //#console.log('Token %s changed event', tokenSymbol, event)
+          })
+          .on('data', (data) => {
+            if (!data || !data.event) {
+              return
             }
-            break
-          }
-          case 'approval': {
+            const eventType = data.event.toLowerCase()
+            switch (eventType) {
+            case 'transfer': {
+              // eslint-disable-next-line no-console
+              //#console.log('Token %s transfer event \'%s\':', tokenSymbol, eventType, data)
+              if (this.requiredTokens.length === 0 || this.requiredTokens.includes(tokenSymbol)) {
+                this.dispatch(NodesActions.tokenTransfer(tokenSymbol, data))
+              }
+              break
+            }
+            case 'approval': {
+              // eslint-disable-next-line no-console
+              //#console.log('Token %s approval event \'%s\':', tokenSymbol, eventType, data)
+              break
+            }
+            }
+          })
+          .on('error', (error) => {
             // eslint-disable-next-line no-console
-            console.log('Token %s event \'%s\':', tokenSymbol, eventType, data)
-            break
-          }
-          }
-        })
-        .on('error', (error) => {
-          // eslint-disable-next-line no-console
-          console.log(`Error of token ${tokenSymbol}\n`, error)
-        })
+            //#console.log(`Error of token ${tokenSymbol}\n`, error)
+          })
       )
     })
   }
 
   subscribeOnContractsEvents () {
-    this.contractSubscriptions.push(
-      this.contracts.forEach((contract, contractName) => {
-        // eslint-disable-next-line no-underscore-dangle
-        if (!contract.events || !contract._address) {
-          return
-        }
+    this.contracts.forEach((contract, contractName) => {
+      // eslint-disable-next-line no-underscore-dangle
+      if (!contract.events || !contract._address) {
+        return
+      }
+      this.contractSubscriptions.push(
         contract.events
           .allEvents({})
           .on('data', (data) => {
             if (!data || !data.event) {
               return
             }
-            console.log('Contract %s event:', contractName, data)
+            //#console.log('Contract %s event:', contractName, data)
           })
           .on('error', (error) => {
             // eslint-disable-next-line no-console
             console.log('Error of contract %s', contractName, error)
           })
-      })
-    )
+      )
+    })
   }
 
   changeProvider (host, networkId) {
     this.unsubscribeFromAllEvents()
     this.tokens = new Map()
     this.contracts = new Map()
-    this.disconnect()
+    this.provider.disconnect()
     this.host = host
     this.networkId = networkId
     this.provider = null
@@ -223,7 +287,7 @@ export default class Web3Controller {
       this.subscribeOnTokenEvents()
     } else {
       // eslint-disable-next-line no-console
-      console.log('Contract Erc20Manager is not initialized.')
+      //#console.log('Contract Erc20Manager is not initialized.')
     }
   }
 
@@ -243,7 +307,6 @@ export default class Web3Controller {
       try {
         const address = Utils.getContractAddressByNetworkId(contract.networks, this.networkId, contractObjectName)
         this.contracts = this.contracts.set(contract.contractName, new this.web3.eth.Contract(abi, address))
-        // console.log(contractObjectName, address)
         this.dispatch(Web3ListenerActions.appendContract(contractObjectName))
       } catch (error) {
         if (abstractContracts.includes(contractObjectName)) {
@@ -252,7 +315,7 @@ export default class Web3Controller {
         } else {
           // TODO: to handle possible errors
           // eslint-disable-next-line no-console
-          console.log(error.message)
+          //#console.log(error.message)
         }
       }
     })
@@ -274,7 +337,7 @@ export default class Web3Controller {
     const requestSyncState = () => {
       this.web3.eth.isSyncing()
         .then((syncStatus) => {
-          console.log('Manual checking node status:', syncStatus)
+          //#console.log('Manual checking node status:', syncStatus)
           if (syncStatus === true) {
             const syncingComplete = false
             const progress = 0
@@ -296,7 +359,7 @@ export default class Web3Controller {
           const progress = 0
           this.dispatch(NodesActions.primaryNodeSetSyncingStatus(syncingInProgress, progress))
           // eslint-disable-next-line no-console
-          console.log('Set SIP, progress 0', error)
+          //#console.log('Set SIP, progress 0', error)
         })
     }
     requestSyncState()
@@ -307,9 +370,4 @@ export default class Web3Controller {
       .on('error', (error) => { console.log('SYNC error:', error) })
   }
 
-  disconnect () {
-    // TODO: in web3 1.0.0-beta.36 provider has method 'disconnect'
-    // See https://github.com/ethereum/web3.js/commit/72443142713ff904c6e4bdbe6b19883cc6dad408
-    this.web3.currentProvider.connection.close()
-  }
 }

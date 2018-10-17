@@ -8,7 +8,7 @@
  */
 
 import { BLOCKCHAIN_BITCOIN, COIN_TYPE_BTC_MAINNET, COIN_TYPE_BTC_TESTNET } from '@chronobank/bitcoin/constants'
-import { BLOCKCHAIN_BITCOIN_CASH } from '@chronobank/bitcoincash/constants'
+import { BLOCKCHAIN_BITCOINCASH } from '@chronobank/bitcoincash/constants'
 import { BLOCKCHAIN_ETHEREUM } from '@chronobank/ethereum/constants'
 import { BLOCKCHAIN_LITECOIN, COIN_TYPE_LTC_MAINNET, COIN_TYPE_LTC_TESTNET } from '@chronobank/litecoin/constants'
 import { BLOCKCHAIN_NEM } from '@chronobank/nem/constants'
@@ -29,7 +29,7 @@ const TESTNET = 'testnet'
  */
 const availableChronoBankMiddlewares = {
   [MAINNET]: {
-    [BLOCKCHAIN_BITCOIN_CASH]: 'middleware_bitcoincash_mainnet_rest',
+    [BLOCKCHAIN_BITCOINCASH]: 'middleware_bitcoincash_mainnet_rest',
     [BLOCKCHAIN_BITCOIN]: 'middleware_bitcoin_mainnet_rest',
     [BLOCKCHAIN_ETHEREUM]: 'middleware_ethereum_mainnet_rest',
     [BLOCKCHAIN_LITECOIN]: 'middleware_litecoin_mainnet_rest',
@@ -37,7 +37,7 @@ const availableChronoBankMiddlewares = {
     [BLOCKCHAIN_WAVES]: 'middleware_waves_mainnet_rest',
   },
   [TESTNET]: {
-    [BLOCKCHAIN_BITCOIN_CASH]: 'middleware_bitcoincash_testnet_rest',
+    [BLOCKCHAIN_BITCOINCASH]: 'middleware_bitcoincash_testnet_rest',
     [BLOCKCHAIN_BITCOIN]: 'middleware_bitcoin_mainnet_rest',
     [BLOCKCHAIN_ETHEREUM]: 'middleware_ethereum_mainnet_rest',
     [BLOCKCHAIN_LITECOIN]: 'middleware_litecoin_mainnet_rest',
@@ -105,7 +105,7 @@ const blockchainMainnet ={
     coinType: null,
     symbol: 'ETH',
   },
-  [BLOCKCHAIN_BITCOIN_CASH]: {
+  [BLOCKCHAIN_BITCOINCASH]: {
     bcNetworkId: 'bitcoin',
     blockexplorer: 'https://bcc.blockdozer.com/insight/tx',
     coinType: null,
@@ -144,7 +144,7 @@ const blockchainTestnet ={
     coinType: null,
     symbol: 'ETH',
   },
-  [BLOCKCHAIN_BITCOIN_CASH]: {
+  [BLOCKCHAIN_BITCOINCASH]: {
     bcNetworkId: 'testnet',
     blockexplorer: 'https://tbcc.blockdozer.com/insight/tx',
     coinType: null,

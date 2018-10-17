@@ -5,14 +5,16 @@
 
 export default {
   web3Listener: {
-    isConnected: null,
+    isConnected: false,
+    isConnecting: false,
     isSyncing: null,
     contracts: {
       list: [],
     },
   },
   web3Writer: {
-    isConnected: null,
+    isConnected: false,
+    isConnecting: false,
     isSyncing: null,
     contracts: {
       list: [],

@@ -8,6 +8,9 @@ import * as NodesActionTypes from '../../nodes/constants'
 import * as NodesActions from '../../nodes/actions'
 import * as NodesThunks from '../../nodes/thunks'
 import * as NodesSelectors from '../../nodes/selectors'
+import * as Web3MiddlewareThunks from './thunks'
+import * as Web3MiddlewareActions from './actions'
+import * as Web3ActionTypes from './constants'
 
 let w3c = null
 
@@ -55,6 +58,24 @@ const nodesNetworkSwitch = (store, action, next) => {
   next(action)
 }
 
+const web3Reconnect = (store, action, next) => {
+  next(action)
+  console.log('web3Reconnect')
+  return w3c.reconnect()
+    .then(() => {
+      console.log('web3Reconnect then')
+      store.dispatch(Web3MiddlewareActions.middlewareReconnectSuccess())
+    })
+    .catch((error) => {
+      console.log('web3Reconnect catch: next reconnect in 5 seconds')
+      store.dispatch(Web3MiddlewareActions.middlewareReconnectFailure(error))
+      setTimeout(() => {
+        console.log('middlewareReconnect 1')
+        store.dispatch(Web3MiddlewareActions.middlewareReconnect(1))
+      }, 5000)
+    })
+}
+
 const mutations = {
 
   /**
@@ -70,6 +91,7 @@ const mutations = {
   [NodesActionTypes.WEB3_LISTENER_GET_WEB3_PROVIDER]: web3ListenerGetWeb3Provider,
   [NodesActionTypes.NODES_INIT]: nodesInit,
   [NodesActionTypes.NODES_NETWORK_SWITCH]: nodesNetworkSwitch,
+  [Web3ActionTypes.WEB3_LISTENER_RECONNECT]: web3Reconnect,
 
 }
 

@@ -27,11 +27,6 @@ export const primaryNodeGetWeb3Instance = () => ({
   type: NodesActionTypes.WEB3_LISTENER_GET_WEB3,
 })
 
-export const primaryNodeConnected = (url) => ({
-  type: NodesActionTypes.WEB3_LISTENER_CONNECTED,
-  url,
-})
-
 export const primaryNodeSwitch = () => ({
   type: NodesActionTypes.WEB3_LISTENER_SWITCH,
 })
@@ -75,11 +70,6 @@ export const tokenTransfer = (symbol, data) => ({
   type: NodesActionTypes.ETHEREUM_TOKEN_TRANSFER,
   symbol,
   data,
-})
-
-export const primaryNodeIncompatibleNetwork = (url) => ({
-  type: NodesActionTypes.WEB3_LISTENER_INCOMPATIBLE_NETWORK,
-  url,
 })
 
 export const web3Reset = () => ({

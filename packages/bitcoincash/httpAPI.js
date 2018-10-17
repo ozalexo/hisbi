@@ -7,7 +7,7 @@
  * See middleware API documantaion here: https://github.com/ChronoBank/middleware-bitcoin-rest
  */
 
-import { BLOCKCHAIN_BITCOIN_CASH } from './constants'
+import { BLOCKCHAIN_BITCOINCASH } from './constants'
 
 /**
  * register new address on middleware
@@ -15,9 +15,9 @@ import { BLOCKCHAIN_BITCOIN_CASH } from './constants'
  */
 export const requestSubscribeWalletByAddress = (address) => (dispatch) => {
   const action = {
-    type: 'REQ/MIDDLEWARE/BITCOIN_CASH/POST/SUBSCRIBE',
+    type: 'REQ/MIDDLEWARE/BITCOINCASH/POST/SUBSCRIBE',
     payload: {
-      blockchain: BLOCKCHAIN_BITCOIN_CASH,
+      blockchain: BLOCKCHAIN_BITCOINCASH,
       request: {
         method: 'POST',
         url: '/addr',
@@ -41,9 +41,9 @@ export const requestSubscribeWalletByAddress = (address) => (dispatch) => {
  */
 export const requestUnubscribeWalletByAddress = (address) => (dispatch) => {
   const action = {
-    type: 'REQ/MIDDLEWARE/BITCOIN_CASH/DELETE/UNSUBSCRIBE',
+    type: 'REQ/MIDDLEWARE/BITCOINCASH/DELETE/UNSUBSCRIBE',
     payload: {
-      blockchain: BLOCKCHAIN_BITCOIN_CASH,
+      blockchain: BLOCKCHAIN_BITCOINCASH,
       request: {
         method: 'DELETE',
         url: '/addr',
@@ -67,9 +67,9 @@ export const requestUnubscribeWalletByAddress = (address) => (dispatch) => {
  */
 export const requestBalanceByAddress = (address) => (dispatch) => {
   const action = {
-    type: 'REQ/MIDDLEWARE/BITCOIN_CASH/GET/BALANCE',
+    type: 'REQ/MIDDLEWARE/BITCOINCASH/GET/BALANCE',
     payload: {
-      blockchain: BLOCKCHAIN_BITCOIN_CASH,
+      blockchain: BLOCKCHAIN_BITCOINCASH,
       request: {
         method: 'GET',
         url: `/addr/${address}/balance`,
@@ -92,9 +92,9 @@ export const requestBalanceByAddress = (address) => (dispatch) => {
  */
 export const requestUtxoByAddress = (address) => (dispatch) => {
   const action = {
-    type: 'REQ/MIDDLEWARE/BITCOIN_CASH/GET/UTXO',
+    type: 'REQ/MIDDLEWARE/BITCOINCASH/GET/UTXO',
     payload: {
-      blockchain: BLOCKCHAIN_BITCOIN_CASH,
+      blockchain: BLOCKCHAIN_BITCOINCASH,
       request: {
         method: 'GET',
         url: `/addr/${address}/utxo`,
@@ -117,9 +117,9 @@ export const requestUtxoByAddress = (address) => (dispatch) => {
  */
 export const requestSendRawTransaction = (rawTx) => (dispatch) => {
   const action = {
-    type: 'REQ/MIDDLEWARE/BITCOIN_CASH/POST/SEND_RAW_TRANSACTION',
+    type: 'REQ/MIDDLEWARE/BITCOINCASH/POST/SEND_RAW_TRANSACTION',
     payload: {
-      blockchain: BLOCKCHAIN_BITCOIN_CASH,
+      blockchain: BLOCKCHAIN_BITCOINCASH,
       request: {
         method: 'POST',
         url: '/tx/send',
@@ -144,9 +144,9 @@ const TXS_PER_PAGE = 20
  */
 export const requestTransactionsHistoryByAddress = (address, skip = 0, offset = TXS_PER_PAGE) => (dispatch) => {
   const action = {
-    type: 'REQ/MIDDLEWARE/BITCOIN_CASH/GET/TRANSACTIONS_HISTORY',
+    type: 'REQ/MIDDLEWARE/BITCOINCASH/GET/TRANSACTIONS_HISTORY',
     payload: {
-      blockchain: BLOCKCHAIN_BITCOIN_CASH,
+      blockchain: BLOCKCHAIN_BITCOINCASH,
       request: {
         method: 'GET',
         url: `tx/${address}/history?skip=${skip}&limit=${offset}`,
@@ -168,9 +168,9 @@ export const requestTransactionsHistoryByAddress = (address, skip = 0, offset = 
  */
 export const requestTransactionByHash = (txHash) => (dispatch) => {
   const action = {
-    type: 'REQ/MIDDLEWARE/BITCOIN_CASH/GET/TRANSACTION_BY_HASH',
+    type: 'REQ/MIDDLEWARE/BITCOINCASH/GET/TRANSACTION_BY_HASH',
     payload: {
-      blockchain: BLOCKCHAIN_BITCOIN_CASH,
+      blockchain: BLOCKCHAIN_BITCOINCASH,
       request: {
         method: 'GET',
         url: `/tx/${txHash}`,
@@ -192,9 +192,9 @@ export const requestTransactionByHash = (txHash) => (dispatch) => {
  */
 export const requestEstimateFeeRate = () => (dispatch) => {
   const action = {
-    type: 'REQ/MIDDLEWARE/BITCOIN_CASH/GET/ESTIMATE_FEE_RATE',
+    type: 'REQ/MIDDLEWARE/BITCOINCASH/GET/ESTIMATE_FEE_RATE',
     payload: {
-      blockchain: BLOCKCHAIN_BITCOIN_CASH,
+      blockchain: BLOCKCHAIN_BITCOINCASH,
       request: {
         method: 'GET',
         url: '/estimate/feerate',
@@ -216,9 +216,9 @@ export const requestEstimateFeeRate = () => (dispatch) => {
  */
 export const requestBlocksHeight = () => (dispatch) => {
   const action = {
-    type: 'REQ/MIDDLEWARE/BLOCKCHAIN_BITCOIN_CASH/GET/BLOCKS_HEIGHT',
+    type: 'REQ/MIDDLEWARE/BLOCKCHAIN_BITCOINCASH/GET/BLOCKS_HEIGHT',
     payload: {
-      blockchain: BLOCKCHAIN_BITCOIN_CASH,
+      blockchain: BLOCKCHAIN_BITCOINCASH,
       request: {
         method: 'GET',
         url: '/blocks/height',

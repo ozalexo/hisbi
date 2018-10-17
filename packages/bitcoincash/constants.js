@@ -3,5 +3,5 @@
  * Licensed under the AGPL Version 3 license.
  */
 
-export const BLOCKCHAIN_BITCOIN_CASH = 'Bitcoin Cash'
+export const BLOCKCHAIN_BITCOINCASH = 'Bitcoin Cash'
 export const BCC = 'BCC'

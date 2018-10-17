@@ -11,9 +11,9 @@ import * as ActionTypes from './constants'
 
 const createTrezorMiddleware = () => {
 
-  const initTrezorManager = (dispatch) => {
+  const initTrezorManager = async (dispatch) => {
     try {
-      TrezorManager.init(dispatch)
+      await TrezorManager.init(dispatch)
       dispatch(TrezorActions.initTrezorManagerSuccess())
     } catch (error) {
       dispatch(TrezorActions.initTrezorManagerFailure(error))

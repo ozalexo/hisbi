@@ -20,8 +20,11 @@ export const initMarket = (store) => {
 
 export const initTrezor = (store) => {
   store.dispatch(initTrezorManager())
+  // TODO: still unclear how to wait for the Trezor device ('connected' event)
   setTimeout(() => {
     // store.dispatch(getPublicKey({ path: "m/44'/60'/0'/0" }))
+    // TODO: device can't operate with multiple simultaneous API calls (returns smth like 'device busy')
+    // Need to think how to chain all calls to TrezorConnect.methods or think about other mechanizm
     store.dispatch(ethereumGetAddress({ path: "m/44'/60'/0'/0/0" }))
   }, 10000)
   // store.dispatch(getPublicKey("m/44'/60'/0'/0"))

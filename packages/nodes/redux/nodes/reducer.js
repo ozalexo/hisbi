@@ -4,11 +4,11 @@
  */
 
 import * as NodesActionTypes from './constants'
-import * as Web3ActionTypes from '../middlewares/web3/constants'
+// import * as Web3ActionTypes from '../middlewares/web3/constants'
 // import * as NodesActions from './actions'
 // import * as NodesSelectors from './selectors'
 import initialState from './initialState'
-import web3ListenerReducer from '../middlewares/web3/reducers'
+import web3ListenerReducer, { mutations as web3ListenerMutations } from '../middlewares/web3/reducers'
 
 const networkSelect = (state, action) => {
   return {
@@ -27,10 +27,6 @@ const ethereumTokenTransfer = (state, action) => {
   }
 }
 
-const incompatibleNetworkType = (state) => {
-  return state
-}
-
 const web3ListenerReset = (state, action) => {
   return {
     ...state,
@@ -38,26 +34,23 @@ const web3ListenerReset = (state, action) => {
   }
 }
 
-const web3ListenerAppendContract = (state, action) => {
-  return {
-    ...state,
-    web3: {
-      ...state.web3,
-      web3Listener: web3ListenerReducer(state.web3.web3Listener, action),
-    },
-  }
-}
-
 const mutations = {
   [NodesActionTypes.ETHEREUM_TOKEN_TRANSFER]: ethereumTokenTransfer,
   [NodesActionTypes.NODES_NETWORK_SELECT]: networkSelect,
-  [NodesActionTypes.WEB3_LISTENER_INCOMPATIBLE_NETWORK]: incompatibleNetworkType,
   [NodesActionTypes.WEB3_LISTENER_RESET]: web3ListenerReset,
-  [Web3ActionTypes.WEB3_LISTENER_APPEND_CONTRACT]: web3ListenerAppendContract,
 }
 
 export default (state = initialState, action) => {
   const type = action.type
+  if (type in web3ListenerMutations) {
+    return {
+      ...state,
+      web3: {
+        ...state.web3,
+        web3Listener: web3ListenerReducer(state.web3.web3Listener, action),
+      },
+    }
+  }
   return (type in mutations)
     ? mutations[type](state, action)
     : state

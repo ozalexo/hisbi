@@ -6,40 +6,58 @@
 import * as MiddlewareActionTypes from './constants'
 
 export const middlewareConnect = () => ({
-  type: MiddlewareActionTypes.MIDDLEWARE_CONNECT,
+  type: MiddlewareActionTypes.WEB3_LISTENER_CONNECT,
 })
 
 export const middlewareConnectSuccess = () => ({
-  type: MiddlewareActionTypes.MIDDLEWARE_CONNECT_SUCCESS,
+  type: MiddlewareActionTypes.WEB3_LISTENER_CONNECT_SUCCESS,
 })
 
 export const middlewareConnectFailure = (error) => ({
-  type: MiddlewareActionTypes.MIDDLEWARE_CONNECT_FAILURE,
+  type: MiddlewareActionTypes.WEB3_LISTENER_CONNECT_FAILURE,
   error,
 })
 
 export const middlewareDisconnect = () => ({
-  type: MiddlewareActionTypes.MIDDLEWARE_DISCONNECT,
+  type: MiddlewareActionTypes.WEB3_LISTENER_DISCONNECT,
+})
+
+export const middlewareReconnect = (isConnecting = true) => ({
+  type: MiddlewareActionTypes.WEB3_LISTENER_RECONNECT,
+  isConnecting,
+})
+
+export const middlewareReconnectSuccess = () => ({
+  type: MiddlewareActionTypes.WEB3_LISTENER_RECONNECT_SUCCESS,
+})
+
+export const middlewareReconnectFailure = (error) => ({
+  type: MiddlewareActionTypes.WEB3_LISTENER_RECONNECT_FAILURE,
+  error,
+})
+
+export const middlewareIncompatibleNetwork = () => ({
+  type: MiddlewareActionTypes.WEB3_LISTENER_INCOMPATIBLE_NETWORK,
 })
 
 export const middlewareSubscribe = (channel, onMessageThunk) => ({
-  type: MiddlewareActionTypes.MIDDLEWARE_SUBSCRIBE,
+  type: MiddlewareActionTypes.WEB3_LISTENER_SUBSCRIBE,
   channel,
   onMessageThunk,
 })
 
 export const middlewareSubscribeSuccess = (channel) => ({
-  type: MiddlewareActionTypes.MIDDLEWARE_SUBSCRIBE_SUCCESS,
+  type: MiddlewareActionTypes.WEB3_LISTENER_SUBSCRIBE_SUCCESS,
   channel,
 })
 
 export const middlewareSubscribeFailure = (error) => ({
-  type: MiddlewareActionTypes.MIDDLEWARE_SUBSCRIBE_FAILURE,
+  type: MiddlewareActionTypes.WEB3_LISTENER_SUBSCRIBE_FAILURE,
   error,
 })
 
 export const middlewareUnsubscribe = (channel) => ({
-  type: MiddlewareActionTypes.MIDDLEWARE_UNSUBSCRIBE,
+  type: MiddlewareActionTypes.WEB3_LISTENER_UNSUBSCRIBE,
   channel,
 })
 

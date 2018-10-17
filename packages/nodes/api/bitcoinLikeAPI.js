@@ -12,14 +12,14 @@
  */
 
 import { BLOCKCHAIN_BITCOIN } from '@chronobank/bitcoin/constants'
-import { BLOCKCHAIN_BITCOIN_CASH } from '@chronobank/bitcoincash/constants'
+import { BLOCKCHAIN_BITCOINCASH } from '@chronobank/bitcoincash/constants'
 import { BLOCKCHAIN_LITECOIN } from '@chronobank/litecoin/constants'
 import * as bitcoinApi from '@chronobank/bitcoin/httpAPI'
 import * as bitcoinCashApi from '@chronobank/bitcoincash/httpAPI'
 import * as litecoinApi from '@chronobank/litecoin/httpAPI'
 
 const chainsMapping = {
-  [BLOCKCHAIN_BITCOIN_CASH]: bitcoinCashApi,
+  [BLOCKCHAIN_BITCOINCASH]: bitcoinCashApi,
   [BLOCKCHAIN_BITCOIN]: bitcoinApi,
   [BLOCKCHAIN_LITECOIN]: litecoinApi,
 }

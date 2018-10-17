@@ -17,19 +17,25 @@ import configureStore from './store/configureStore'
 import App from './App'
 import registerServiceWorker from './registerServiceWorker'
 
+const testCreateMemoryAccount = () => {}
+const testLoginWithMemoryAccount = () => {}
+
 const initAfterRehydration = () => {
   // Initializers.initI18N(store)
   try {
     Initializers.initPrimaryNodes(store)
     Initializers.initMarket(store)
     Initializers.initTrezor(store)
-    const state = store.getState()
-    let path = '/'
-    if (state.accounts.list.length > 0) {
-      // path = '/select-account'
-      path = '/'
-    }
-    store.dispatch(push(path))
+    testCreateMemoryAccount()
+    testLoginWithMemoryAccount()
+
+    // const state = store.getState()
+    // let path = '/'
+    // if (state.accounts.list.length > 0) {
+    //   // path = '/select-account'
+    //   path = '/'
+    // }
+    // store.dispatch(push(path))
   } catch (error) {
     // TODO: Q: automatic switch to another available node? But what if user tried to connect to custom node?
     // eslint-dicanle-next-line no-console

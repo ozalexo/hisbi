@@ -25,6 +25,7 @@ export default (history) => {
   const isDevelopmentEnv = process.env.NODE_ENV === 'development'
   if (isDevelopmentEnv) {
     const IGNORED_DOMAINS = [
+      'persist/REHYDRATE',
       '@@i18n/',
       '@@redux-form/',
       '@@router/',

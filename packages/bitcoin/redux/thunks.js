@@ -13,7 +13,6 @@ import { selectPreparedUnsignedTransaction, selectSignedTransaction, selectCurre
 import * as BitcoinActions from './actions'
 import * as Utils from './utils'
 
-// eslint-disable-next-line import/prefer-default-export
 export const createBitcoinWallet = ({ isMain = false, privateKey }) => (dispatch, getState) => {
   const state = getState()
   const loginType = selectSessionType(state)

@@ -64,7 +64,7 @@ export const requestMarketPrices = () => async (dispatch, getState) => {
       chunks.map((tokensChunk) => dispatch(requestPrices(tokensChunk.join(','), currencyList))
         .then((responseChunk) => responseChunk)
         .catch((error) => {
-          dispatch(MarketMiddlewareActions.updateMarketPricesFailure(error))
+          return dispatch(MarketMiddlewareActions.updateMarketPricesFailure(error))
         })
       )
     )
@@ -72,13 +72,13 @@ export const requestMarketPrices = () => async (dispatch, getState) => {
     prices['data'] = {}
     chunkedResponse.forEach((cResponse) => prices.data = { ...prices.data, ...cResponse.payload.data })
   } else {
-    await dispatch(requestPrices(tokenList, currencyList))
-      .then((response) => {
-        prices.data = response.payload.data
-      })
-      .catch((error) => {
-        dispatch(MarketMiddlewareActions.updateMarketPricesFailure(error))
-      })
+    try {
+      const response  = await dispatch(requestPrices(tokenList, currencyList))
+      prices.data = response.payload.data
+    } catch (error) {
+      dispatch(MarketMiddlewareActions.updateMarketPricesFailure(error))
+      return
+    }
   }
   if (prices.data && Object.keys(prices.data).length > 0) {
     dispatch(MarketMiddlewareActions.updateMarketPrices(prices.data))

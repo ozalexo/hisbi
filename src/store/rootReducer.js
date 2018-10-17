@@ -11,13 +11,11 @@ import { DUCK_MARKET } from '@chronobank/market/redux/constants'
 import { DUCK_MODALS } from '../redux/modals/constants'
 import { DUCK_NOTIFIER } from '../redux/notifier/constants'
 import { DUCK_SIDES } from '../redux/sides/constants'
-import { DUCK_TREZOR } from '@chronobank/trezor/redux/constants'
 import coreReducers from '@chronobank/core/redux/reducers'
 import market from '@chronobank/market/redux/reducers'
 import modals from '../redux/modals/reducer'
 import notifier from '../redux/notifier/reducer'
 import sides from '../redux/sides/reducer'
-import trezor from '@chronobank/trezor/redux/reducers'
 
 export default combineReducers({
   ...coreReducers,
@@ -25,7 +23,6 @@ export default combineReducers({
   [DUCK_MODALS]: modals,
   [DUCK_NOTIFIER]: notifier,
   [DUCK_SIDES]: sides,
-  [DUCK_TREZOR]: trezor,
   form: formReducer,
   i18n: i18nReducer,
 })

@@ -18,7 +18,7 @@ class TrezorManager {
     this.isDeviceConnected = false
   }
 
-  init (dispatch) {
+  async init (dispatch) {
 
     if (dispatch) {
       this.dispatch = dispatch
@@ -27,7 +27,7 @@ class TrezorManager {
     }
 
     try {
-      TrezorConnect.init({
+      await TrezorConnect.init({
         // connectSrc: 'https://localhost:21324',
         debug: false,
         popup: false,

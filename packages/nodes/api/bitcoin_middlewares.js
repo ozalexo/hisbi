@@ -3,7 +3,7 @@
  * Licensed under the AGPL Version 3 license.
  */
 
-import { BLOCKCHAIN_BITCOIN_CASH } from '@chronobank/bitcoincash/constants'
+import { BLOCKCHAIN_BITCOINCASH } from '@chronobank/bitcoincash/constants'
 import { requestBitcoinCashAddressInfo } from './explorers/blockdozer'
 
 export const requestBitcoinCurrentBlockHeight = (blockchain) => (dispatch) => {
@@ -86,7 +86,7 @@ export const requestBitcoinAddressInfo = (blockchain, address) => (dispatch) => 
       return result
     })
     .catch((error) => {
-      if (blockchain === BLOCKCHAIN_BITCOIN_CASH) {
+      if (blockchain === BLOCKCHAIN_BITCOINCASH) {
         return dispatch(requestBitcoinCashAddressInfo(address))
       } else {
         throw new Error(error)

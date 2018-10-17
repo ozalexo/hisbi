@@ -5,7 +5,7 @@
 
 import storage from 'redux-persist/lib/storage'
 import { createTransform } from 'redux-persist'
-import { DUCK_BITCOIN_CASH } from './constants'
+import { DUCK_BITCOINCASH } from './constants'
 
 const keepOnlyDerivedWallets = createTransform(
 
@@ -37,8 +37,8 @@ const keepOnlyDerivedWallets = createTransform(
   }
 )
 
-const BITCOIN_CASH_PERSIST_CONFIG = {
-  key: DUCK_BITCOIN_CASH,
+const BITCOINCASH_PERSIST_CONFIG = {
+  key: DUCK_BITCOINCASH,
   version: '1.0',
   storage: storage,
   whitelist: ['wallets'],
@@ -48,4 +48,4 @@ const BITCOIN_CASH_PERSIST_CONFIG = {
   transforms: [keepOnlyDerivedWallets],
 }
 
-export default BITCOIN_CASH_PERSIST_CONFIG
+export default BITCOINCASH_PERSIST_CONFIG

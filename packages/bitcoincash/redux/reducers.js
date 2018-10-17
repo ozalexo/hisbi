@@ -10,7 +10,7 @@ import * as ActionTypes from './constants'
 const bitcoincashRehydrate = (state, payload) => {
   // action.payload is undefined if LocalStorage is empty
   // See https://github.com/rt2zz/redux-persist/issues/719
-  if (!payload.payload || payload.key !== ActionTypes.DUCK_BITCOIN_CASH) {
+  if (!payload.payload || payload.key !== ActionTypes.DUCK_BITCOINCASH) {
     return state
   }
   return {
