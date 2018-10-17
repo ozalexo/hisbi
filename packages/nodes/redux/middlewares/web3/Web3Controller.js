@@ -36,7 +36,6 @@ export default class Web3Controller {
     this.tokenSubscriptions = []
     this.contractSubscriptions = []
     this.syncStatusSubscription = null
-    this.keepAliveTimer = null
   }
 
   reconnect () {
@@ -60,13 +59,14 @@ export default class Web3Controller {
   onEndHandler = (error) => {
     this.dispatch(Web3ListenerActions.middlewareConnectFailure(error))
     this.provider && this.provider.disconnect()
-    this.keepAliveTimer && clearInterval(this.keepAliveTimer)
-    this.keepAliveTimer = null
+
     if (!this.web3) {
       return
     }
+
     this.resetTokens()
     this.resetContracts()
+
     setTimeout(() => {
       this.dispatch(Web3ListenerThunks.middlewareReconnect())
     }, 5000)
@@ -85,9 +85,6 @@ export default class Web3Controller {
               .on('end', this.onEndHandler)
 
             if (this.provider && this.provider.connected) {
-              this.keepAliveTimer = setInterval(() => {
-                this.provider.keepAlive()
-              }, 6000)
 
               this.web3 = new Web3(this.provider)
               this.dispatch(Web3ListenerActions.middlewareConnectSuccess(this.host))

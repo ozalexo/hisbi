@@ -5,19 +5,14 @@
 
 import { errors } from 'web3-core-helpers'
 
-// WS states
-const CONNECTING = 0
-const OPEN = 1
-// const CLOSING = 2
-// const CLOSED = 3
-
 export default class Web3Provider {
   constructor (url) {
     this.connection = null
     this.url = url
     this.responseCallbacks = {}
     this.notificationCallbacks = []
-    this.connectionFail = false
+    this.pingInterval = null
+    this.WStimeout = null
   }
 
   connect = (timeoutMs = 1500, numberOfRetries = 10) => {
@@ -45,7 +40,7 @@ export default class Web3Provider {
           rejectInternal()
         }
       }, numberOfRetries ? timeoutMs * numberOfRetries : timeoutMs)
-      if (!this.connection || (this.connection.readyState !== OPEN && this.connection.readyState !== CONNECTING)) {
+      if (!this.connection || (this.connection.readyState !== WebSocket.OPEN && this.connection.readyState !== WebSocket.CONNECTING)) {
         if (this.connection) {
           this.connection.close()
         }
@@ -54,17 +49,19 @@ export default class Web3Provider {
           if (hasReturned) {
             this.connection.close()
           } else {
-            this.connectionFail = false
+            this.pingInterval = setInterval(this.ping, 5000)
             return resolve(this)
           }
         }
         this.connection.onclose = () => {
+          this.pingInterval && clearInterval(this.pingInterval)
           setTimeout(() => { rejectInternal() }, timeoutMs)
         }
         this.connection.onerror = () => {
           setTimeout(() => { rejectInternal() }, timeoutMs)
         }
         this.connection.onmessage = (event) => {
+          clearTimeout(this.WStimeout)
           const data = typeof event.data === 'string'
             ? event.data
             : ''
@@ -72,7 +69,6 @@ export default class Web3Provider {
           this.parseResponse(data).forEach(this.envokeCallbacks)
         }
       } else {
-        this.connectionFail = false
         return resolve(this)
       }
 
@@ -123,7 +119,7 @@ export default class Web3Provider {
   }
 
   get connected () {
-    return this.connection && this.connection.readyState === OPEN
+    return this.connection && this.connection.readyState === WebSocket.OPEN
   }
 
   parseResponse = (data) => {
@@ -186,45 +182,19 @@ export default class Web3Provider {
     this.responseCallbacks[id].method = method
   }
 
-  keepAlive = () => {
-    if (this.connectionFail) {
-      return
-    }
-    const timer = setTimeout(() => {
-      if (!this.connectionFail) {
-        this.connectionFail = true
-        this.connection && this.connection.onclose(new Error('KeepAlive by timeout'))
-      }
-    }, 5000)
-    this.send({
-      id: 10000,
-      jsonrpc: "2.0",
-      method: "net_version",
-      params: [],
-    }, (error/*, res*/) => {
-      timer && clearTimeout(timer)
-      if (!this.connectionFail) {
-        if (error) {
-          this.connectionFail = true
-          this.connection && this.connection.onclose(new Error('KeepAlive by error'))
-        }
-      }
-    })
-  }
-
   send = (payload, callback) => {
     if (!this.connection) {
       callback(new Error('300: connection not open'))
       return
     }
-    if (this.connection.readyState === CONNECTING) {
+    if (this.connection.readyState === WebSocket.CONNECTING) {
       setTimeout(() => {
         this.send(payload, callback)
       }, 10)
       return
     }
 
-    if (this.connection.readyState !== OPEN) {
+    if (this.connection.readyState !== WebSocket.OPEN) {
       if (typeof this.connection.onerror === 'function') {
         this.connection.onerror(new Error('200: connection not open'))
       } else {
@@ -253,7 +223,10 @@ export default class Web3Provider {
       break
 
     case 'end':
-      this.connection.onclose = callback
+      this.connection.onclose = (e) => {
+        this.pingInterval && clearInterval(this.pingInterval)
+        callback(e)
+      }
       break
 
     case 'error':
@@ -261,6 +234,23 @@ export default class Web3Provider {
       break
     }
     return this
+  }
+
+  ping = () => {
+    if (!this.connection || this.connection.readyState !== WebSocket.OPEN) {
+      return
+    }
+    this.send({
+      id: 10000,
+      jsonrpc: "2.0",
+      method: "net_version",
+      params: [],
+    }, () => {})  // send ping to server
+    this.WStimeout = setTimeout(() => {  // if it doesn't respond within a second
+      if (this.connection && this.connection.readyState === WebSocket.OPEN) {  // and if the connection is still open
+        this.connection.onclose(new Error('Ping timed out'))  // close the connection
+      }
+    }, 1000)
   }
 
   removeListener = (type, callback) => {
