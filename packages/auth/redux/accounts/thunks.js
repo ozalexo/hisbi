@@ -7,7 +7,7 @@ import * as AccountActions from './actions'
 import * as AccountSelectors from './selectors'
 import * as EthereumThunks from '@chronobank/ethereum/redux/thunks'
 import * as BitcoinThunks from '@chronobank/bitcoin/redux/thunks'
-import * as BitcoinCashThunks from '@chronobank/bitcoincash/redux/thunks'
+// import * as BitcoinCashThunks from '@chronobank/bitcoincash/redux/thunks'
 import { requestBitcoinSubscribeWalletByAddress } from '@chronobank/nodes/api/bitcoinLikeAPI'
 
 // eslint-disable-next-line import/prefer-default-export
@@ -26,7 +26,7 @@ export const createInMemoryAccount = (accountTitle, mnemonic, password) => (
   // TODO: continuing to login. Just for demo
   const privateKey = dispatch(EthereumThunks.getEthereumPrivateKeyByPassword('111'))
   const btcAddress = dispatch(BitcoinThunks.createBitcoinWallet({ isMain: true, privateKey }))
-  const bccAddress = dispatch(BitcoinCashThunks.createBitcoinCashWallet({ isMain: true, privateKey }))
+  // const bccAddress = dispatch(BitcoinCashThunks.createBitcoinCashWallet({ isMain: true, privateKey }))
   // Wallets are created. Let's use http API to obtain some data
   dispatch(requestBitcoinSubscribeWalletByAddress('Bitcoin', btcAddress))
     .then((data) => { console.log('HTTP response OK:', data) })
