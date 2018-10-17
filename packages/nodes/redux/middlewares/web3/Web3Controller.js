@@ -160,7 +160,7 @@ export default class Web3Controller {
       this.tokenSubscriptions.push(
         tokenContract.events
           .allEvents({})
-          .on('changed', (event) => {
+          .on('changed', (/*event*/) => {
             //#console.log('Token %s changed event', tokenSymbol, event)
           })
           .on('data', (data) => {
@@ -171,7 +171,7 @@ export default class Web3Controller {
             switch (eventType) {
             case 'transfer': {
               // eslint-disable-next-line no-console
-              //#console.log('Token %s transfer event \'%s\':', tokenSymbol, eventType, data)
+              console.log('Token %s transfer event \'%s\':', tokenSymbol, eventType, data)
               if (this.requiredTokens.length === 0 || this.requiredTokens.includes(tokenSymbol)) {
                 this.dispatch(NodesActions.tokenTransfer(tokenSymbol, data))
               }
@@ -179,7 +179,7 @@ export default class Web3Controller {
             }
             case 'approval': {
               // eslint-disable-next-line no-console
-              //#console.log('Token %s approval event \'%s\':', tokenSymbol, eventType, data)
+              console.log('Token %s approval event \'%s\':', tokenSymbol, eventType, data)
               break
             }
             }
