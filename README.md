@@ -26,11 +26,17 @@ HISBI - How It Should Be Implemented
   * packages/ethereum
 
 * Hardware keys support:
-  * packages/trezor
-  * packages/ledger
+  * packages/trezor - middleware, interaction with hardware Trezor wallet (device events listener and API JS calls)
+  * packages/ledger - middleware, interaction with hardware Ledger wallet (device events listener and API JS calls)
 
 * Networking (web3, http api, websockets):
-  * packages/nodes
+  * packages/nodes - network switching and keep inff anout currently selected nodes (betowrk ID, blockchain-related host etc.)
+  * packages/nodes/api - contains dispatchable thunks to interact with clients (below)
+  * packages/nodes/clients - contains axios.clients with all HTTP/S URLs
+  * packages/nodes/redux/middlewares/axios - init of redux-axios-middleware
+  * packages/nodes/redux/middlewares/rabbitmq - middleware, WS to RabbitMQ host (WS/Stomp)
+  * packages/nodes/redux/middlewares/web3 - middleware, Web3 WS connect to Ethereum nodes
+
 
 * Create account and login:
   * packages/auth
