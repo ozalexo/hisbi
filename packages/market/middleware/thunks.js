@@ -89,8 +89,13 @@ export const initCryptoCompareMarket = () => (dispatch) => {
   const MARKET_REQUEST_DELAY = 30000
   dispatch(MarketMiddlewareActions.connect())
     .then(() => {
+      dispatch(MarketMiddlewareActions.connectSuccess())
       dispatch(MarketMiddlewareActions.setEventHandler('m', (data) => {
         dispatch(updateMarket(data))
+      }))
+      dispatch(MarketMiddlewareActions.setEventHandler('disconnect', () => {
+        dispatch(MarketMiddlewareActions.connectFailure())
+        dispatch(initCryptoCompareMarket())
       }))
       dispatch(MarketMiddlewareActions.subscribe())
     })

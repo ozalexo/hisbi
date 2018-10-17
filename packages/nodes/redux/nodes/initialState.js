@@ -114,6 +114,11 @@ const blockchainMainnet ={
     blockexplorer: 'https://bcc.blockdozer.com/insight/tx',
     coinType: null,
     symbol: 'BTC',
+    channels: {
+      balance: '/exchange/events/internal-testnet-bitcoin-middleware-chronobank-io_balance',
+      transaction: '/exchange/events/internal-testnet-bitcoin-middleware-chronobank-io_transaction',
+      block: '/exchange/events/internal-testnet-bitcoin-middleware-chronobank-io_block',
+    },
   },
   [BLOCKCHAIN_BITCOIN]: {
     bcNetworkId: 'bitcoin',
@@ -173,6 +178,11 @@ const blockchainTestnet ={
     blockexplorer: 'https://tbcc.blockdozer.com/insight/tx',
     coinType: null,
     symbol: 'BCC',
+    channels: {
+      balance: '/exchange/events/internal-testnet-bitcoin-middleware-chronobank-io_balance',
+      transaction: '/exchange/events/internal-testnet-bitcoin-middleware-chronobank-io_transaction',
+      block: '/exchange/events/internal-testnet-bitcoin-middleware-chronobank-io_block',
+    },
   },
   [BLOCKCHAIN_BITCOIN]: {
     bcNetworkId: 'testnet',

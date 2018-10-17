@@ -20,6 +20,7 @@ class CryptocompareSocket {
     this.subscriptions = null
     this.actions = {}
     this.WStimeout = null
+    this.eventHandlers = {}
   }
 
   subscribe () {
@@ -36,6 +37,9 @@ class CryptocompareSocket {
   }
 
   setEventHandler (event, eventHandler) {
+    if (event && eventHandler) {
+      this.eventHandlers[event] = eventHandler
+    }
     return new Promise((resolve, reject) => {
       try {
         this.socket.on([event], (data) => {
@@ -85,6 +89,7 @@ class CryptocompareSocket {
         reconnectionAttempts: Infinity,
         forceNew: true,
         transports: ['websocket'],
+        timeout: 10000,
       })
       this.socket.on('connect', () => {
         return resolve()
@@ -93,20 +98,20 @@ class CryptocompareSocket {
         return reject()
       })
       this.socket.on('ping', () => {
-        console.log('ping, started timeout')
         this.WStimeout = setTimeout(() => {  // if it doesn't respond within two seconds
-          console.log('timed out', this.socket)
           if (this.socket && this.socket.io.readyState === 'open') {  // and if the connection is still open
-            this.connect() // force reconnect
+            this.socket.close() // force reconnect
           }
         }, 2000)
       })
       this.socket.on('pong', () => {
-        console.log('ping, clear timeout')
         clearTimeout(this.WStimeout)
       })
-      this.socket.on('connect_timeout', (timeout) => {
-        console.log('MARKET connect_timeout', timeout)
+      // this.socket.on('connect_timeout', (timeout) => {
+      //   console.log('MARKET connect_timeout', timeout)
+      // })
+      Object.keys(this.eventHandlers).forEach((eventKey) => {
+        this.setEventHandler(eventKey, this.eventHandlers[eventKey])
       })
       this.socket.connect()
     })
@@ -114,6 +119,7 @@ class CryptocompareSocket {
 
   disconnect () {
     return new Promise((resolve, reject) => {
+      this.unsubscribe()
       try {
         this.socket.close()
         this.socket = null
