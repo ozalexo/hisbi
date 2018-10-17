@@ -209,7 +209,7 @@ export default class Web3Controller {
           })
           .on('error', (error) => {
             // eslint-disable-next-line no-console
-            console.log('Error of contract %s', contractName, error)
+            // console.log('Error of contract %s', contractName, error)
           })
       )
     })

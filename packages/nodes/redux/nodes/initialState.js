@@ -104,6 +104,10 @@ const blockchainMainnet ={
     blockexplorer: 'https://etherscan.io/tx',
     coinType: null,
     symbol: 'ETH',
+    channels: {
+      balance: '/exchange/events/mainnet-ethereum-middleware-chronobank-io_balance',
+      events: '/exchange/events/mainnet-ethereum-parity-middleware-chronobank-io_chrono_sc',
+    },
   },
   [BLOCKCHAIN_BITCOINCASH]: {
     bcNetworkId: 'bitcoin',
@@ -116,24 +120,40 @@ const blockchainMainnet ={
     blockexplorer: 'https://blockexplorer.com/tx',
     coinType: COIN_TYPE_BTC_MAINNET,
     symbol: 'BTC',
+    channels: {
+      balance: '/exchange/events/mainnet-bitcoin-middleware-chronobank-io_balance',
+      block: '/exchange/events/mainnet-bitcoin-middleware-chronobank-io_block',
+    },
   },
   [BLOCKCHAIN_LITECOIN]: {
     bcNetworkId: 'litecoin',
     blockexplorer: 'https://live.blockcypher.com/ltc/tx',
     coinType: COIN_TYPE_LTC_MAINNET,
     symbol: 'LTC',
+    channels: {
+      balance: '/exchange/events/mainnet-litecoin-middleware-chronobank-io_balance',
+      block: '/exchange/events/mainnet-litecoin-middleware-chronobank-io_block',
+    },
   },
   [BLOCKCHAIN_NEM]: {
     bcNetworkId: 'mainnet',
     blockexplorer: null,
     coinType: null,
     symbol: 'NEM',
+    channels: {
+      balance: '/exchange/events/mainnet-nem-middleware-chronobank-io_balance',
+      transaction: '/exchange/events/mainnet-nem-middleware-chronobank-io_transaction',
+    },
   },
   [BLOCKCHAIN_WAVES]: {
     bcNetworkId: 'MAINNET_CONFIG',
     blockexplorer: null,
     coinType: null,
     symbol: 'WAVES',
+    channels: {
+      balance: '/exchange/events/mainnet-waves-middleware-chronobank-io_balance',
+      transaction: '/exchange/events/mainnet-waves-middleware-chronobank-io_transaction',
+    },
   },
 }
 
@@ -143,6 +163,10 @@ const blockchainTestnet ={
     blockexplorer: 'https://rinkeby.etherscan.io/tx',
     coinType: null,
     symbol: 'ETH',
+    channels: {
+      balance: '/exchange/events/rinkeby-ethereum-middleware-chronobank-io_balance',
+      events: '/exchange/events/rinkeby-ethereum-middleware-chronobank-io_chrono_sc',
+    },
   },
   [BLOCKCHAIN_BITCOINCASH]: {
     bcNetworkId: 'testnet',
@@ -155,24 +179,41 @@ const blockchainTestnet ={
     blockexplorer: 'https://live.blockcypher.com/btc-testnet/tx',
     coinType: COIN_TYPE_BTC_TESTNET,
     symbol: 'BTC',
+    channels: {
+      balance: '/exchange/events/internal-testnet-bitcoin-middleware-chronobank-io_balance',
+      transaction: '/exchange/events/internal-testnet-bitcoin-middleware-chronobank-io_transaction',
+      block: '/exchange/events/internal-testnet-bitcoin-middleware-chronobank-io_block',
+    },
   },
   [BLOCKCHAIN_LITECOIN]: {
     bcNetworkId: 'litecoin_testnet',
     blockexplorer: 'https://chain.so/tx/LTCTEST',
     coinType: COIN_TYPE_LTC_TESTNET,
     symbol: 'LTC',
+    channels: {
+      balance: '/exchange/events/testnet-litecoin-middleware-chronobank-io_balance',
+      block: '/exchange/events/testnet-litecoin-middleware-chronobank-io_block',
+    },
   },
   [BLOCKCHAIN_NEM]: {
     bcNetworkId: 'testnet',
     blockexplorer: '',
     coinType: null,
     symbol: 'NEM',
+    channels: {
+      balance: '/exchange/events/testnet-nem-middleware-chronobank-io_balance',
+      transaction: '/exchange/events/testnet-nem-middleware-chronobank-io_transaction',
+    },
   },
   [BLOCKCHAIN_WAVES]: {
     bcNetworkId: 'TESTNET_CONFIG',
     blockexplorer: '',
     coinType: null,
     symbol: 'WAVES',
+    channels: {
+      balance: '/exchange/events/testnet-waves-middleware-chronobank-io_balance',
+      transaction: '/exchange/events/testnet-waves-middleware-chronobank-io_transaction',
+    },
   },
 }
 
