@@ -10,6 +10,11 @@ export const marketAddToken = (symbol) => ({
   symbol,
 })
 
+export const marketRemoveToken = (symbol) => ({
+  type: ActionTypes.MARKET_REMOVE_TOKEN,
+  symbol,
+})
+
 export const marketSelectCoin = (coin) => ({
   type: ActionTypes.MARKET_SELECT_COIN,
   coin,
