@@ -25,13 +25,12 @@ export default (history) => {
   const isDevelopmentEnv = process.env.NODE_ENV === 'development'
   if (isDevelopmentEnv) {
     const IGNORED_DOMAINS = [
-      'persist/REHYDRATE',
+      // 'persist/REHYDRATE',
       '@@i18n/',
       '@@redux-form/',
       '@@router/',
-      'MIDDLEWARE/CRYPTOCOMPARE',
+      'MIDDLEWARE_CRYPTOCOMPARE',
       'REQ/GET/CRYPTOCOMPARE',
-      'WEB3/LISTENER/APPEND_CONTRACT',
     ]
     // Note: logger must be the last middleware in chain, otherwise it will log thunk and promise, not actual actions
     middleware.push(createLogger({

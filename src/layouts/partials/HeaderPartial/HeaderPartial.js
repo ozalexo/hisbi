@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 
-import { selectAllWalletsPendingTransactionsLength } from '@chronobank/core/redux/selectors'
+import { selectAllWalletsPendingTransactionsLength } from '@chronobank/core/redux/transactions/selectors'
 import { sidesOpen } from '../../../redux/sides/thunks'
 import { NOTIFICATION_PANEL_KEY } from '../../../redux/sides/constants'
 import Button from '../../../components/Button'

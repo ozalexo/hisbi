@@ -8,14 +8,14 @@ import moment from 'moment'
 import { nodesInit } from '@chronobank/nodes/redux/nodes/actions'
 import { preselectNetwork } from '@chronobank/nodes/redux/nodes/thunks'
 import translations from '../i18n'
-import { initCryptoCompareMarket } from '@chronobank/market/middleware/thunks'
+import { startMarket } from '@chronobank/market/middleware/thunks'
 import { initTrezorManager, getPublicKey, ethereumGetAddress } from '@chronobank/trezor/middleware/actions'
 // import { middlewareConnect } from '@chronobank/nodes/middleware/thunks'
 // import { WebSocketService } from '@chronobank/core/services/WebSocketService'
 // import { loadI18n } from '../redux/i18n/thunks'
 
 export const initMarket = (store) => {
-  store.dispatch(initCryptoCompareMarket())
+  store.dispatch(startMarket())
 }
 
 export const initTrezor = (store) => {

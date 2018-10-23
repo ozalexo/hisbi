@@ -4,12 +4,13 @@
  */
 
 export default {
-  socketStatus: null,
-  tokens: ['ETH', 'TIME'],
   currencies: ['USD'],
+  initState: false,
+  lastMarket: {},
   prices: {},
   rates: {},
-  selectedCurrency: 'USD',
-  lastMarket: {},
   selectedCoin: 'ETH',
+  selectedCurrency: 'USD',
+  socketStatus: null,
+  tokens: ['ETH', 'TIME'],
 }

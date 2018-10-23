@@ -1,0 +1,9 @@
+/**
+ * Copyright 2017–2018, LaborX PTY
+ * Licensed under the AGPL Version 3 license.
+ */
+
+export const CORE_BLOCKCHAIN_ADD = 'CORE_BLOCKCHAIN_ADD'
+export const CORE_BLOCKCHAIN_REMOVE = 'CORE_BLOCKCHAIN_REMOVE'
+export const CORE_BLOCKCHAIN_ENABLE = 'CORE_BLOCKCHAIN_ENABLE'
+export const CORE_BLOCKCHAIN_DISABLE = 'CORE_BLOCKCHAIN_DISABLE'

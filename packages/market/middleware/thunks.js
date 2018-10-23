@@ -85,7 +85,14 @@ export const requestMarketPrices = () => async (dispatch, getState) => {
   }
 }
 
-export const initCryptoCompareMarket = () => (dispatch) => {
+// true means isGraceful disconnect, do not reconnect
+export const stopMarket = (isGraceful = true) => (dispatch) => {
+  dispatch(MarketMiddlewareActions.disconnect(isGraceful))
+  dispatch(MarketMiddlewareActions.stopPricesPolling())
+  dispatch(MarketMiddlewareActions.resetState())
+}
+
+export const startMarket = () => (dispatch) => {
   const MARKET_REQUEST_DELAY = 30000
   dispatch(MarketMiddlewareActions.connect())
     .then(() => {
@@ -93,15 +100,16 @@ export const initCryptoCompareMarket = () => (dispatch) => {
       dispatch(MarketMiddlewareActions.setEventHandler('m', (data) => {
         dispatch(updateMarket(data))
       }))
-      dispatch(MarketMiddlewareActions.setEventHandler('disconnect', () => {
-        dispatch(MarketMiddlewareActions.connectFailure())
-        dispatch(initCryptoCompareMarket())
+      dispatch(MarketMiddlewareActions.setEventHandler('disconnect', (isGraceful) => {
+        if (!isGraceful) {
+          dispatch(MarketMiddlewareActions.connectFailure())
+          dispatch(startMarket())
+        }
       }))
       dispatch(MarketMiddlewareActions.subscribe())
     })
-    .catch((error) => {
+    .catch(() => {
       // TODO: to add error handler
-      console.log('MME:', error)
     })
   dispatch(MarketMiddlewareActions.startPricesPolling(MARKET_REQUEST_DELAY))
 }

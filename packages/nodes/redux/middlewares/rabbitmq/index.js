@@ -19,6 +19,44 @@ const BASE_URL = 'https://rabbitmq-webstomp.chronobank.io/stomp'
 const USER = 'rabbitmq_user'
 const PASSWORD = '38309100024'
 
+/*
+
+import Socket from './ws'
+import Stomp from 'webstomp-client'
+
+    const handlers = {
+      onerror: (error) => {
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ONERROR', error)
+      },
+      onclose: () => {
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ONCLOSE')
+      },
+      onmessage: (message) => {
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ONMESSAGE', message)
+      },
+    }
+
+    const socket = new Socket('wss://rabbitmq-webstfomp.chronobank.io/stomp/websocket', handlers)
+    socket.connect()
+      .then((ws) => {
+        const client = Stomp.over(ws, {
+          debug: false,
+          heartbeat: false,
+          protocols: ['v12.stomp'],
+        })
+        client.connect(
+          'rabbitmq_user',
+          '38309100024',
+          (m) => { console.log('STOMP. Connected:', m) },
+          (error) => { console.log('STOMP. Error:', error) },
+        )
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SUCCESS CONNECT')
+      })
+      .catch((error) => {
+        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> FAILURE CONNECT', error)
+      })
+*/
+
 class SubscriptionManager {
   constructor () {
     this.subscriptions = new Map()

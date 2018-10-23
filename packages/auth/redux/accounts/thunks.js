@@ -9,6 +9,8 @@ import * as EthereumThunks from '@chronobank/ethereum/redux/thunks'
 import * as BitcoinThunks from '@chronobank/bitcoin/redux/thunks'
 // import * as BitcoinCashThunks from '@chronobank/bitcoincash/redux/thunks'
 import { requestBitcoinSubscribeWalletByAddress } from '@chronobank/nodes/api/bitcoinLikeAPI'
+import { addMiddleware, removeMiddleware } from 'redux-dynamic-middlewares'
+import aliasesMiddleware from '@chronobank/core/middlewares/aliases'
 
 // eslint-disable-next-line import/prefer-default-export
 export const createInMemoryAccount = (accountTitle, mnemonic, password) => (
@@ -24,6 +26,8 @@ export const createInMemoryAccount = (accountTitle, mnemonic, password) => (
     dispatch(AccountActions.selectAccount(ethereumWallet.address))
   }
   // TODO: continuing to login. Just for demo
+  // First of all, add aliases dynamic middleware:
+  addMiddleware(aliasesMiddleware)
   const privateKey = dispatch(EthereumThunks.getEthereumPrivateKeyByPassword('111'))
   const btcAddress = dispatch(BitcoinThunks.createBitcoinWallet({ isMain: true, privateKey }))
   // const bccAddress = dispatch(BitcoinCashThunks.createBitcoinCashWallet({ isMain: true, privateKey }))
